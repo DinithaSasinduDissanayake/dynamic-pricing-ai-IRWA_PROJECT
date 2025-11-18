@@ -24,16 +24,20 @@ class CommitLocRecord:
 
 
 def run_command(args: Sequence[str], cwd: Optional[Path] = None) -> Tuple[int, str, str]:
-    completed = subprocess.run(
-        list(args),
-        cwd=str(cwd) if cwd is not None else None,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=False,
-    )
+    try:
+        completed = subprocess.run(
+            list(args),
+            cwd=str(cwd) if cwd is not None else None,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=False,
+        )
+    except OSError as exc:
+        return 127, "", str(exc)
     stdout = completed.stdout.decode("utf-8", errors="replace") if isinstance(completed.stdout, bytes) else completed.stdout
     stderr = completed.stderr.decode("utf-8", errors="replace") if isinstance(completed.stderr, bytes) else completed.stderr
     return completed.returncode, stdout, stderr
+
 
 
 def ensure_clean_working_tree(repo_dir: Path) -> None:
