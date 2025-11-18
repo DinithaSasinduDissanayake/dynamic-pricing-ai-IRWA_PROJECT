@@ -1,3 +1,7 @@
-commit_hash,commit_number,date,total_loc,added,removed,message
-83ac1a4d3549246d407195f7c3121f58f1df31c8,1,2025-08-13T08:51:08+05:30,0,0,0,Initial commit
-863c12248112345ca553a8e59d15b743d8edb2dc,56,2025-08-28T18:13:20+05:30,0,0,0,Restore preferred .gitignore
+commit_hash,commit_number,date,total_loc,added,removed,python_loc,typescript_loc,javascript_loc,message
+83ac1a4d3549246d407195f7c3121f58f1df31c8,1,2025-08-13T08:51:08+05:30,0,0,0,0,0,0,Initial commit
+d84ab320a512e803e52d35510f143bcdf3536473,101,2025-08-30T02:41:41+05:30,2268,2268,0,2268,0,0,test(price-proposals): seed market.db and run collection in smoke to ensure optimizer proceeds
+fa3212d838b9ca02bcd3e132de6f65fc79eebfc7,201,2025-09-29T16:22:37+05:30,10744,8476,0,10029,0,715,"Introduce a full chat API and UI to enable agent-driven dynamic pricing collaboration with streaming, summary-based memory, and per-message usage/cost observability. Persist threads/messages in SQLite and propagate agents/tools metadata to user messages; add tests to validate API, streaming, and CRUD flows."
+a64bdffa8352b95bfa9cb09a123e8efdf89a7ff6,301,2025-10-19T02:05:41+05:30,11263,519,0,10353,775,135,Merge branch 'minor-ui-bug-fixes' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into minor-ui-bug-fixes
+86c28bbd99add97df6a34e7855aff352bba55b86,401,2025-10-22T13:15:46+05:30,14330,3067,0,13163,1032,135,Ensure tests can import project root by adding to PYTHONPATH in test
+fd53c85a548e05e4d119a5d174b832360ca5701f,501,2025-11-01T00:51:29+05:30,15499,1169,0,14043,1321,135,chore(events): add new PricingOptimizerAgent initialization event log entry
