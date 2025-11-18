@@ -21,6 +21,9 @@ class CommitLocRecord:
     added: int
     removed: int
     message: str
+    python_loc: int = 0
+    typescript_loc: int = 0
+    javascript_loc: int = 0
 
 
 def run_command(args: Sequence[str], cwd: Optional[Path] = None) -> Tuple[int, str, str]:
@@ -174,15 +177,14 @@ def get_files_for_commit(repo_dir: Path) -> List[Path]:
     return files
 
 
-def run_cloc_on_files(repo_dir: Path, files: Sequence[Path]) -> Optional[int]:
+def run_cloc_on_files(repo_dir: Path, files: Sequence[Path]) -> Optional[Tuple[int, dict]]:
     if not files:
-        return 0
+        return (0, {"Python": 0, "TypeScript": 0, "JavaScript": 0})
 
     cloc_cmd = [
         "cloc",
         "--csv",
         "--quiet",
-        "--sum-one",
         "--include-lang=Python,TypeScript,JavaScript",
     ]
 
@@ -196,14 +198,25 @@ def run_cloc_on_files(repo_dir: Path, files: Sequence[Path]) -> Optional[int]:
 
     reader = csv.DictReader(out.splitlines())
     total_code = 0
+    lang_breakdown = {"Python": 0, "TypeScript": 0, "JavaScript": 0}
+    
     for row in reader:
-        if row.get("language", "").lower() == "sum":
+        lang = row.get("language", "").strip()
+        if lang in lang_breakdown:
+            try:
+                lang_breakdown[lang] = int(row.get("code", "0"))
+            except ValueError:
+                pass
+        if lang.lower() == "sum":
             try:
                 total_code = int(row.get("code", "0"))
             except ValueError:
                 total_code = 0
-            break
-    return total_code
+    
+    if total_code == 0:
+        total_code = sum(lang_breakdown.values())
+    
+    return (total_code, lang_breakdown)
 
 
 def generate_records(
@@ -223,9 +236,11 @@ def generate_records(
             continue
 
         files = get_files_for_commit(repo_dir)
-        total_loc = run_cloc_on_files(repo_dir, files)
-        if total_loc is None:
+        cloc_result = run_cloc_on_files(repo_dir, files)
+        if cloc_result is None:
             continue
+        
+        total_loc, lang_breakdown = cloc_result
 
         if prev_total is None:
             added = total_loc
@@ -250,6 +265,9 @@ def generate_records(
                 added=added,
                 removed=removed,
                 message=message,
+                python_loc=lang_breakdown.get("Python", 0),
+                typescript_loc=lang_breakdown.get("TypeScript", 0),
+                javascript_loc=lang_breakdown.get("JavaScript", 0),
             )
         )
 
@@ -265,7 +283,10 @@ def write_csv(records: Sequence[CommitLocRecord], csv_path: Path) -> None:
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     with csv_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["commit_hash", "commit_number", "date", "total_loc", "added", "removed", "message"])
+        writer.writerow([
+            "commit_hash", "commit_number", "date", "total_loc", "added", "removed",
+            "python_loc", "typescript_loc", "javascript_loc", "message"
+        ])
         for r in records:
             writer.writerow(
                 [
@@ -275,6 +296,9 @@ def write_csv(records: Sequence[CommitLocRecord], csv_path: Path) -> None:
                     r.total_loc,
                     r.added,
                     r.removed,
+                    r.python_loc,
+                    r.typescript_loc,
+                    r.javascript_loc,
                     r.message.replace("\n", " ").strip(),
                 ]
             )
@@ -296,15 +320,26 @@ def write_summary(records: Sequence[CommitLocRecord], summary_path: Path) -> Non
     else:
         compression_pct = (end_loc - start_loc) / start_loc * 100.0
 
+    final_record = records[-1]
+    py_pct = (final_record.python_loc / final_record.total_loc * 100.0) if final_record.total_loc > 0 else 0.0
+    ts_pct = (final_record.typescript_loc / final_record.total_loc * 100.0) if final_record.total_loc > 0 else 0.0
+    js_pct = (final_record.javascript_loc / final_record.total_loc * 100.0) if final_record.total_loc > 0 else 0.0
+
     summary_lines = [
         f"Started at {start_loc} LOC",
         f"Ended at {end_loc} LOC",
         f"Peak LOC: {peak_loc}",
         f"Change: {compression_pct:.1f}%",
+        "",
+        "Language Breakdown (Final Commit):",
+        f"  Python:     {final_record.python_loc:6d} LOC ({py_pct:5.1f}%)",
+        f"  TypeScript: {final_record.typescript_loc:6d} LOC ({ts_pct:5.1f}%)",
+        f"  JavaScript: {final_record.javascript_loc:6d} LOC ({js_pct:5.1f}%)",
     ]
     summary = "\n".join(summary_lines)
     summary_path.write_text(summary, encoding="utf-8")
     print(f"Summary: Started at {start_loc} LOC, ended at {end_loc} LOC ({compression_pct:.1f}% change)")
+    print(f"Language split: Python {py_pct:.1f}%, TypeScript {ts_pct:.1f}%, JavaScript {js_pct:.1f}%")
 
 
 def write_chart(records: Sequence[CommitLocRecord], png_path: Path) -> None:
@@ -327,6 +362,30 @@ def write_chart(records: Sequence[CommitLocRecord], png_path: Path) -> None:
     plt.ylabel("Lines of Code Changed")
     plt.title("LOC Evolution on release-ready Branch (Per-Commit Delta)")
     plt.legend()
+    plt.tight_layout()
+    plt.savefig(png_path)
+    plt.close()
+
+
+def write_language_chart(records: Sequence[CommitLocRecord], png_path: Path) -> None:
+    png_path.parent.mkdir(parents=True, exist_ok=True)
+    if not records:
+        return
+
+    x = [r.commit_number for r in records]
+    python = [r.python_loc for r in records]
+    typescript = [r.typescript_loc for r in records]
+    javascript = [r.javascript_loc for r in records]
+
+    plt.figure(figsize=(max(10, len(x) * 0.15), 6))
+    plt.stackplot(x, python, typescript, javascript, 
+                  labels=["Python", "TypeScript", "JavaScript"],
+                  colors=["#3572A5", "#3178C6", "#F1E05A"],
+                  alpha=0.8)
+    plt.xlabel("Commit Number")
+    plt.ylabel("Lines of Code")
+    plt.title("Language Distribution Over Time")
+    plt.legend(loc="upper left")
     plt.tight_layout()
     plt.savefig(png_path)
     plt.close()
@@ -414,6 +473,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     reports_dir = repo_dir / "loc_reports"
     csv_path = reports_dir / "loc_history.csv"
     png_path = reports_dir / "loc_evolution.png"
+    lang_png_path = reports_dir / "loc_by_language.png"
     summary_path = reports_dir / "loc_summary.txt"
 
     write_csv(records, csv_path)
@@ -421,6 +481,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     write_chart(records, png_path)
     print(f"Saved {png_path.relative_to(repo_dir)}")
+
+    write_language_chart(records, lang_png_path)
+    print(f"Saved {lang_png_path.relative_to(repo_dir)}")
 
     write_summary(records, summary_path)
 
