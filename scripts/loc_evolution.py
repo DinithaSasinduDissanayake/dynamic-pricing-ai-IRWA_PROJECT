@@ -29,10 +29,11 @@ def run_command(args: Sequence[str], cwd: Optional[Path] = None) -> Tuple[int, s
         cwd=str(cwd) if cwd is not None else None,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True,
         shell=False,
     )
-    return completed.returncode, completed.stdout, completed.stderr
+    stdout = completed.stdout.decode("utf-8", errors="replace") if isinstance(completed.stdout, bytes) else completed.stdout
+    stderr = completed.stderr.decode("utf-8", errors="replace") if isinstance(completed.stderr, bytes) else completed.stderr
+    return completed.returncode, stdout, stderr
 
 
 def ensure_clean_working_tree(repo_dir: Path) -> None:
@@ -249,7 +250,7 @@ def generate_records(
         )
 
         print(
-            f"✅ Commit {idx}/{len(commits)}: {commit_hash[:7]} (+{added}, -{removed}, total: {total_loc} LOC)",
+            f"Commit {idx}/{len(commits)}: {commit_hash[:7]} (+{added}, -{removed}, total: {total_loc} LOC)",
             flush=True,
         )
 
@@ -299,7 +300,7 @@ def write_summary(records: Sequence[CommitLocRecord], summary_path: Path) -> Non
     ]
     summary = "\n".join(summary_lines)
     summary_path.write_text(summary, encoding="utf-8")
-    print(f"📉 Summary: Started at {start_loc} LOC, ended at {end_loc} LOC ({compression_pct:.1f}% change)")
+    print(f"Summary: Started at {start_loc} LOC, ended at {end_loc} LOC ({compression_pct:.1f}% change)")
 
 
 def write_chart(records: Sequence[CommitLocRecord], png_path: Path) -> None:
@@ -399,7 +400,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
 
     total_commits = len(commits)
-    print(f"🔍 Analyzing {args.branch} branch ({total_commits} commits)")
+    print(f"Analyzing {args.branch} branch ({total_commits} commits)")
 
     try:
         records = generate_records(repo_dir, commits, args.sample_every)
@@ -412,10 +413,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     summary_path = reports_dir / "loc_summary.txt"
 
     write_csv(records, csv_path)
-    print(f"📊 Saved {csv_path.relative_to(repo_dir)}")
+    print(f"Saved {csv_path.relative_to(repo_dir)}")
 
     write_chart(records, png_path)
-    print(f"📈 Saved {png_path.relative_to(repo_dir)}")
+    print(f"Saved {png_path.relative_to(repo_dir)}")
 
     write_summary(records, summary_path)
 
