@@ -1,17 +1,17 @@
 import os
+# Trigger reload for env vars
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
-from core.chat_db import init_chat_db, cleanup_empty_threads
-from core.auth_db import init_db
-from core.auth_service import validate_session_token
 from contextlib import asynccontextmanager
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
+import structlog
 
-from backend.routers import auth, settings, threads, messages, streaming, prices, catalog, alerts, debug, collector, responsible_ai
+from core.chat_db import init_chat_db, cleanup_empty_threads
+from core.auth_db import init_db_async
+from backend.routers import auth, settings, threads, messages, streaming, prices, catalog, alerts, debug, collector
 
 from core.agents.alert_service import api as alert_api
 from core.agents.price_optimizer.agent import PricingOptimizerAgent
@@ -20,10 +20,12 @@ from core.agents.data_collector.repo import DataRepo
 from core.agents.data_collector.collector import DataCollector
 from core.agents.proposal_logger import ProposalLogger
 
+logger = structlog.get_logger()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    # Database initialization
+    await init_db_async()
     init_chat_db()
     cleanup_empty_threads()
     
@@ -32,86 +34,84 @@ async def lifespan(app: FastAPI):
         return
     
     # Initialize agents
-    import logging
-    logger = logging.getLogger("main")
+    pricing_optimizer = None
+    data_collector = None
+    proposal_logger = None
+
+    # try:
+    #     logger.info("agent_init_start", agent="PricingOptimizerAgent")
+    #     pricing_optimizer = PricingOptimizerAgent()
+    #     logger.info("agent_init_success", agent="PricingOptimizerAgent")
+    # except Exception as e:
+    #     logger.error("agent_init_failed", agent="PricingOptimizerAgent", error=str(e))
     
-    try:
-        logger.info("Initializing PricingOptimizerAgent...")
-        pricing_optimizer = PricingOptimizerAgent()
-        logger.info("PricingOptimizerAgent initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize PricingOptimizerAgent: {e}", exc_info=True)
-        pricing_optimizer = None
+    # try:
+    #     logger.info("agent_init_start", agent="DataCollectorAgent")
+    #     from core.settings import get_settings
+    #     db_path = get_settings().resolve_app_db()
+    #     data_collector_repo = DataRepo(db_path)
+    #     await data_collector_repo.init()
+    #     reactive_collector = DataCollector(data_collector_repo)
+    #     app.state.reactive_collector = reactive_collector
+    #     data_collector = DataCollectorAgent(
+    #         repo=data_collector_repo,
+    #         check_interval_seconds=180
+    #     )
+    #     logger.info("agent_init_success", agent="DataCollectorAgent")
+    # except Exception as e:
+    #     logger.warning("agent_init_failed", agent="DataCollectorAgent", error=str(e))
     
-    try:
-        logger.info("Initializing DataCollectorAgent...")
-        from core.config import resolve_app_db
-        db_path = resolve_app_db()
-        data_collector_repo = DataRepo(db_path)
-        await data_collector_repo.init()
-        reactive_collector = DataCollector(data_collector_repo)
-        app.state.reactive_collector = reactive_collector
-        data_collector = DataCollectorAgent(
-            repo=data_collector_repo,
-            check_interval_seconds=180
-        )
-        logger.info("DataCollectorAgent initialized successfully")
-    except Exception as e:
-        logger.warning(f"Failed to initialize DataCollectorAgent: {e}", exc_info=True)
-        data_collector = None
-    
-    try:
-        logger.info("Initializing ProposalLogger...")
-        proposal_logger = ProposalLogger()
-        logger.info("ProposalLogger initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize ProposalLogger: {e}", exc_info=True)
-        proposal_logger = None
+    # try:
+    #     logger.info("agent_init_start", agent="ProposalLogger")
+    #     proposal_logger = ProposalLogger()
+    #     logger.info("agent_init_success", agent="ProposalLogger")
+    # except Exception as e:
+    #     logger.error("agent_init_failed", agent="ProposalLogger", error=str(e))
     
     # Start agents
-    logger.info("Starting agents...")
+    logger.info("agents_starting")
     await alert_api.start()
     
-    if pricing_optimizer is not None:
-        logger.info("Starting PricingOptimizerAgent...")
-        try:
-            await pricing_optimizer.start()
-            logger.info("PricingOptimizerAgent started successfully")
-        except Exception as e:
-            logger.error(f"Failed to start PricingOptimizerAgent: {e}", exc_info=True)
-    else:
-        logger.warning("PricingOptimizerAgent not initialized - skipping start")
+    # if pricing_optimizer:
+    #     try:
+    #         await pricing_optimizer.start()
+    #         logger.info("agent_started", agent="PricingOptimizerAgent")
+    #     except Exception as e:
+    #         logger.error("agent_start_failed", agent="PricingOptimizerAgent", error=str(e))
     
-    if data_collector is not None:
-        logger.info("Starting DataCollectorAgent...")
-        try:
-            await data_collector.start()
-            logger.info("DataCollectorAgent started successfully")
-        except Exception as e:
-            logger.error(f"Failed to start DataCollectorAgent: {e}", exc_info=True)
-    else:
-        logger.warning("DataCollectorAgent not initialized - skipping start")
+    # if data_collector:
+    #     try:
+    #         await data_collector.start()
+    #         logger.info("agent_started", agent="DataCollectorAgent")
+    #     except Exception as e:
+    #         logger.error("agent_start_failed", agent="DataCollectorAgent", error=str(e))
     
-    if proposal_logger is not None:
-        logger.info("Starting ProposalLogger...")
-        try:
-            await proposal_logger.start()
-            logger.info("ProposalLogger started successfully")
-        except Exception as e:
-            logger.error(f"Failed to start ProposalLogger: {e}", exc_info=True)
-    else:
-        logger.warning("ProposalLogger not initialized - skipping start")
+    # if proposal_logger:
+    #     try:
+    #         await proposal_logger.start()
+    #         logger.info("agent_started", agent="ProposalLogger")
+    #     except Exception as e:
+    #         logger.error("agent_start_failed", agent="ProposalLogger", error=str(e))
     
     yield
     
     # Cleanup on shutdown
-    if data_collector is not None:
+    if data_collector:
         await data_collector.stop()
-    if proposal_logger is not None:
+    if proposal_logger:
         await proposal_logger.stop()
 
 
-app = FastAPI(title="FluxPricer Auth + Chat API", lifespan=lifespan)
+app = FastAPI(title="FluxPricer Auth + Chat API", lifespan=lifespan, debug=True)
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    import traceback
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={"message": str(exc), "traceback": traceback.format_exc()},
+    )
  
 app.add_middleware(
     CORSMiddleware,
@@ -134,13 +134,6 @@ def root_index():
         return HTMLResponse((FRONTEND_DIST / "index.html").read_text(encoding="utf-8"))
     except Exception:
         return HTMLResponse("<h1>FluxPricer API</h1><p>Frontend not built. Run: cd frontend && npm run build</p>")
-
-
-try:
-    init_db()
-    init_chat_db()
-except Exception:
-    pass
 
 
 # Capture the original host environment value for UI_REQUIRE_LOGIN so pytest can override it
@@ -168,39 +161,14 @@ def _require_login_enabled() -> bool:
         return False
 
 
-
-def _extract_token_from_request(request: Request) -> str | None:
-    try:
-        token = request.query_params.get("token")
-        if token:
-            return token
-        auth = request.headers.get("authorization") or request.headers.get("Authorization")
-        if auth and auth.lower().startswith("bearer "):
-            return auth.split(" ", 1)[1].strip()
-        cookie = request.cookies.get("fp_session")
-        if cookie:
-            return cookie
-    except Exception:
-        pass
-    return None
-
-
 class ChatAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        # Note: Auth middleware temporarily simplified during migration to fastapi-users
         if not _require_login_enabled():
             return await call_next(request)
         path = request.url.path or ""
         if path.startswith("/api/login") or path.startswith("/api/register") or path.startswith("/api/me") or path.startswith("/api/settings"):
             return await call_next(request)
-        if path.startswith("/api/threads") or path.startswith("/api/messages"):
-            token = _extract_token_from_request(request)
-            try:
-                sess = validate_session_token(token) if token else None
-            except Exception as e:
-                print(f"Token validation error: {e}")
-                sess = None
-            if not sess:
-                return JSONResponse({"error": "Authentication required"}, status_code=401)
         return await call_next(request)
 
 
@@ -216,4 +184,3 @@ app.include_router(catalog.router)
 app.include_router(alerts.router)
 app.include_router(debug.router)
 app.include_router(collector.router)
-app.include_router(responsible_ai.router)

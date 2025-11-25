@@ -1,7 +1,7 @@
 # core/agents/alert_service/sinks/slack.py
 import aiohttp
+from tenacity import retry, stop_after_attempt, wait_fixed
 from ..config import load_runtime_defaults, merge_defaults_db
-from ..util.retry import retry
 
 class SlackSink:
     def __init__(self, repo):
@@ -33,6 +33,7 @@ class SlackSink:
         text = f"[{sev}] {title} (rule={rule_id}, sku={sku})"
 
         # POST with retries; log outcome to deliveries table if available
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
         async def _post():
             timeout = aiohttp.ClientTimeout(total=10)
             async with aiohttp.ClientSession(timeout=timeout) as sess:
@@ -45,7 +46,7 @@ class SlackSink:
 
         delivery_id = f"deliv_{inc.get('id','')}_slack"
         try:
-            await retry(_post, attempts=3)
+            await _post()
             if hasattr(self.repo, "record_delivery"):
                 await self.repo.record_delivery(
                     delivery_id=delivery_id,

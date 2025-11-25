@@ -75,7 +75,7 @@ export function Sidebar() {
           await logout()
         } catch {
         }
-        window.location.href = '/auth'
+        window.location.href = '/login'
       },
     })
   }
@@ -88,89 +88,89 @@ export function Sidebar() {
     >
       <div className={`will-change-transform transition-transform duration-250 ease-in-out motion-reduce:transition-none h-full`}>
         <div className={`flex flex-col h-svh gap-3 ${uiCollapsed ? 'p-2 items-center' : 'p-3'}`}>
-        <div className={uiCollapsed ? 'flex flex-col items-center gap-2 shrink-0' : 'flex gap-2 shrink-0'}>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={uiCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            onClick={toggleCollapsed}
-            aria-expanded={!uiCollapsed}
-            aria-controls="thread-list"
-          >
-            {uiCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-          </Button>
-          {uiCollapsed ? (
+          <div className={uiCollapsed ? 'flex flex-col items-center gap-2 shrink-0' : 'flex gap-2 shrink-0'}>
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Create new thread"
-              onClick={() => {
-                navigate('/chat')
-                createDraftThread()
-              }}
+              aria-label={uiCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              onClick={toggleCollapsed}
+              aria-expanded={!uiCollapsed}
+              aria-controls="thread-list"
             >
-              <Sparkles className="h-4 w-4" />
+              {uiCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
             </Button>
-          ) : (
-            <Button
-              onClick={() => {
-                navigate('/chat')
-                createDraftThread()
-              }}
-              aria-label="Create new thread"
-              variant="gradient"
-              size="lg"
-              className="flex-1"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span className="text-[0.9375rem] tracking-wide">New Chat</span>
-            </Button>
-          )}
-        </div>
-
-        {!uiCollapsed ? (
-          <div className="flex-1 overflow-y-auto py-2 bg-popover/40" id="thread-list">
-            <Virtuoso
-              data={allItems}
-              totalCount={allItems.length}
-              itemContent={(index, item) => (
-                <ThreadItem
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  isActive={currentId === item.id}
-                  isDraft={item.isDraft}
-                  updatedAt={item.updated_at}
-                  onSelect={() => startTransition(() => setCurrent(item.id))}
-                  collapsed={false}
-                />
-              )}
-              style={{ height: '100%', padding: '0 4px' }}
-            />
-          </div>
-        ) : (
-          <div className="flex-1 overflow-y-auto py-2 bg-transparent flex items-start justify-center" id="thread-list">
-            <div className="space-y-1">
-              {allItems.map((item) => (
-                <ThreadItem
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  isActive={currentId === item.id}
-                  isDraft={item.isDraft}
-                  updatedAt={item.updated_at}
-                  onSelect={() => startTransition(() => setCurrent(item.id))}
-                  collapsed={true}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className={`${uiCollapsed ? '' : 'border-t bg-muted/20'} mt-auto pt-3 flex flex-col gap-1 -mx-3 px-3 -mb-3 pb-3 shrink-0 sticky bottom-0`}
-        >
             {uiCollapsed ? (
-              <CollapsedNavItem title="Home" onClick={() => (window.location.href = '/') }>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Create new thread"
+                onClick={() => {
+                  navigate('/chat')
+                  createDraftThread()
+                }}
+              >
+                <Sparkles className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  navigate('/chat')
+                  createDraftThread()
+                }}
+                aria-label="Create new thread"
+                variant="gradient"
+                size="lg"
+                className="flex-1"
+              >
+                <Sparkles className="h-5 w-5" />
+                <span className="text-[0.9375rem] tracking-wide">New Chat</span>
+              </Button>
+            )}
+          </div>
+
+          {!uiCollapsed ? (
+            <div className="flex-1 overflow-y-auto py-2 bg-popover/40" id="thread-list">
+              <Virtuoso
+                data={allItems}
+                totalCount={allItems.length}
+                itemContent={(index, item) => (
+                  <ThreadItem
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    isActive={currentId === item.id}
+                    isDraft={item.isDraft}
+                    updatedAt={item.updated_at}
+                    onSelect={() => startTransition(() => setCurrent(item.id))}
+                    collapsed={false}
+                  />
+                )}
+                style={{ height: '100%', padding: '0 4px' }}
+              />
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto py-2 bg-transparent flex items-start justify-center" id="thread-list">
+              <div className="space-y-1">
+                {allItems.map((item) => (
+                  <ThreadItem
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    isActive={currentId === item.id}
+                    isDraft={item.isDraft}
+                    updatedAt={item.updated_at}
+                    onSelect={() => startTransition(() => setCurrent(item.id))}
+                    collapsed={true}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className={`${uiCollapsed ? '' : 'border-t bg-muted/20'} mt-auto pt-3 flex flex-col gap-1 -mx-3 px-3 -mb-3 pb-3 shrink-0 sticky bottom-0`}
+          >
+            {uiCollapsed ? (
+              <CollapsedNavItem title="Home" onClick={() => (window.location.href = '/')}>
                 <Home className="h-4 w-4" />
               </CollapsedNavItem>
             ) : (
@@ -220,14 +220,14 @@ export function Sidebar() {
               </Button>
             )}
 
-          {user && !uiCollapsed && (
-            <div className="mt-2 px-3 py-2 bg-muted/50 rounded-lg text-xs">
-              <div className="text-muted-foreground mb-1">Signed in as</div>
-              <div className="font-medium overflow-hidden text-ellipsis whitespace-nowrap">
-                {user.full_name || user.email}
+            {user && !uiCollapsed && (
+              <div className="mt-2 px-3 py-2 bg-muted/50 rounded-lg text-xs">
+                <div className="text-muted-foreground mb-1">Signed in as</div>
+                <div className="font-medium overflow-hidden text-ellipsis whitespace-nowrap">
+                  {user.full_name || user.email}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
             {uiCollapsed ? (
               <CollapsedNavItem title="Sign out" onClick={handleLogout} className="text-destructive hover:text-destructive hover:bg-destructive/10">
@@ -245,8 +245,8 @@ export function Sidebar() {
                 <span className="ml-2">Sign Out</span>
               </Button>
             )}
+          </div>
         </div>
-      </div>
       </div>
     </aside>
   )

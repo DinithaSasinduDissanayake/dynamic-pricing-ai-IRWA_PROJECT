@@ -1,7 +1,7 @@
 sqlalchemy==2.0.36
-argon2-cffi==23.1.0
-pyotp==2.9.0
-email-validator==2.2.0
+# argon2-cffi removed - now using pwdlib[argon2] via fastapi-users
+# pyotp removed - not used (no 2FA implementation)
+# email-validator removed - only used in deleted auth_service.py
 pydantic==2.8.2
 aiosqlite
 aiohttp
@@ -32,11 +32,6 @@ locust>=2.0.0
 # Modernization stack additions
 pydantic-settings
 blinker
-langchain
-langchain-core
-langchain-openai
-langchain-community
-google-generativeai
 tiktoken
 httpx
 opentelemetry-api
@@ -46,3 +41,10 @@ opentelemetry-instrumentation-fastapi
 prometheus-client
 fastapi-users
 pwdlib[argon2]
+tenacity
+structlog
+litellm
+bcrypt<5.0
+langchain
+langchain-core
+langchain-google-genai

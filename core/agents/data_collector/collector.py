@@ -4,19 +4,11 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, Optional
 
-from core.agents.agent_sdk.bus_factory import get_bus as _get_bus
+from core.agents.agent_sdk.event_bus import get_bus as _get_bus
 from core.agents.agent_sdk.protocol import Topic
 from core.agents.agent_sdk.events_models import MarketTick
 from core.payloads import MarketFetchRequestPayload, MarketFetchAckPayload, MarketFetchDonePayload
 from .repo import DataRepo
-
-# Optional legacy agent SDK bus for backward compatibility.
-# If available, we will dual-publish the raw dict payload to the legacy bus/topic.
-try:  # Safe import; legacy module may not exist in all environments
-    from core.agents.agent_sdk import get_bus as get_legacy_bus, Topic as LegacyTopic
-except Exception:
-    get_legacy_bus = None  # type: ignore[assignment]
-    LegacyTopic = None  # type: ignore[assignment]
 
 
 class DataCollector:
@@ -60,24 +52,6 @@ class DataCollector:
             demand_index=demand_index_value,
         )
         await _get_bus().publish(Topic.MARKET_TICK.value, tick)
-
-        # Best-effort legacy publish for backward compatibility.
-        # If the legacy bus exists, also publish the original dict payload; ignore errors.
-        if get_legacy_bus is not None and LegacyTopic is not None:
-            try:
-                legacy_bus = get_legacy_bus()
-                res = legacy_bus.publish(LegacyTopic.MARKET_TICK.value, payload)
-                # Handle both coroutine and sync publish implementations.
-                import asyncio as _asyncio
-
-                if _asyncio.iscoroutine(res):
-                    await res
-            except Exception as e:
-                # Non-fatal: continue if legacy publish fails.
-                try:
-                    print(f"[DataCollector] Legacy bus publish failed: {e}")
-                except Exception:
-                    pass
 
     async def ingest_stream(
         self, it: Iterable[Dict[str, Any]], delay_s: float = 1.0
@@ -139,7 +113,7 @@ class DataCollector:
                         from .connectors.web_scraper import fetch_competitor_price
                         for url in urls:
                             try:
-                                result = fetch_competitor_price(url)
+                                result = await fetch_competitor_price(url)
                                 if result.get("status") == "success" and "price" in result:
                                     tick_data = {
                                         "sku": sku,
@@ -198,5 +172,3 @@ class DataCollector:
                 "error": str(e)
             }
             await bus.publish(Topic.MARKET_FETCH_ACK.value, fail_payload)
-
-

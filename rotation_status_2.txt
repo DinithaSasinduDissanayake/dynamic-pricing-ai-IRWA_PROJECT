@@ -1,0 +1,1122 @@
+INFO:core.agents.key_manager:Discovered 5 keys. Let the juggling begin!
+19:38:28 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...CkXc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+19:38:29 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...MOmA. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+19:38:29 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...X41Y. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 33.092762847s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "33s"
+      }
+    ]
+  }
+}
+
+19:38:29 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...R4lc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+19:38:30 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...2d8I. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:30 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...CkXc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 32.574046532s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "32s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:30 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...MOmA. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:30 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...X41Y. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:30 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...R4lc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 32.063934432s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "32s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:31 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...2d8I. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:31 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...CkXc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:31 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...MOmA. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 31.293147998s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "31s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.1s more.
+19:38:31 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...X41Y. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.0s more.
+19:38:31 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...R4lc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.1s more.
+19:38:32 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...2d8I. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 30.758163493s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "30s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.1s more.
+19:38:32 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...CkXc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:32 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...MOmA. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:32 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...X41Y. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 30.20517103s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "30s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:32 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...R4lc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...2d8I. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...CkXc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 29.67466529s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "29s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...MOmA. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...X41Y. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...R4lc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 29.136083595s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "29s"
+      }
+    ]
+  }
+}
+
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...2d8I. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:34 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...CkXc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:34 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...MOmA. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 28.600005397s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "28s"
+      }
+    ]
+  }
+}
+
+--- Verifying Real Key Rotation ---
+Discovered 5 keys.
+Key: ...CkXc Status: alive
+Key: ...MOmA Status: alive
+Key: ...X41Y Status: alive
+Key: ...R4lc Status: alive
+Key: ...2d8I Status: alive
+
+Attempting to send messages...
+
+--- Attempt 1 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 33.092762847s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "33s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 2 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 32.574046532s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "32s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 3 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 32.063934432s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "32s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 4 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 31.293147998s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "31s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 5 ---
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:34 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...X41Y. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:34 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...R4lc. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+WARNING:core.agents.key_manager:All keys are dead. Desperately summoning one that should sleep for 59.3s more.
+19:38:34 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-2.0-flash-exp; provider = gemini
+WARNING:core.agents.llm:Hit rate limit with key ending in ...2d8I. Rotating.
+WARNING:core.agents.key_manager:Key hit a wall (429). It's taking a nap for 60s.
+ERROR:core.agents.llm:LLM chat failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 28.06460947s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "28s"
+      }
+    ]
+  }
+}
+
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 30.758163493s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "30s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 6 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 30.20517103s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "30s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 7 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 29.67466529s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "29s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 8 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 29.136083595s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "29s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 9 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 28.600005397s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "model": "gemini-2.0-flash-exp",
+              "location": "global"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "28s"
+      }
+    ]
+  }
+}
+
+
+--- Attempt 10 ---
+Failed: litellm.RateLimitError: litellm.RateLimitError: geminiException - {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp\nPlease retry in 28.06460947s.",
+    "status": "RESOURCE_EXHAUSTED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Learn more about Gemini API quotas",
+            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+        "violations": [
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          },
+          {
+            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",
+            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",
+            "quotaDimensions": {
+              "location": "global",
+              "model": "gemini-2.0-flash-exp"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.RetryInfo",
+        "retryDelay": "28s"
+      }
+    ]
+  }
+}
+
+
+Final Key Stats:
+Key: ...CkXc Status: zombie Usage: 6
+Key: ...MOmA Status: zombie Usage: 6
+Key: ...X41Y Status: zombie Usage: 6
+Key: ...R4lc Status: zombie Usage: 6
+Key: ...2d8I Status: zombie Usage: 6

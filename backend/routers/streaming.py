@@ -1,3 +1,4 @@
+import json as _json
 from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
@@ -18,12 +19,7 @@ router = APIRouter(prefix="/api/threads", tags=["streaming"])
 
 
 def _get_user_settings(token: Optional[str]) -> Dict[str, Any]:
-    from core.auth_service import validate_session_token
-    if not token:
-        return {}
-    sess = validate_session_token(token)
-    if not sess:
-        return {}
+    # Note: Auth migrated to fastapi-users, token validation removed
     from backend.routers.settings import get_user_settings
     return get_user_settings(token)
 
@@ -121,33 +117,18 @@ def _extract_token_from_request(request: Optional[Request]) -> Optional[str]:
 
 
 @router.post("/{thread_id}/messages", response_model=MessageOut)
+@router.post("/{thread_id}/messages", response_model=MessageOut)
 def api_post_message(thread_id: int, req: PostMessageRequest, request: Request, token: Optional[str] = None):
-    import json as _json
-    from core.auth_service import validate_session_token
-    from core.agents.user_interact.context import set_owner_id
+    # Note: Auth migrated to fastapi-users
 
     tok = token or _extract_token_from_request(request)
 
     settings = _get_user_settings(tok)
     mode = str(settings.get("mode", "user") or "user")
-    owner_id = None
-
-    if tok:
-        sess = validate_session_token(tok)
-        logger.info(f"[DEBUG POST] Session validation result: {sess}")
-        if sess and "user_id" in sess:
-            owner_id = str(sess["user_id"])
-            logger.info(f"[DEBUG POST] Extracted owner_id: {owner_id}")
-    else:
-        logger.warning("[DEBUG POST] No token provided!")
-
+    # Note: Auth migrated to fastapi-users, token validation removed
     um = add_message(thread_id=thread_id, role="user", content=req.content, parent_id=req.parent_id)
-    uia = UserInteractionAgent(user_name=req.user_name, mode=mode, owner_id=owner_id)
-    logger.info(f"[DEBUG POST] Created UserInteractionAgent with owner_id={owner_id}")
-
-    if owner_id:
-        set_owner_id(owner_id)
-        logger.info(f"[DEBUG POST] Called set_owner_id({owner_id})")
+    uia = UserInteractionAgent(user_name=req.user_name, mode=mode, owner_id=None)
+    logger.info(f"[DEBUG POST] Created UserInteractionAgent without owner_id (auth migration)")
 
     for item in _assemble_memory(thread_id):
         uia.add_to_memory(item["role"], item["content"])
@@ -201,9 +182,9 @@ def api_post_message(thread_id: int, req: PostMessageRequest, request: Request, 
     try:
         update_message(
             um.id,
-            agents=_json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
-            tools=_json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
-            meta=(None if metadata is None else _json.dumps(metadata, ensure_ascii=False)),
+            agents=json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
+            tools=json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
+            meta=(None if metadata is None else json.dumps(metadata, ensure_ascii=False)),
         )
     except Exception:
         pass
@@ -216,11 +197,11 @@ def api_post_message(thread_id: int, req: PostMessageRequest, request: Request, 
         token_in=token_in,
         token_out=token_out,
         cost_usd=cost_usd,
-        agents=_json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
-        tools=_json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
+        agents=json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
+        tools=json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
         api_calls=api_calls,
         parent_id=um.id,
-        meta=(None if metadata is None else _json.dumps(metadata, ensure_ascii=False)),
+        meta=(None if metadata is None else json.dumps(metadata, ensure_ascii=False)),
     )
 
     try:
@@ -259,8 +240,11 @@ def api_post_message(thread_id: int, req: PostMessageRequest, request: Request, 
 
 @router.post("/{thread_id}/messages/stream")
 def api_post_message_stream(thread_id: int, req: PostMessageRequest, request: Request, token: Optional[str] = None):
-    import json as _json
-
+    try:
+        with open("debug_stream.txt", "a") as f:
+            f.write(f"DEBUG: Entered api_post_message_stream for thread {thread_id}\n")
+    except Exception:
+        pass
     tok = token or _extract_token_from_request(request)
 
     def _get_show_thinking() -> bool:
@@ -277,38 +261,21 @@ def api_post_message_stream(thread_id: int, req: PostMessageRequest, request: Re
         except Exception:
             return "user"
 
-    def _iter():
+    async def _iter():
         try:
             if _get_show_thinking():
-                yield "event: thinking\n" + "data: " + _json.dumps({"status": "started"}) + "\n\n"
+                yield "event: thinking\n" + "data: " + json.dumps({"status": "started"}) + "\n\n"
             else:
                 yield "event: ping\n" + "data: {}\n\n"
         except Exception:
             yield "event: ping\n" + "data: {}\n\n"
 
         try:
-            from core.auth_service import validate_session_token
-            from core.agents.user_interact.context import set_owner_id
-
-            owner_id = None
-            if tok:
-                sess = validate_session_token(tok)
-                logger.info(f"[DEBUG STREAM] Session validation result: {sess}")
-                if sess and "user_id" in sess:
-                    owner_id = str(sess["user_id"])
-                    logger.info(f"[DEBUG STREAM] Extracted owner_id: {owner_id}")
-            else:
-                logger.warning("[DEBUG STREAM] No token provided!")
-
+            # Note: Auth migrated to fastapi-users, token validation removed
             um = add_message(thread_id=thread_id, role="user", content=req.content, parent_id=req.parent_id)
 
-            uia = UserInteractionAgent(user_name=req.user_name, mode=_get_mode(), owner_id=owner_id)
-            logger.info(f"[DEBUG STREAM] Created UserInteractionAgent with owner_id={owner_id}")
-
-            if owner_id:
-                set_owner_id(owner_id)
-                logger.info(f"[DEBUG STREAM] Called set_owner_id({owner_id})")
-
+            uia = UserInteractionAgent(user_name=req.user_name, mode=_get_mode(), owner_id=None)
+            
             for item in _assemble_memory(thread_id):
                 uia.add_to_memory(item["role"], item["content"])
 
@@ -323,11 +290,11 @@ def api_post_message_stream(thread_id: int, req: PostMessageRequest, request: Re
             activated_agents: set = set()
             tool_events: List[Dict[str, Any]] = []
             try:
-                for delta in uia.stream_response(req.content):
+                async for delta in uia.stream_response(req.content):
                     try:
                         if isinstance(delta, str) and delta:
                             full_parts.append(delta)
-                            yield "event: message\n" + "data: " + _json.dumps({"id": am.id, "delta": delta}, ensure_ascii=False) + "\n\n"
+                            yield "event: message\n" + "data: " + json.dumps({"id": am.id, "delta": delta}, ensure_ascii=False) + "\n\n"
                             continue
 
                         if isinstance(delta, dict):

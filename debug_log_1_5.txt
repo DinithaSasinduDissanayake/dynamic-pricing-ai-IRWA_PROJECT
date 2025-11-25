@@ -1,0 +1,118 @@
+19:43:25 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+19:43:28 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+19:43:30 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+19:43:33 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+19:43:35 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+19:43:37 - LiteLLM:INFO: utils.py:3427 - 
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+INFO:LiteLLM:
+LiteLLM completion() model= gemini-1.5-flash; provider = gemini
+--- Detailed Key Debugger ---
+Found 6 keys to test.
+
+--- Testing GEMINI_API_KEY ending in ...MOmA ---
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+[FAIL] FAILED: litellm.NotFoundError: GeminiException - {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+--- Testing GEMINI_API_KEY_1 ending in ...MOmA ---
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+[FAIL] FAILED: litellm.NotFoundError: GeminiException - {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+--- Testing GEMINI_API_KEY_2 ending in ...R4lc ---
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+[FAIL] FAILED: litellm.NotFoundError: GeminiException - {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+--- Testing GEMINI_API_KEY_3 ending in ...2d8I ---
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+[FAIL] FAILED: litellm.NotFoundError: GeminiException - {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+--- Testing GEMINI_API_KEY_4 ending in ...CkXc ---
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+[FAIL] FAILED: litellm.NotFoundError: GeminiException - {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+--- Testing GEMINI_API_KEY_5 ending in ...X41Y ---
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+[FAIL] FAILED: litellm.NotFoundError: GeminiException - {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+--- Summary ---
+GEMINI_API_KEY: [FAIL] Dead
+GEMINI_API_KEY_1: [FAIL] Dead
+GEMINI_API_KEY_2: [FAIL] Dead
+GEMINI_API_KEY_3: [FAIL] Dead
+GEMINI_API_KEY_4: [FAIL] Dead
+GEMINI_API_KEY_5: [FAIL] Dead

@@ -1,0 +1,20 @@
+LLM chat failed: litellm.InternalServerError: litellm.InternalServerError: geminiException - {
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAILABLE"
+  }
+}
+
+Model: gemini/gemini-2.5-flash
+Keys: 6
+[FAIL] Error: litellm.InternalServerError: litellm.InternalServerError: geminiException - {
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAILABLE"
+  }
+}
+
+
+Test FAILED

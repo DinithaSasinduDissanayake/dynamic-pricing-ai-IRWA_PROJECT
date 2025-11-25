@@ -7,7 +7,7 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
-from core.agents.agent_sdk.bus_factory import get_bus
+from core.agents.agent_sdk.event_bus import get_bus
 from core.agents.agent_sdk.protocol import Topic
 from core.agents.agent_sdk.events_models import PriceProposal
 from core.agents.auto_applier_db import AutoApplierDB

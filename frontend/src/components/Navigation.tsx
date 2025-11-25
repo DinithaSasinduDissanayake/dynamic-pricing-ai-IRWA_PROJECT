@@ -99,10 +99,10 @@ export function Navigation() {
             </>
           ) : (
             <>
-              <Button variant="outline" onClick={() => navigate('/auth?mode=signin')}>
+              <Button variant="outline" onClick={() => navigate('/login?mode=signin')}>
                 Sign In
               </Button>
-              <Button onClick={() => navigate('/auth?mode=signup')}>Get Started</Button>
+              <Button onClick={() => navigate('/login?mode=signup')}>Get Started</Button>
             </>
           )}
         </div>

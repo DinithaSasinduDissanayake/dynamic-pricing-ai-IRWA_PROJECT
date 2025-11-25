@@ -1,23 +1,18 @@
-from typing import Any, Dict, Optional
-from fastapi import HTTPException, Query
-from core.auth_service import validate_session_token
+from typing import Any, Dict
+from fastapi import Depends
+from core.users import current_active_user
+from core.auth_db import User
 from core.agents.data_collector.repo import DataRepo
 
 
-async def get_current_user(token: str = Query(...)) -> Dict[str, Any]:
-    sess = validate_session_token(token)
-    if not sess:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-    return sess
+async def get_current_user(user: User = Depends(current_active_user)) -> Dict[str, Any]:
+    """Get current authenticated user using fastapi-users"""
+    return {"user_id": str(user.id), "email": user.email, "full_name": user.full_name}
 
 
-async def get_current_user_for_alerts(token: Optional[str] = Query(None)) -> Dict[str, Any]:
-    if not token:
-        raise HTTPException(status_code=401, detail="Authentication token required")
-    sess = validate_session_token(token)
-    if not sess:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-    return sess
+async def get_current_user_for_alerts(user: User = Depends(current_active_user)) -> Dict[str, Any]:
+    """Get current authenticated user for alerts using fastapi-users"""
+    return {"user_id": str(user.id), "email": user.email, "full_name": user.full_name}
 
 
 async def get_repo() -> DataRepo:

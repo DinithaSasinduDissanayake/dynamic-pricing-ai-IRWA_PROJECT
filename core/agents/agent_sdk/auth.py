@@ -5,14 +5,13 @@ import time
 import os
 from typing import Set, Optional, Dict, Any
 import functools
-
-# Import logging system - simplified approach for compatibility
 import logging
 import uuid
 
+# Import centralized config
+from core.settings import get_config
+
 # Always use standard logging for now to avoid compatibility issues
-# Back-compat: tests import STRUCTURED_LOGGING from auth; expose flag
-STRUCTURED_LOGGING = False
 logger = logging.getLogger("mcp.auth")
 
 def new_correlation_id():
@@ -81,14 +80,11 @@ DEFAULT_SCOPES = {
     "admin": {"read", "write", "create_rule", "subscribe", "collect", "import", "propose", "apply", "explain", "admin"}
 }
 
-# Import centralized config
-from core.config import get_config
-
 # Initialize config-based globals
 def _get_auth_config():
     """Get auth configuration from centralized config."""
     config = get_config()
-    return config.auth_secret, config.token_expiry_seconds, config.auth_metrics_enabled
+    return config.mcp_auth_secret, config.mcp_token_expiry, config.mcp_auth_metrics
 
 AUTH_SECRET, TOKEN_EXPIRY_SECONDS, METRICS_ENABLED = _get_auth_config()
 
@@ -381,14 +377,3 @@ def create_dev_token(scopes: str) -> str:
     """
     scope_set = set(s.strip() for s in scopes.split(","))
     return create_token(scope_set)
-
-# Backward compatibility with existing alert service auth
-def verify_capability_legacy(token: str, scope: str):
-    """Legacy verify_capability function for backward compatibility.
-    
-    Raises PermissionError instead of AuthError to match original behavior.
-    """
-    try:
-        verify_capability(token, scope)
-    except AuthError as e:
-        raise PermissionError(str(e)) from e

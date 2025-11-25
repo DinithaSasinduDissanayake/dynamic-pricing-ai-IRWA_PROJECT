@@ -4,20 +4,21 @@ Performance Monitor for Dynamic Pricing AI System
 This module provides real-time performance monitoring for IRWA compliance:
 - Continuous performance tracking with configurable intervals
 - Alert system with customizable thresholds
-- System health monitoring (CPU, memory, disk)
 - Dashboard data integration
 - Event callbacks for performance issues
 """
 
 import asyncio
 import time
-import psutil
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Callable, Any
 from dataclasses import dataclass, asdict
 from enum import Enum
 import json
 import logging
+
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy import text
 
 from .metrics import MetricsCalculator, SystemPerformanceMetrics
 
@@ -39,9 +40,6 @@ class AlertThresholds:
     max_response_time_ms: float = 300.0
     max_data_freshness_minutes: float = 15.0
     min_availability_percent: float = 95.0
-    max_memory_usage_percent: float = 85.0
-    max_cpu_usage_percent: float = 80.0
-    max_disk_usage_percent: float = 90.0
     max_error_rate_percent: float = 2.0
     
     # Business impact thresholds
@@ -79,31 +77,6 @@ class PerformanceAlert:
         }
 
 
-@dataclass
-class SystemHealthSnapshot:
-    """System health snapshot for monitoring"""
-    timestamp: datetime
-    cpu_usage_percent: float
-    memory_usage_percent: float
-    disk_usage_percent: float
-    network_io_bytes: int
-    disk_io_bytes: int
-    active_connections: int
-    process_count: int
-    
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            'timestamp': self.timestamp.isoformat(),
-            'cpu_usage_percent': self.cpu_usage_percent,
-            'memory_usage_percent': self.memory_usage_percent,
-            'disk_usage_percent': self.disk_usage_percent,
-            'network_io_bytes': self.network_io_bytes,
-            'disk_io_bytes': self.disk_io_bytes,
-            'active_connections': self.active_connections,
-            'process_count': self.process_count
-        }
-
-
 class PerformanceMonitor:
     """Real-time performance monitoring system"""
     
@@ -118,7 +91,6 @@ class PerformanceMonitor:
         
         self.active_alerts: Dict[str, PerformanceAlert] = {}
         self.alert_callbacks: List[Callable[[PerformanceAlert], None]] = []
-        self.health_history: List[SystemHealthSnapshot] = []
         self.is_monitoring = False
         
         # Initialize logging
@@ -151,17 +123,6 @@ class PerformanceMonitor:
     
     async def _monitor_cycle(self):
         """Execute one monitoring cycle"""
-        # Collect system health snapshot
-        health_snapshot = self._collect_system_health()
-        self.health_history.append(health_snapshot)
-        
-        # Keep only last 24 hours of history
-        cutoff_time = datetime.now() - timedelta(hours=24)
-        self.health_history = [
-            h for h in self.health_history 
-            if h.timestamp > cutoff_time
-        ]
-        
         # Get performance metrics
         try:
             performance_metrics = await self.metrics_calculator.calculate_system_performance_metrics()
@@ -170,45 +131,9 @@ class PerformanceMonitor:
             # Check thresholds and generate alerts
             await self._check_performance_thresholds(performance_metrics)
             await self._check_pricing_thresholds(pricing_metrics)
-            await self._check_system_health_thresholds(health_snapshot)
             
         except Exception as e:
             self.logger.error(f"Error collecting metrics: {e}")
-    
-    def _collect_system_health(self) -> SystemHealthSnapshot:
-        """Collect current system health metrics"""
-        try:
-            # Get system resource usage
-            cpu_usage = psutil.cpu_percent(interval=1)
-            memory = psutil.virtual_memory()
-            disk = psutil.disk_usage('/')
-            
-            # Get network and disk I/O
-            net_io = psutil.net_io_counters()
-            disk_io = psutil.disk_io_counters()
-            
-            return SystemHealthSnapshot(
-                timestamp=datetime.now(),
-                cpu_usage_percent=cpu_usage,
-                memory_usage_percent=memory.percent,
-                disk_usage_percent=disk.percent if disk else 0.0,
-                network_io_bytes=net_io.bytes_sent + net_io.bytes_recv if net_io else 0,
-                disk_io_bytes=disk_io.read_bytes + disk_io.write_bytes if disk_io else 0,
-                active_connections=len(psutil.net_connections()),
-                process_count=len(psutil.pids())
-            )
-        except Exception as e:
-            self.logger.error(f"Error collecting system health: {e}")
-            return SystemHealthSnapshot(
-                timestamp=datetime.now(),
-                cpu_usage_percent=0.0,
-                memory_usage_percent=0.0,
-                disk_usage_percent=0.0,
-                network_io_bytes=0,
-                disk_io_bytes=0,
-                active_connections=0,
-                process_count=0
-            )
     
     async def _check_performance_thresholds(self, metrics: SystemPerformanceMetrics):
         """Check performance metrics against thresholds"""
@@ -289,48 +214,6 @@ class PerformanceMonitor:
         else:
             await self._resolve_alert("pricing_precision")
     
-    async def _check_system_health_thresholds(self, health: SystemHealthSnapshot):
-        """Check system health metrics against thresholds"""
-        
-        # CPU usage check
-        if health.cpu_usage_percent > self.thresholds.max_cpu_usage_percent:
-            severity = AlertSeverity.CRITICAL if health.cpu_usage_percent > 95 else AlertSeverity.WARNING
-            await self._trigger_alert(
-                "cpu_usage",
-                severity,
-                health.cpu_usage_percent,
-                self.thresholds.max_cpu_usage_percent,
-                f"CPU usage {health.cpu_usage_percent:.1f}% exceeds threshold {self.thresholds.max_cpu_usage_percent:.1f}%"
-            )
-        else:
-            await self._resolve_alert("cpu_usage")
-        
-        # Memory usage check
-        if health.memory_usage_percent > self.thresholds.max_memory_usage_percent:
-            severity = AlertSeverity.CRITICAL if health.memory_usage_percent > 95 else AlertSeverity.WARNING
-            await self._trigger_alert(
-                "memory_usage",
-                severity,
-                health.memory_usage_percent,
-                self.thresholds.max_memory_usage_percent,
-                f"Memory usage {health.memory_usage_percent:.1f}% exceeds threshold {self.thresholds.max_memory_usage_percent:.1f}%"
-            )
-        else:
-            await self._resolve_alert("memory_usage")
-        
-        # Disk usage check
-        if health.disk_usage_percent > self.thresholds.max_disk_usage_percent:
-            severity = AlertSeverity.CRITICAL if health.disk_usage_percent > 95 else AlertSeverity.WARNING
-            await self._trigger_alert(
-                "disk_usage",
-                severity,
-                health.disk_usage_percent,
-                self.thresholds.max_disk_usage_percent,
-                f"Disk usage {health.disk_usage_percent:.1f}% exceeds threshold {self.thresholds.max_disk_usage_percent:.1f}%"
-            )
-        else:
-            await self._resolve_alert("disk_usage")
-    
     async def _trigger_alert(self, 
                            metric_name: str,
                            severity: AlertSeverity,
@@ -395,15 +278,22 @@ class PerformanceMonitor:
     
     async def _store_alert(self, alert: PerformanceAlert):
         """Store alert in database"""
-        import aiosqlite
-        
         try:
-            async with aiosqlite.connect(self.db_path) as conn:
-                await conn.execute("""
-                    INSERT OR REPLACE INTO evaluation_metrics (metric_type, metric_data, session_id)
-                    VALUES (?, ?, ?)
-                """, ("performance_alert", json.dumps(alert.to_dict()), alert.alert_id))
-                await conn.commit()
+            # Use the same DB path pattern as other components
+            engine = create_async_engine(f"sqlite+aiosqlite:///{self.db_path}", echo=False)
+            
+            async with engine.begin() as conn:
+                await conn.execute(
+                    text("""
+                        INSERT OR REPLACE INTO evaluation_metrics (metric_type, metric_data, session_id)
+                        VALUES (:type, :data, :id)
+                    """),
+                    {
+                        "type": "performance_alert",
+                        "data": json.dumps(alert.to_dict()),
+                        "id": alert.alert_id
+                    }
+                )
         except Exception as e:
             self.logger.error(f"Error storing alert: {e}")
     
@@ -419,33 +309,9 @@ class PerformanceMonitor:
             if alert.timestamp > cutoff_time
         ]
     
-    def get_system_health_trends(self, hours: int = 6) -> Dict[str, List[float]]:
-        """Get system health trends for dashboard display"""
-        cutoff_time = datetime.now() - timedelta(hours=hours)
-        recent_health = [
-            h for h in self.health_history
-            if h.timestamp > cutoff_time
-        ]
-        
-        if not recent_health:
-            return {
-                'timestamps': [],
-                'cpu_usage': [],
-                'memory_usage': [],
-                'disk_usage': []
-            }
-        
-        return {
-            'timestamps': [h.timestamp.isoformat() for h in recent_health],
-            'cpu_usage': [h.cpu_usage_percent for h in recent_health],
-            'memory_usage': [h.memory_usage_percent for h in recent_health],
-            'disk_usage': [h.disk_usage_percent for h in recent_health]
-        }
-    
     def get_performance_dashboard_data(self) -> Dict[str, Any]:
         """Get comprehensive performance data for dashboard"""
         active_alerts = self.get_active_alerts()
-        health_trends = self.get_system_health_trends()
         
         # Calculate alert counts by severity
         alert_counts = {
@@ -454,15 +320,10 @@ class PerformanceMonitor:
             'info': len([a for a in active_alerts if a.severity == AlertSeverity.INFO])
         }
         
-        # Get latest system health
-        latest_health = self.health_history[-1] if self.health_history else None
-        
         return {
             'monitoring_status': 'active' if self.is_monitoring else 'inactive',
             'alert_counts': alert_counts,
             'active_alerts': [alert.to_dict() for alert in active_alerts],
-            'health_trends': health_trends,
-            'latest_health': latest_health.to_dict() if latest_health else None,
             'thresholds': self.thresholds.to_dict(),
             'monitoring_interval': self.monitoring_interval
         }

@@ -144,19 +144,18 @@ class _MCPDataCollectorTools:
     async def _call_tool(self, tool_name: str, arguments: Dict[str, Any], timeout: float = 30.0, retries: int = 3) -> Tuple[bool, Dict[str, Any]]:
         """Call MCP tool with connection pooling, timeout, retries, and exponential backoff."""
         import random
+        from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type, AsyncRetrying
         
         try:
             from mcp.client.session import ClientSession  # type: ignore
         except Exception as e:
             return False, {"ok": False, "error": f"mcp_client_import_error: {e}", "error_code": "import_error"}
 
-        last_error = None
         pool = await self._get_pool()
         
-        for attempt in range(retries):
+        async def _attempt_call():
             read, write = None, None
             reusable = True
-            
             try:
                 # Get connection from pool
                 read, write = await asyncio.wait_for(
@@ -191,15 +190,14 @@ class _MCPDataCollectorTools:
                                         # Add metadata
                                         data.setdefault("_mcp_meta", {
                                             "tool": tool_name, 
-                                            "attempt": attempt + 1,
                                             "timestamp": time.time(),
                                             "pool_key": self._pool_key
                                         })
                                         return True, data
                                     else:
-                                        return True, {"ok": True, "data": data, "_mcp_meta": {"tool": tool_name, "attempt": attempt + 1}}
+                                        return True, {"ok": True, "data": data, "_mcp_meta": {"tool": tool_name}}
                                 except Exception:
-                                    return True, {"ok": True, "content": payload, "_mcp_meta": {"tool": tool_name, "attempt": attempt + 1}}
+                                    return True, {"ok": True, "content": payload, "_mcp_meta": {"tool": tool_name}}
                         except Exception:
                             pass
 
@@ -209,39 +207,38 @@ class _MCPDataCollectorTools:
                             if isinstance(data, dict):
                                 data.setdefault("_mcp_meta", {
                                     "tool": tool_name, 
-                                    "attempt": attempt + 1, 
                                     "timestamp": time.time(),
                                     "pool_key": self._pool_key
                                 })
                                 return True, data
                             else:
-                                return True, {"ok": True, "data": data, "_mcp_meta": {"tool": tool_name, "attempt": attempt + 1}}
+                                return True, {"ok": True, "data": data, "_mcp_meta": {"tool": tool_name}}
                         except Exception:
-                            return True, {"ok": True, "result": str(res), "_mcp_meta": {"tool": tool_name, "attempt": attempt + 1}}
+                            return True, {"ok": True, "result": str(res), "_mcp_meta": {"tool": tool_name}}
                                 
             except asyncio.TimeoutError:
-                last_error = f"timeout_after_{timeout}s"
                 reusable = False  # Don't reuse timed-out connections
-            except Exception as e:
-                last_error = str(e)
+                raise
+            except Exception:
                 reusable = False  # Don't reuse failed connections
+                raise
             finally:
                 # Return connection to pool
                 if read is not None and write is not None:
                     await pool.return_connection(read, write, reusable=reusable)
-            
-            # Exponential backoff with jitter (except on last attempt)
-            if attempt < retries - 1:
-                backoff = min(2 ** attempt + random.uniform(0, 1), 10.0)  # Max 10s
-                await asyncio.sleep(backoff)
-        
-        return False, {
-            "ok": False, 
-            "error": f"mcp_client_runtime_error: {last_error}", 
-            "error_code": "timeout" if "timeout" in str(last_error) else "runtime_error",
-            "attempts": retries,
-            "_mcp_meta": {"tool": tool_name, "final_attempt": True, "pool_key": self._pool_key}
-        }
+
+        try:
+            async for attempt in AsyncRetrying(stop=stop_after_attempt(retries), wait=wait_exponential(multiplier=1, min=1, max=10)):
+                with attempt:
+                    return await _attempt_call()
+        except Exception as e:
+            return False, {
+                "ok": False, 
+                "error": f"mcp_client_runtime_error: {str(e)}", 
+                "error_code": "timeout" if "timeout" in str(e).lower() else "runtime_error",
+                "attempts": retries,
+                "_mcp_meta": {"tool": tool_name, "final_attempt": True, "pool_key": self._pool_key}
+            }
 
     async def start_collection(self, sku: str, market: str = "DEFAULT", connector: str = "mock", depth: int = 1) -> Dict[str, Any]:
         ok, res = await self._call_tool("start_collection", {

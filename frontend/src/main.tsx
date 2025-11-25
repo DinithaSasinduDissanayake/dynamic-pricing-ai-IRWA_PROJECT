@@ -47,7 +47,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/" element={<LandingPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/login" element={<AuthPage />} />
               <Route
                 path="/chat"
                 element={

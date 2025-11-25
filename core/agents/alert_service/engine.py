@@ -3,7 +3,6 @@ import logging
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 from types import SimpleNamespace
-import aiosqlite
 
 from .repo import Repo
 from .rules import RuleRuntime
@@ -12,7 +11,7 @@ from .schemas import Alert
 from .sinks import get_sinks
 from .tools import Tools, get_llm_tools, execute_tool_call
 from core.agents.agent_sdk.protocol import Topic
-from core.agents.agent_sdk.bus_factory import get_bus
+from core.agents.agent_sdk.event_bus import get_bus
 
 bus = get_bus()
 
@@ -205,12 +204,18 @@ Use your tools to investigate and take action."""
     
     async def _get_owner_id_for_sku(self, sku: str) -> Optional[str]:
         try:
-            async with aiosqlite.connect("app/data.db") as db:
-                cur = await db.execute(
-                    "SELECT owner_id FROM product_catalog WHERE sku=? LIMIT 1",
-                    (sku,),
+            from core.agents.data_collector.repo import DataRepo
+            from sqlalchemy import text
+            
+            repo = DataRepo()
+            engine = repo._get_engine()
+            
+            async with engine.connect() as conn:
+                result = await conn.execute(
+                    text("SELECT owner_id FROM product_catalog WHERE sku=:sku LIMIT 1"),
+                    {"sku": sku}
                 )
-                row = await cur.fetchone()
+                row = result.fetchone()
                 return str(row[0]) if row else None
         except Exception as e:
             self.logger.warning(f"Failed to fetch owner_id for SKU {sku}: {e}")

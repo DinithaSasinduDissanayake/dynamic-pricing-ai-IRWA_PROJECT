@@ -7,6 +7,6 @@ Exports:
 """
 
 from .protocol import Topic
-from .bus_factory import get_bus
+from .event_bus import get_bus
 
 __all__ = ["Topic", "get_bus"]

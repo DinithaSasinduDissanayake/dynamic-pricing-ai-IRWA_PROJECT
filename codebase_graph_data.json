@@ -1,0 +1,4425 @@
+{
+  "nodes": [
+    {
+      "id": "$null",
+      "group": "other",
+      "size": 95,
+      "name": "$null"
+    },
+    {
+      "id": "check_imports.py",
+      "group": "other",
+      "size": 237,
+      "name": "check_imports.py"
+    },
+    {
+      "id": "conftest.py",
+      "group": "other",
+      "size": 145,
+      "name": "conftest.py"
+    },
+    {
+      "id": "fix_catalog_patches.py",
+      "group": "other",
+      "size": 484,
+      "name": "fix_catalog_patches.py"
+    },
+    {
+      "id": "fix_prices_patches.py",
+      "group": "other",
+      "size": 648,
+      "name": "fix_prices_patches.py"
+    },
+    {
+      "id": "fix_tests.py",
+      "group": "other",
+      "size": 1100,
+      "name": "fix_tests.py"
+    },
+    {
+      "id": "quick_test.py",
+      "group": "other",
+      "size": 698,
+      "name": "quick_test.py"
+    },
+    {
+      "id": "sample_catalog.csv",
+      "group": "other",
+      "size": 348,
+      "name": "sample_catalog.csv"
+    },
+    {
+      "id": "test_price_optimizer_integration.py",
+      "group": "other",
+      "size": 4376,
+      "name": "test_price_optimizer_integration.py"
+    },
+    {
+      "id": "test_user_interaction_optimization.py",
+      "group": "other",
+      "size": 4192,
+      "name": "test_user_interaction_optimization.py"
+    },
+    {
+      "id": "app\\data.db.old",
+      "group": "other",
+      "size": 225280,
+      "name": "data.db.old"
+    },
+    {
+      "id": "backend\\deps.py",
+      "group": "backend",
+      "size": 800,
+      "name": "deps.py"
+    },
+    {
+      "id": "backend\\main.py",
+      "group": "backend",
+      "size": 6914,
+      "name": "main.py"
+    },
+    {
+      "id": "backend\\test_auth_settings_api.py",
+      "group": "backend",
+      "size": 11356,
+      "name": "test_auth_settings_api.py"
+    },
+    {
+      "id": "backend\\test_catalog_delete_api.py",
+      "group": "backend",
+      "size": 2611,
+      "name": "test_catalog_delete_api.py"
+    },
+    {
+      "id": "backend\\test_chat_api.py",
+      "group": "backend",
+      "size": 15649,
+      "name": "test_chat_api.py"
+    },
+    {
+      "id": "backend\\__init__.py",
+      "group": "backend",
+      "size": 49,
+      "name": "__init__.py"
+    },
+    {
+      "id": "backend\\routers\\alerts.py",
+      "group": "backend",
+      "size": 1542,
+      "name": "alerts.py"
+    },
+    {
+      "id": "backend\\routers\\auth.py",
+      "group": "backend",
+      "size": 1071,
+      "name": "auth.py"
+    },
+    {
+      "id": "backend\\routers\\catalog.py",
+      "group": "backend",
+      "size": 5045,
+      "name": "catalog.py"
+    },
+    {
+      "id": "backend\\routers\\collector.py",
+      "group": "backend",
+      "size": 2417,
+      "name": "collector.py"
+    },
+    {
+      "id": "backend\\routers\\debug.py",
+      "group": "backend",
+      "size": 11200,
+      "name": "debug.py"
+    },
+    {
+      "id": "backend\\routers\\messages.py",
+      "group": "backend",
+      "size": 1568,
+      "name": "messages.py"
+    },
+    {
+      "id": "backend\\routers\\prices.py",
+      "group": "backend",
+      "size": 3770,
+      "name": "prices.py"
+    },
+    {
+      "id": "backend\\routers\\settings.py",
+      "group": "backend",
+      "size": 2024,
+      "name": "settings.py"
+    },
+    {
+      "id": "backend\\routers\\streaming.py",
+      "group": "backend",
+      "size": 17493,
+      "name": "streaming.py"
+    },
+    {
+      "id": "backend\\routers\\threads.py",
+      "group": "backend",
+      "size": 6860,
+      "name": "threads.py"
+    },
+    {
+      "id": "backend\\routers\\utils.py",
+      "group": "backend",
+      "size": 12032,
+      "name": "utils.py"
+    },
+    {
+      "id": "backend\\routers\\__init__.py",
+      "group": "backend",
+      "size": 3,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\auth_db.py",
+      "group": "core",
+      "size": 1724,
+      "name": "auth_db.py"
+    },
+    {
+      "id": "core\\chat_db.py",
+      "group": "core",
+      "size": 7799,
+      "name": "chat_db.py"
+    },
+    {
+      "id": "core\\create_market_db.py",
+      "group": "core",
+      "size": 1125,
+      "name": "create_market_db.py"
+    },
+    {
+      "id": "core\\payloads.py",
+      "group": "core",
+      "size": 2841,
+      "name": "payloads.py"
+    },
+    {
+      "id": "core\\settings.py",
+      "group": "core",
+      "size": 5833,
+      "name": "settings.py"
+    },
+    {
+      "id": "core\\tool_registry.py",
+      "group": "core",
+      "size": 4757,
+      "name": "tool_registry.py"
+    },
+    {
+      "id": "core\\users.py",
+      "group": "core",
+      "size": 1773,
+      "name": "users.py"
+    },
+    {
+      "id": "core\\workflow_templates.py",
+      "group": "core",
+      "size": 2774,
+      "name": "workflow_templates.py"
+    },
+    {
+      "id": "core\\__init__.py",
+      "group": "core",
+      "size": 0,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\auto_applier.py",
+      "group": "core",
+      "size": 5528,
+      "name": "auto_applier.py"
+    },
+    {
+      "id": "core\\agents\\auto_applier_db.py",
+      "group": "core",
+      "size": 10045,
+      "name": "auto_applier_db.py"
+    },
+    {
+      "id": "core\\agents\\base_chat_handler.py",
+      "group": "core",
+      "size": 8358,
+      "name": "base_chat_handler.py"
+    },
+    {
+      "id": "core\\agents\\chat_executor.py",
+      "group": "core",
+      "size": 3124,
+      "name": "chat_executor.py"
+    },
+    {
+      "id": "core\\agents\\governance_execution_agent.py",
+      "group": "core",
+      "size": 13562,
+      "name": "governance_execution_agent.py"
+    },
+    {
+      "id": "core\\agents\\key_manager.py",
+      "group": "core",
+      "size": 4707,
+      "name": "key_manager.py"
+    },
+    {
+      "id": "core\\agents\\llm_client.py",
+      "group": "core",
+      "size": 11121,
+      "name": "llm_client.py"
+    },
+    {
+      "id": "core\\agents\\llm_provider_manager.py",
+      "group": "core",
+      "size": 7632,
+      "name": "llm_provider_manager.py"
+    },
+    {
+      "id": "core\\agents\\market_collector.py",
+      "group": "core",
+      "size": 926,
+      "name": "market_collector.py"
+    },
+    {
+      "id": "core\\agents\\policy_guard.py",
+      "group": "core",
+      "size": 0,
+      "name": "policy_guard.py"
+    },
+    {
+      "id": "core\\agents\\proposal_logger.py",
+      "group": "core",
+      "size": 4610,
+      "name": "proposal_logger.py"
+    },
+    {
+      "id": "core\\agents\\supervisor.py",
+      "group": "core",
+      "size": 9333,
+      "name": "supervisor.py"
+    },
+    {
+      "id": "core\\agents\\__init__.py",
+      "group": "core",
+      "size": 34,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\activity_log.py",
+      "group": "core",
+      "size": 3372,
+      "name": "activity_log.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\auth.py",
+      "group": "core",
+      "size": 14251,
+      "name": "auth.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\events_models.py",
+      "group": "core",
+      "size": 739,
+      "name": "events_models.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\event_bus.py",
+      "group": "core",
+      "size": 3627,
+      "name": "event_bus.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\health_tools.py",
+      "group": "core",
+      "size": 2127,
+      "name": "health_tools.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\mcp_client.py",
+      "group": "core",
+      "size": 28368,
+      "name": "mcp_client.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\protocol.py",
+      "group": "core",
+      "size": 481,
+      "name": "protocol.py"
+    },
+    {
+      "id": "core\\agents\\agent_sdk\\__init__.py",
+      "group": "core",
+      "size": 269,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\api.py",
+      "group": "core",
+      "size": 2407,
+      "name": "api.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\auth.py",
+      "group": "core",
+      "size": 939,
+      "name": "auth.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\config.py",
+      "group": "core",
+      "size": 3339,
+      "name": "config.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\correlate.py",
+      "group": "core",
+      "size": 547,
+      "name": "correlate.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\detectors.py",
+      "group": "core",
+      "size": 1033,
+      "name": "detectors.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\engine.py",
+      "group": "core",
+      "size": 9039,
+      "name": "engine.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\repo.py",
+      "group": "core",
+      "size": 12530,
+      "name": "repo.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\rules.py",
+      "group": "core",
+      "size": 6701,
+      "name": "rules.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\schemas.py",
+      "group": "core",
+      "size": 2090,
+      "name": "schemas.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\tools.py",
+      "group": "core",
+      "size": 7793,
+      "name": "tools.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\__init__.py",
+      "group": "core",
+      "size": 0,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\sinks\\email.py",
+      "group": "core",
+      "size": 4081,
+      "name": "email.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\sinks\\slack.py",
+      "group": "core",
+      "size": 2839,
+      "name": "slack.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\sinks\\ui.py",
+      "group": "core",
+      "size": 322,
+      "name": "ui.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\sinks\\webhook.py",
+      "group": "core",
+      "size": 2588,
+      "name": "webhook.py"
+    },
+    {
+      "id": "core\\agents\\alert_service\\sinks\\__init__.py",
+      "group": "core",
+      "size": 923,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\agent.py",
+      "group": "core",
+      "size": 3831,
+      "name": "agent.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\collector.py",
+      "group": "core",
+      "size": 7667,
+      "name": "collector.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\mcp_server.py",
+      "group": "core",
+      "size": 12321,
+      "name": "mcp_server.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\repo.py",
+      "group": "core",
+      "size": 16046,
+      "name": "repo.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\tools.py",
+      "group": "core",
+      "size": 17852,
+      "name": "tools.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\connectors\\mock.py",
+      "group": "core",
+      "size": 657,
+      "name": "mock.py"
+    },
+    {
+      "id": "core\\agents\\data_collector\\connectors\\web_scraper.py",
+      "group": "core",
+      "size": 3283,
+      "name": "web_scraper.py"
+    },
+    {
+      "id": "core\\agents\\langchain_integration\\langchain_client.py",
+      "group": "core",
+      "size": 15440,
+      "name": "langchain_client.py"
+    },
+    {
+      "id": "core\\agents\\langchain_integration\\__init__.py",
+      "group": "core",
+      "size": 50,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\price_optimizer\\agent.py",
+      "group": "core",
+      "size": 5605,
+      "name": "agent.py"
+    },
+    {
+      "id": "core\\agents\\price_optimizer\\algorithms.py",
+      "group": "core",
+      "size": 4406,
+      "name": "algorithms.py"
+    },
+    {
+      "id": "core\\agents\\price_optimizer\\llm_brain.py",
+      "group": "core",
+      "size": 6526,
+      "name": "llm_brain.py"
+    },
+    {
+      "id": "core\\agents\\price_optimizer\\optimizer.py",
+      "group": "core",
+      "size": 5114,
+      "name": "optimizer.py"
+    },
+    {
+      "id": "core\\agents\\price_optimizer\\tools.py",
+      "group": "core",
+      "size": 22308,
+      "name": "tools.py"
+    },
+    {
+      "id": "core\\agents\\price_optimizer\\__init__.py",
+      "group": "core",
+      "size": 628,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\agents\\pricing_optimizer_bus\\bus_events.py",
+      "group": "core",
+      "size": 436,
+      "name": "bus_events.py"
+    },
+    {
+      "id": "core\\agents\\pricing_optimizer_bus\\bus_iface.py",
+      "group": "core",
+      "size": 418,
+      "name": "bus_iface.py"
+    },
+    {
+      "id": "core\\agents\\pricing_optimizer_bus\\pricing_ui_integration.py",
+      "group": "core",
+      "size": 2394,
+      "name": "pricing_ui_integration.py"
+    },
+    {
+      "id": "core\\agents\\user_interact\\context.py",
+      "group": "core",
+      "size": 311,
+      "name": "context.py"
+    },
+    {
+      "id": "core\\agents\\user_interact\\prompts.py",
+      "group": "core",
+      "size": 9385,
+      "name": "prompts.py"
+    },
+    {
+      "id": "core\\agents\\user_interact\\tools.py",
+      "group": "core",
+      "size": 17021,
+      "name": "tools.py"
+    },
+    {
+      "id": "core\\agents\\user_interact\\tool_schemas.py",
+      "group": "core",
+      "size": 5524,
+      "name": "tool_schemas.py"
+    },
+    {
+      "id": "core\\agents\\user_interact\\user_interaction_agent.py",
+      "group": "core",
+      "size": 7527,
+      "name": "user_interaction_agent.py"
+    },
+    {
+      "id": "core\\agents\\user_interact\\__init__.py",
+      "group": "core",
+      "size": 43,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\evaluation\\evaluation_engine.py",
+      "group": "core",
+      "size": 21364,
+      "name": "evaluation_engine.py"
+    },
+    {
+      "id": "core\\evaluation\\metrics.py",
+      "group": "core",
+      "size": 12905,
+      "name": "metrics.py"
+    },
+    {
+      "id": "core\\evaluation\\performance_monitor.py",
+      "group": "core",
+      "size": 15767,
+      "name": "performance_monitor.py"
+    },
+    {
+      "id": "core\\evaluation\\__init__.py",
+      "group": "core",
+      "size": 1287,
+      "name": "__init__.py"
+    },
+    {
+      "id": "core\\observability\\logging.py",
+      "group": "core",
+      "size": 2304,
+      "name": "logging.py"
+    },
+    {
+      "id": "core\\observability\\__init__.py",
+      "group": "core",
+      "size": 0,
+      "name": "__init__.py"
+    },
+    {
+      "id": "data\\auth.db.old",
+      "group": "other",
+      "size": 180224,
+      "name": "auth.db.old"
+    },
+    {
+      "id": "data\\chat.db.old",
+      "group": "other",
+      "size": 794624,
+      "name": "chat.db.old"
+    },
+    {
+      "id": "data\\events.jsonl",
+      "group": "other",
+      "size": 40644366,
+      "name": "events.jsonl"
+    },
+    {
+      "id": "data\\market.db.backup.old",
+      "group": "other",
+      "size": 36864,
+      "name": "market.db.backup.old"
+    },
+    {
+      "id": "data\\market.db.old",
+      "group": "other",
+      "size": 0,
+      "name": "market.db.old"
+    },
+    {
+      "id": "frontend\\eslint.config.js",
+      "group": "frontend",
+      "size": 1364,
+      "name": "eslint.config.js"
+    },
+    {
+      "id": "frontend\\playwright.config.ts",
+      "group": "frontend",
+      "size": 599,
+      "name": "playwright.config.ts"
+    },
+    {
+      "id": "frontend\\postcss.config.js",
+      "group": "frontend",
+      "size": 98,
+      "name": "postcss.config.js"
+    },
+    {
+      "id": "frontend\\tailwind.config.js",
+      "group": "frontend",
+      "size": 2498,
+      "name": "tailwind.config.js"
+    },
+    {
+      "id": "frontend\\tsconfig.tsbuildinfo",
+      "group": "frontend",
+      "size": 3663,
+      "name": "tsconfig.tsbuildinfo"
+    },
+    {
+      "id": "frontend\\vite.config.ts",
+      "group": "frontend",
+      "size": 586,
+      "name": "vite.config.ts"
+    },
+    {
+      "id": "frontend\\vitest.config.ts",
+      "group": "frontend",
+      "size": 446,
+      "name": "vitest.config.ts"
+    },
+    {
+      "id": "frontend\\e2e\\auth.spec.ts",
+      "group": "frontend",
+      "size": 454,
+      "name": "auth.spec.ts"
+    },
+    {
+      "id": "frontend\\e2e\\overlays.spec.ts",
+      "group": "frontend",
+      "size": 3734,
+      "name": "overlays.spec.ts"
+    },
+    {
+      "id": "frontend\\src\\App.tsx",
+      "group": "frontend",
+      "size": 4258,
+      "name": "App.tsx"
+    },
+    {
+      "id": "frontend\\src\\main.tsx",
+      "group": "frontend",
+      "size": 2538,
+      "name": "main.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\AlertDetailModal.tsx",
+      "group": "frontend",
+      "size": 5341,
+      "name": "AlertDetailModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\AuthControls.tsx",
+      "group": "frontend",
+      "size": 3219,
+      "name": "AuthControls.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\BranchNavigator.tsx",
+      "group": "frontend",
+      "size": 5958,
+      "name": "BranchNavigator.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\CatalogModal.tsx",
+      "group": "frontend",
+      "size": 1276,
+      "name": "CatalogModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\CatalogUpload.tsx",
+      "group": "frontend",
+      "size": 11894,
+      "name": "CatalogUpload.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ConfirmModal.tsx",
+      "group": "frontend",
+      "size": 1565,
+      "name": "ConfirmModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ErrorBoundary.tsx",
+      "group": "frontend",
+      "size": 1856,
+      "name": "ErrorBoundary.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\Footer.tsx",
+      "group": "frontend",
+      "size": 5843,
+      "name": "Footer.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\HeaderOverflowMenu.tsx",
+      "group": "frontend",
+      "size": 2201,
+      "name": "HeaderOverflowMenu.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\HelpModal.tsx",
+      "group": "frontend",
+      "size": 2073,
+      "name": "HelpModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\MetadataTooltip.tsx",
+      "group": "frontend",
+      "size": 2754,
+      "name": "MetadataTooltip.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\Navigation.tsx",
+      "group": "frontend",
+      "size": 3859,
+      "name": "Navigation.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\PriceChart.tsx",
+      "group": "frontend",
+      "size": 4620,
+      "name": "PriceChart.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\PricesPanel.tsx",
+      "group": "frontend",
+      "size": 10720,
+      "name": "PricesPanel.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\PromptModal.tsx",
+      "group": "frontend",
+      "size": 2854,
+      "name": "PromptModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\SettingsButton.tsx",
+      "group": "frontend",
+      "size": 1692,
+      "name": "SettingsButton.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\SettingsModal.tsx",
+      "group": "frontend",
+      "size": 4085,
+      "name": "SettingsModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\Sidebar.tsx",
+      "group": "frontend",
+      "size": 9428,
+      "name": "Sidebar.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\Sparkline.tsx",
+      "group": "frontend",
+      "size": 1269,
+      "name": "Sparkline.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\SummaryIndicator.tsx",
+      "group": "frontend",
+      "size": 4082,
+      "name": "SummaryIndicator.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ThinkingTokens.tsx",
+      "group": "frontend",
+      "size": 1345,
+      "name": "ThinkingTokens.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ThreadListExample.tsx",
+      "group": "frontend",
+      "size": 1360,
+      "name": "ThreadListExample.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\Toasts.tsx",
+      "group": "frontend",
+      "size": 1065,
+      "name": "Toasts.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\AgentActivity.tsx",
+      "group": "frontend",
+      "size": 3038,
+      "name": "AgentActivity.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\animations.ts",
+      "group": "frontend",
+      "size": 923,
+      "name": "animations.ts"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "group": "frontend",
+      "size": 4842,
+      "name": "ChatComposer.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\ChatHeader.a11y.test.tsx",
+      "group": "frontend",
+      "size": 2413,
+      "name": "ChatHeader.a11y.test.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "group": "frontend",
+      "size": 12609,
+      "name": "ChatHeader.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "group": "frontend",
+      "size": 3225,
+      "name": "ChatPane.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\CodeBlock.tsx",
+      "group": "frontend",
+      "size": 1705,
+      "name": "CodeBlock.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\DraftMessageView.tsx",
+      "group": "frontend",
+      "size": 495,
+      "name": "DraftMessageView.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\EmptyState.tsx",
+      "group": "frontend",
+      "size": 304,
+      "name": "EmptyState.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "group": "frontend",
+      "size": 5807,
+      "name": "ExportThreadModal.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\InputEnhancer.tsx",
+      "group": "frontend",
+      "size": 1703,
+      "name": "InputEnhancer.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\MarkdownRenderer.tsx",
+      "group": "frontend",
+      "size": 6855,
+      "name": "MarkdownRenderer.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "group": "frontend",
+      "size": 3639,
+      "name": "MessageActions.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\MessageList.tsx",
+      "group": "frontend",
+      "size": 813,
+      "name": "MessageList.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\MessageMetadata.tsx",
+      "group": "frontend",
+      "size": 1198,
+      "name": "MessageMetadata.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "group": "frontend",
+      "size": 6914,
+      "name": "MessageView.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\TypingIndicator.tsx",
+      "group": "frontend",
+      "size": 531,
+      "name": "TypingIndicator.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\chat\\VirtualizedMessageList.tsx",
+      "group": "frontend",
+      "size": 1341,
+      "name": "VirtualizedMessageList.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\contact\\ContactForm.tsx",
+      "group": "frontend",
+      "size": 3663,
+      "name": "ContactForm.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\contact\\ContactInfoCards.tsx",
+      "group": "frontend",
+      "size": 3500,
+      "name": "ContactInfoCards.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\contact\\FAQSection.tsx",
+      "group": "frontend",
+      "size": 1132,
+      "name": "FAQSection.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\landing\\CheckmarkItem.tsx",
+      "group": "frontend",
+      "size": 560,
+      "name": "CheckmarkItem.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\landing\\CTASection.tsx",
+      "group": "frontend",
+      "size": 1399,
+      "name": "CTASection.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\landing\\FeaturesSection.tsx",
+      "group": "frontend",
+      "size": 3757,
+      "name": "FeaturesSection.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\landing\\HeroSection.tsx",
+      "group": "frontend",
+      "size": 6466,
+      "name": "HeroSection.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\landing\\HowItWorksSection.tsx",
+      "group": "frontend",
+      "size": 3399,
+      "name": "HowItWorksSection.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\settings\\SettingToggle.tsx",
+      "group": "frontend",
+      "size": 744,
+      "name": "SettingToggle.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\sidebar\\CollapsedNavItem.test.tsx",
+      "group": "frontend",
+      "size": 987,
+      "name": "CollapsedNavItem.test.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\sidebar\\CollapsedNavItem.tsx",
+      "group": "frontend",
+      "size": 786,
+      "name": "CollapsedNavItem.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\sidebar\\ThreadItem.tsx",
+      "group": "frontend",
+      "size": 2165,
+      "name": "ThreadItem.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\alert-dialog.tsx",
+      "group": "frontend",
+      "size": 4449,
+      "name": "alert-dialog.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\button.tsx",
+      "group": "frontend",
+      "size": 745,
+      "name": "button.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\buttonVariants.ts",
+      "group": "frontend",
+      "size": 1458,
+      "name": "buttonVariants.ts"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\collapsible.tsx",
+      "group": "frontend",
+      "size": 324,
+      "name": "collapsible.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\dialog.tsx",
+      "group": "frontend",
+      "size": 3864,
+      "name": "dialog.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\input.tsx",
+      "group": "frontend",
+      "size": 813,
+      "name": "input.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\switch.tsx",
+      "group": "frontend",
+      "size": 1212,
+      "name": "switch.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\textarea.tsx",
+      "group": "frontend",
+      "size": 730,
+      "name": "textarea.tsx"
+    },
+    {
+      "id": "frontend\\src\\components\\ui\\tooltip.tsx",
+      "group": "frontend",
+      "size": 1194,
+      "name": "tooltip.tsx"
+    },
+    {
+      "id": "frontend\\src\\contexts\\LayoutContext.tsx",
+      "group": "frontend",
+      "size": 1434,
+      "name": "LayoutContext.tsx"
+    },
+    {
+      "id": "frontend\\src\\contexts\\ThemeContext.ts",
+      "group": "frontend",
+      "size": 282,
+      "name": "ThemeContext.ts"
+    },
+    {
+      "id": "frontend\\src\\contexts\\ThemeContext.tsx",
+      "group": "frontend",
+      "size": 926,
+      "name": "ThemeContext.tsx"
+    },
+    {
+      "id": "frontend\\src\\contexts\\themeTypes.ts",
+      "group": "frontend",
+      "size": 38,
+      "name": "themeTypes.ts"
+    },
+    {
+      "id": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "group": "frontend",
+      "size": 4108,
+      "name": "useChatKeyboardShortcuts.ts"
+    },
+    {
+      "id": "frontend\\src\\hooks\\useChatSettings.ts",
+      "group": "frontend",
+      "size": 925,
+      "name": "useChatSettings.ts"
+    },
+    {
+      "id": "frontend\\src\\hooks\\useIncidents.ts",
+      "group": "frontend",
+      "size": 2273,
+      "name": "useIncidents.ts"
+    },
+    {
+      "id": "frontend\\src\\hooks\\usePriceStream.ts",
+      "group": "frontend",
+      "size": 2231,
+      "name": "usePriceStream.ts"
+    },
+    {
+      "id": "frontend\\src\\hooks\\useProducts.ts",
+      "group": "frontend",
+      "size": 1197,
+      "name": "useProducts.ts"
+    },
+    {
+      "id": "frontend\\src\\hooks\\useTheme.ts",
+      "group": "frontend",
+      "size": 296,
+      "name": "useTheme.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\api.ts",
+      "group": "frontend",
+      "size": 1640,
+      "name": "api.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\apiClient.ts",
+      "group": "frontend",
+      "size": 2433,
+      "name": "apiClient.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\authApi.ts",
+      "group": "frontend",
+      "size": 3817,
+      "name": "authApi.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\branchUtils.ts",
+      "group": "frontend",
+      "size": 1981,
+      "name": "branchUtils.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\constants.ts",
+      "group": "frontend",
+      "size": 350,
+      "name": "constants.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\contactPageConstants.ts",
+      "group": "frontend",
+      "size": 875,
+      "name": "contactPageConstants.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\conversationExport.ts",
+      "group": "frontend",
+      "size": 1942,
+      "name": "conversationExport.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\hooks.ts",
+      "group": "frontend",
+      "size": 1009,
+      "name": "hooks.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\modal.ts",
+      "group": "frontend",
+      "size": 565,
+      "name": "modal.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\themeHelpers.ts",
+      "group": "frontend",
+      "size": 4722,
+      "name": "themeHelpers.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\timeUtils.ts",
+      "group": "frontend",
+      "size": 1553,
+      "name": "timeUtils.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\types.ts",
+      "group": "frontend",
+      "size": 1085,
+      "name": "types.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\utils.ts",
+      "group": "frontend",
+      "size": 172,
+      "name": "utils.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\api\\messageApi.ts",
+      "group": "frontend",
+      "size": 1313,
+      "name": "messageApi.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\api\\sseClient.ts",
+      "group": "frontend",
+      "size": 6220,
+      "name": "sseClient.ts"
+    },
+    {
+      "id": "frontend\\src\\lib\\api\\threadApi.ts",
+      "group": "frontend",
+      "size": 1080,
+      "name": "threadApi.ts"
+    },
+    {
+      "id": "frontend\\src\\pages\\AuthPage.tsx",
+      "group": "frontend",
+      "size": 6951,
+      "name": "AuthPage.tsx"
+    },
+    {
+      "id": "frontend\\src\\pages\\ChatPage.tsx",
+      "group": "frontend",
+      "size": 504,
+      "name": "ChatPage.tsx"
+    },
+    {
+      "id": "frontend\\src\\pages\\ContactPage.tsx",
+      "group": "frontend",
+      "size": 2520,
+      "name": "ContactPage.tsx"
+    },
+    {
+      "id": "frontend\\src\\pages\\LandingPage.tsx",
+      "group": "frontend",
+      "size": 1602,
+      "name": "LandingPage.tsx"
+    },
+    {
+      "id": "frontend\\src\\pages\\PricingPage.tsx",
+      "group": "frontend",
+      "size": 9359,
+      "name": "PricingPage.tsx"
+    },
+    {
+      "id": "frontend\\src\\stores\\authStore.ts",
+      "group": "frontend",
+      "size": 2499,
+      "name": "authStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\catalogStore.ts",
+      "group": "frontend",
+      "size": 245,
+      "name": "catalogStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\confirmStore.ts",
+      "group": "frontend",
+      "size": 1058,
+      "name": "confirmStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\helpStore.ts",
+      "group": "frontend",
+      "size": 252,
+      "name": "helpStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\messageStore.ts",
+      "group": "frontend",
+      "size": 8129,
+      "name": "messageStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\panelsStore.ts",
+      "group": "frontend",
+      "size": 690,
+      "name": "panelsStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\promptStore.ts",
+      "group": "frontend",
+      "size": 964,
+      "name": "promptStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\settingsStore.ts",
+      "group": "frontend",
+      "size": 1392,
+      "name": "settingsStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\sidebarStore.ts",
+      "group": "frontend",
+      "size": 655,
+      "name": "sidebarStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\threadStore.ts",
+      "group": "frontend",
+      "size": 3080,
+      "name": "threadStore.ts"
+    },
+    {
+      "id": "frontend\\src\\stores\\toastStore.ts",
+      "group": "frontend",
+      "size": 549,
+      "name": "toastStore.ts"
+    },
+    {
+      "id": "frontend\\src\\test\\App.backdrop.test.tsx",
+      "group": "frontend",
+      "size": 3230,
+      "name": "App.backdrop.test.tsx"
+    },
+    {
+      "id": "frontend\\src\\test\\Button.test.tsx",
+      "group": "frontend",
+      "size": 839,
+      "name": "Button.test.tsx"
+    },
+    {
+      "id": "frontend\\src\\test\\Products.test.tsx",
+      "group": "frontend",
+      "size": 1038,
+      "name": "Products.test.tsx"
+    },
+    {
+      "id": "frontend\\src\\test\\setup.ts",
+      "group": "frontend",
+      "size": 617,
+      "name": "setup.ts"
+    },
+    {
+      "id": "frontend\\src\\test\\mocks\\browser.ts",
+      "group": "frontend",
+      "size": 124,
+      "name": "browser.ts"
+    },
+    {
+      "id": "frontend\\src\\test\\mocks\\handlers.ts",
+      "group": "frontend",
+      "size": 759,
+      "name": "handlers.ts"
+    },
+    {
+      "id": "frontend\\src\\test\\mocks\\server.ts",
+      "group": "frontend",
+      "size": 1213,
+      "name": "server.ts"
+    },
+    {
+      "id": "frontend\\src\\utils\\exportHelpers.ts",
+      "group": "frontend",
+      "size": 1839,
+      "name": "exportHelpers.ts"
+    },
+    {
+      "id": "frontend\\src\\workers\\markdownWorker.ts",
+      "group": "frontend",
+      "size": 1136,
+      "name": "markdownWorker.ts"
+    }
+  ],
+  "links": [
+    {
+      "source": "check_imports.py",
+      "target": "core\\auth_db.py",
+      "type": "import",
+      "symbols": [
+        "core.auth_db"
+      ]
+    },
+    {
+      "source": "check_imports.py",
+      "target": "backend\\main.py",
+      "type": "import",
+      "symbols": [
+        "backend.main"
+      ]
+    },
+    {
+      "source": "test_price_optimizer_integration.py",
+      "target": "core\\agents\\price_optimizer\\tools.py",
+      "type": "from_import",
+      "symbols": [
+        "Tools"
+      ]
+    },
+    {
+      "source": "test_user_interaction_optimization.py",
+      "target": "core\\agents\\user_interact\\tools.py",
+      "type": "from_import",
+      "symbols": [
+        "optimize_price"
+      ]
+    },
+    {
+      "source": "test_user_interaction_optimization.py",
+      "target": "core\\agents\\price_optimizer\\agent.py",
+      "type": "from_import",
+      "symbols": [
+        "PricingOptimizerAgent"
+      ]
+    },
+    {
+      "source": "test_user_interaction_optimization.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "test_user_interaction_optimization.py",
+      "target": "core\\agents\\user_interact\\tools.py",
+      "type": "from_import",
+      "symbols": [
+        "list_price_proposals"
+      ]
+    },
+    {
+      "source": "backend\\deps.py",
+      "target": "core\\users.py",
+      "type": "from_import",
+      "symbols": [
+        "current_active_user"
+      ]
+    },
+    {
+      "source": "backend\\deps.py",
+      "target": "core\\auth_db.py",
+      "type": "from_import",
+      "symbols": [
+        "User"
+      ]
+    },
+    {
+      "source": "backend\\deps.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "init_chat_db",
+        "cleanup_empty_threads"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\auth_db.py",
+      "type": "from_import",
+      "symbols": [
+        "init_db_async"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "backend\\routers\\__init__.py",
+      "type": "from_import",
+      "symbols": [
+        "auth",
+        "settings",
+        "threads",
+        "messages",
+        "streaming",
+        "prices",
+        "catalog",
+        "alerts",
+        "debug",
+        "collector"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\agents\\alert_service\\__init__.py",
+      "type": "from_import",
+      "symbols": [
+        "api"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\agents\\price_optimizer\\agent.py",
+      "type": "from_import",
+      "symbols": [
+        "PricingOptimizerAgent"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\agents\\data_collector\\agent.py",
+      "type": "from_import",
+      "symbols": [
+        "DataCollectorAgent"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\agents\\data_collector\\collector.py",
+      "type": "from_import",
+      "symbols": [
+        "DataCollector"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\agents\\proposal_logger.py",
+      "type": "from_import",
+      "symbols": [
+        "ProposalLogger"
+      ]
+    },
+    {
+      "source": "backend\\main.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "backend\\test_auth_settings_api.py",
+      "target": "backend\\main.py",
+      "type": "from_import",
+      "symbols": [
+        "app"
+      ]
+    },
+    {
+      "source": "backend\\test_catalog_delete_api.py",
+      "target": "backend\\main.py",
+      "type": "from_import",
+      "symbols": [
+        "app"
+      ]
+    },
+    {
+      "source": "backend\\test_chat_api.py",
+      "target": "backend\\main.py",
+      "type": "from_import",
+      "symbols": [
+        "app"
+      ]
+    },
+    {
+      "source": "backend\\test_chat_api.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "add_summary"
+      ]
+    },
+    {
+      "source": "backend\\routers\\alerts.py",
+      "target": "core\\agents\\alert_service\\__init__.py",
+      "type": "from_import",
+      "symbols": [
+        "api"
+      ]
+    },
+    {
+      "source": "backend\\routers\\alerts.py",
+      "target": "backend\\deps.py",
+      "type": "from_import",
+      "symbols": [
+        "get_current_user_for_alerts"
+      ]
+    },
+    {
+      "source": "backend\\routers\\auth.py",
+      "target": "core\\users.py",
+      "type": "from_import",
+      "symbols": [
+        "fastapi_users",
+        "auth_backend"
+      ]
+    },
+    {
+      "source": "backend\\routers\\auth.py",
+      "target": "core\\auth_db.py",
+      "type": "from_import",
+      "symbols": [
+        "User"
+      ]
+    },
+    {
+      "source": "backend\\routers\\catalog.py",
+      "target": "backend\\deps.py",
+      "type": "from_import",
+      "symbols": [
+        "get_current_user"
+      ]
+    },
+    {
+      "source": "backend\\routers\\catalog.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "backend\\routers\\collector.py",
+      "target": "backend\\deps.py",
+      "type": "from_import",
+      "symbols": [
+        "get_current_user",
+        "get_repo"
+      ]
+    },
+    {
+      "source": "backend\\routers\\collector.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "backend\\routers\\collector.py",
+      "target": "core\\agents\\data_collector\\tools.py",
+      "type": "from_import",
+      "symbols": [
+        "Tools"
+      ]
+    },
+    {
+      "source": "backend\\routers\\debug.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "backend\\routers\\messages.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "get_thread_messages",
+        "SessionLocal",
+        "Thread"
+      ]
+    },
+    {
+      "source": "backend\\routers\\prices.py",
+      "target": "backend\\deps.py",
+      "type": "from_import",
+      "symbols": [
+        "get_current_user_for_alerts",
+        "get_repo"
+      ]
+    },
+    {
+      "source": "backend\\routers\\prices.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "backend\\routers\\settings.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "add_message",
+        "update_message",
+        "get_thread_messages",
+        "get_message"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "core\\agents\\user_interact\\user_interaction_agent.py",
+      "type": "from_import",
+      "symbols": [
+        "UserInteractionAgent"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "core\\payloads.py",
+      "type": "from_import",
+      "symbols": [
+        "PostMessageRequest",
+        "MessageOut"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_user_settings"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "assemble_memory"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "compute_cost_usd"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "should_summarize"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "generate_summary"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "safe_add_summary"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "should_auto_rename_thread"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "backend\\routers\\utils.py",
+      "type": "from_import",
+      "symbols": [
+        "generate_thread_title"
+      ]
+    },
+    {
+      "source": "backend\\routers\\streaming.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "update_thread"
+      ]
+    },
+    {
+      "source": "backend\\routers\\threads.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "create_thread",
+        "delete_thread",
+        "get_thread_messages",
+        "list_threads",
+        "update_thread",
+        "update_message",
+        "add_message",
+        "SessionLocal",
+        "Thread",
+        "Summary"
+      ]
+    },
+    {
+      "source": "backend\\routers\\threads.py",
+      "target": "core\\payloads.py",
+      "type": "from_import",
+      "symbols": [
+        "CreateThreadRequest",
+        "ThreadOut",
+        "UpdateThreadRequest",
+        "ThreadExport",
+        "ThreadImportRequest"
+      ]
+    },
+    {
+      "source": "backend\\routers\\utils.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "get_thread_messages",
+        "get_latest_summary",
+        "Message"
+      ]
+    },
+    {
+      "source": "backend\\routers\\utils.py",
+      "target": "core\\chat_db.py",
+      "type": "from_import",
+      "symbols": [
+        "add_summary",
+        "get_message",
+        "get_latest_summary"
+      ]
+    },
+    {
+      "source": "backend\\routers\\utils.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "backend\\routers\\utils.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_llm_client"
+      ]
+    },
+    {
+      "source": "backend\\routers\\utils.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "backend\\routers\\utils.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_llm_client"
+      ]
+    },
+    {
+      "source": "core\\tool_registry.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "core\\tool_registry.py",
+      "target": "core\\agents\\agent_sdk\\mcp_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_data_collector_client"
+      ]
+    },
+    {
+      "source": "core\\tool_registry.py",
+      "target": "core\\agents\\price_optimizer\\agent.py",
+      "type": "from_import",
+      "symbols": [
+        "PricingOptimizerAgent"
+      ]
+    },
+    {
+      "source": "core\\tool_registry.py",
+      "target": "core\\agents\\user_interact\\context.py",
+      "type": "from_import",
+      "symbols": [
+        "get_owner_id"
+      ]
+    },
+    {
+      "source": "core\\users.py",
+      "target": "core\\auth_db.py",
+      "type": "from_import",
+      "symbols": [
+        "User",
+        "get_user_db"
+      ]
+    },
+    {
+      "source": "core\\users.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\workflow_templates.py",
+      "target": "core\\tool_registry.py",
+      "type": "from_import",
+      "symbols": [
+        "get_tool_registry"
+      ]
+    },
+    {
+      "source": "core\\agents\\auto_applier.py",
+      "target": "core\\agents\\agent_sdk\\event_bus.py",
+      "type": "from_import",
+      "symbols": [
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\auto_applier.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\auto_applier.py",
+      "target": "core\\agents\\agent_sdk\\events_models.py",
+      "type": "from_import",
+      "symbols": [
+        "PriceProposal"
+      ]
+    },
+    {
+      "source": "core\\agents\\auto_applier.py",
+      "target": "core\\agents\\auto_applier_db.py",
+      "type": "from_import",
+      "symbols": [
+        "AutoApplierDB"
+      ]
+    },
+    {
+      "source": "core\\agents\\governance_execution_agent.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\governance_execution_agent.py",
+      "target": "core\\payloads.py",
+      "type": "from_import",
+      "symbols": [
+        "PriceProposalPayload",
+        "PriceUpdatePayload"
+      ]
+    },
+    {
+      "source": "core\\agents\\governance_execution_agent.py",
+      "target": "core\\observability\\logging.py",
+      "type": "from_import",
+      "symbols": [
+        "get_logger"
+      ]
+    },
+    {
+      "source": "core\\agents\\llm_client.py",
+      "target": "core\\agents\\key_manager.py",
+      "type": "from_import",
+      "symbols": [
+        "KeyManager"
+      ]
+    },
+    {
+      "source": "core\\agents\\market_collector.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "core\\agents\\market_collector.py",
+      "target": "core\\agents\\data_collector\\collector.py",
+      "type": "from_import",
+      "symbols": [
+        "DataCollector"
+      ]
+    },
+    {
+      "source": "core\\agents\\market_collector.py",
+      "target": "core\\agents\\data_collector\\connectors\\mock.py",
+      "type": "from_import",
+      "symbols": [
+        "mock_ticks"
+      ]
+    },
+    {
+      "source": "core\\agents\\proposal_logger.py",
+      "target": "core\\agents\\agent_sdk\\event_bus.py",
+      "type": "from_import",
+      "symbols": [
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\proposal_logger.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\tool_registry.py",
+      "type": "from_import",
+      "symbols": [
+        "get_tool_registry"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\data_collector\\collector.py",
+      "type": "from_import",
+      "symbols": [
+        "DataCollector"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\agent_sdk\\mcp_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_data_collector_client"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\price_optimizer\\agent.py",
+      "type": "from_import",
+      "symbols": [
+        "PricingOptimizerAgent"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\agent_sdk\\event_bus.py",
+      "type": "from_import",
+      "symbols": [
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\workflow_templates.py",
+      "type": "from_import",
+      "symbols": [
+        "collect_and_optimize_prelude"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\agents\\agent_sdk\\events_models.py",
+      "type": "from_import",
+      "symbols": [
+        "PriceProposal"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\agents\\supervisor.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\agents\\agent_sdk\\auth.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_config"
+      ]
+    },
+    {
+      "source": "core\\agents\\agent_sdk\\mcp_client.py",
+      "target": "core\\agents\\price_optimizer\\tools.py",
+      "type": "from_import",
+      "symbols": [
+        "Tools"
+      ]
+    },
+    {
+      "source": "core\\agents\\agent_sdk\\mcp_client.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\alert_service\\auth.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\agents\\alert_service\\engine.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\alert_service\\engine.py",
+      "target": "core\\agents\\agent_sdk\\event_bus.py",
+      "type": "from_import",
+      "symbols": [
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\alert_service\\engine.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_llm_client"
+      ]
+    },
+    {
+      "source": "core\\agents\\alert_service\\engine.py",
+      "target": "core\\agents\\data_collector\\repo.py",
+      "type": "from_import",
+      "symbols": [
+        "DataRepo"
+      ]
+    },
+    {
+      "source": "core\\agents\\alert_service\\sinks\\ui.py",
+      "target": "core\\agents\\agent_sdk\\__init__.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic",
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\agent.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_llm_client"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\collector.py",
+      "target": "core\\agents\\agent_sdk\\event_bus.py",
+      "type": "from_import",
+      "symbols": [
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\collector.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\collector.py",
+      "target": "core\\agents\\agent_sdk\\events_models.py",
+      "type": "from_import",
+      "symbols": [
+        "MarketTick"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\collector.py",
+      "target": "core\\payloads.py",
+      "type": "from_import",
+      "symbols": [
+        "MarketFetchRequestPayload",
+        "MarketFetchAckPayload",
+        "MarketFetchDonePayload"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\repo.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\tools.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\data_collector\\tools.py",
+      "target": "core\\payloads.py",
+      "type": "from_import",
+      "symbols": [
+        "MarketFetchRequestPayload"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\agent.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\agent.py",
+      "target": "core\\agents\\agent_sdk\\mcp_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_price_optimizer_client"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\agent.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_llm_client"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\agent.py",
+      "target": "core\\agents\\agent_sdk\\event_bus.py",
+      "type": "from_import",
+      "symbols": [
+        "get_bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\agent.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\algorithms.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "should_trace",
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\algorithms.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "should_trace",
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\algorithms.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "should_trace",
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\algorithms.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "should_trace",
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\llm_brain.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "LLMClient"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\llm_brain.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\llm_brain.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\llm_brain.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "activity_log"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\optimizer.py",
+      "target": "core\\agents\\agent_sdk\\activity_log.py",
+      "type": "from_import",
+      "symbols": [
+        "should_trace",
+        "activity_log",
+        "safe_redact"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\tools.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\tools.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\price_optimizer\\tools.py",
+      "target": "core\\payloads.py",
+      "type": "from_import",
+      "symbols": [
+        "MarketFetchRequestPayload"
+      ]
+    },
+    {
+      "source": "core\\agents\\pricing_optimizer_bus\\pricing_ui_integration.py",
+      "target": "core\\agents\\pricing_optimizer_bus\\bus_iface.py",
+      "type": "from_import",
+      "symbols": [
+        "bus"
+      ]
+    },
+    {
+      "source": "core\\agents\\pricing_optimizer_bus\\pricing_ui_integration.py",
+      "target": "core\\agents\\pricing_optimizer_bus\\bus_events.py",
+      "type": "from_import",
+      "symbols": [
+        "PricingOptimizerEvents"
+      ]
+    },
+    {
+      "source": "core\\agents\\pricing_optimizer_bus\\pricing_ui_integration.py",
+      "target": "core\\agents\\price_optimizer\\agent.py",
+      "type": "from_import",
+      "symbols": [
+        "PricingOptimizerAgent"
+      ]
+    },
+    {
+      "source": "core\\agents\\user_interact\\tools.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "core\\agents\\user_interact\\tools.py",
+      "target": "core\\agents\\agent_sdk\\protocol.py",
+      "type": "from_import",
+      "symbols": [
+        "Topic"
+      ]
+    },
+    {
+      "source": "core\\agents\\user_interact\\user_interaction_agent.py",
+      "target": "core\\agents\\llm_client.py",
+      "type": "from_import",
+      "symbols": [
+        "get_llm_client"
+      ]
+    },
+    {
+      "source": "core\\agents\\user_interact\\user_interaction_agent.py",
+      "target": "core\\settings.py",
+      "type": "from_import",
+      "symbols": [
+        "get_settings"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\PricesPanel.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/PricesPanel"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\contexts\\LayoutContext.tsx",
+      "type": "import",
+      "symbols": [
+        "./contexts/LayoutContext"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/chat/ChatPane"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\PromptModal.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/PromptModal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\ConfirmModal.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/ConfirmModal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\HelpModal.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/HelpModal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\Toasts.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/Toasts"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\ErrorBoundary.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/ErrorBoundary"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\components\\CatalogModal.tsx",
+      "type": "import",
+      "symbols": [
+        "./components/CatalogModal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\stores\\catalogStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/catalogStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\stores\\sidebarStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/sidebarStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\App.tsx",
+      "target": "frontend\\src\\stores\\panelsStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/panelsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\main.tsx",
+      "target": "frontend\\src\\contexts\\ThemeContext.tsx",
+      "type": "import",
+      "symbols": [
+        "./contexts/ThemeContext.tsx"
+      ]
+    },
+    {
+      "source": "frontend\\src\\main.tsx",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "./lib/apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\main.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\main.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "./stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\AlertDetailModal.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\AlertDetailModal.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\AuthControls.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\AuthControls.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\BranchNavigator.tsx",
+      "target": "frontend\\src\\components\\ui\\tooltip.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/tooltip"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\BranchNavigator.tsx",
+      "target": "frontend\\src\\lib\\branchUtils.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/branchUtils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\CatalogModal.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\CatalogModal.tsx",
+      "target": "frontend\\src\\components\\CatalogUpload.tsx",
+      "type": "import",
+      "symbols": [
+        "./CatalogUpload"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\CatalogUpload.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\CatalogUpload.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ConfirmModal.tsx",
+      "target": "frontend\\src\\components\\ui\\alert-dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/alert-dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ConfirmModal.tsx",
+      "target": "frontend\\src\\stores\\confirmStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/confirmStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ConfirmModal.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ErrorBoundary.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Footer.tsx",
+      "target": "frontend\\src\\hooks\\useTheme.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useTheme"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Footer.tsx",
+      "target": "frontend\\src\\lib\\themeHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/themeHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\HeaderOverflowMenu.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\HelpModal.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\HelpModal.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\HelpModal.tsx",
+      "target": "frontend\\src\\stores\\helpStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/helpStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\MetadataTooltip.tsx",
+      "target": "frontend\\src\\components\\ui\\tooltip.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/tooltip"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\MetadataTooltip.tsx",
+      "target": "frontend\\src\\lib\\types.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/types"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Navigation.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Navigation.tsx",
+      "target": "frontend\\src\\hooks\\useTheme.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useTheme"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Navigation.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PriceChart.tsx",
+      "target": "frontend\\src\\lib\\types.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/types"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\stores\\panelsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/panelsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\components\\Sparkline.tsx",
+      "type": "import",
+      "symbols": [
+        "./Sparkline"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\components\\AlertDetailModal.tsx",
+      "type": "import",
+      "symbols": [
+        "./AlertDetailModal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\hooks\\useProducts.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useProducts"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\hooks\\useIncidents.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useIncidents"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PricesPanel.tsx",
+      "target": "frontend\\src\\hooks\\usePriceStream.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/usePriceStream"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\lib\\modal.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/modal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\components\\ui\\input.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/input"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\components\\ui\\textarea.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/textarea"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\lib\\constants.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/constants"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\stores\\promptStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/promptStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\PromptModal.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsButton.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsButton.tsx",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsButton.tsx",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsModal.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsModal.tsx",
+      "target": "frontend\\src\\lib\\types.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/types"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsModal.tsx",
+      "target": "frontend\\src\\components\\settings\\SettingToggle.tsx",
+      "type": "import",
+      "symbols": [
+        "./settings/SettingToggle"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SettingsModal.tsx",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\components\\sidebar\\ThreadItem.tsx",
+      "type": "import",
+      "symbols": [
+        "./sidebar/ThreadItem"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\stores\\confirmStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/confirmStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\stores\\catalogStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/catalogStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\stores\\sidebarStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/sidebarStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Sidebar.tsx",
+      "target": "frontend\\src\\components\\sidebar\\CollapsedNavItem.tsx",
+      "type": "import",
+      "symbols": [
+        "./sidebar/CollapsedNavItem"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SummaryIndicator.tsx",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SummaryIndicator.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\SummaryIndicator.tsx",
+      "target": "frontend\\src\\components\\ui\\tooltip.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/tooltip"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ThinkingTokens.tsx",
+      "target": "frontend\\src\\components\\ui\\collapsible.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/collapsible"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ThreadListExample.tsx",
+      "target": "frontend\\src\\lib\\api.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/api"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ThreadListExample.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "./ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Toasts.tsx",
+      "target": "frontend\\src\\lib\\constants.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/constants"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\Toasts.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "target": "frontend\\src\\stores\\promptStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/promptStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.a11y.test.tsx",
+      "target": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "type": "import",
+      "symbols": [
+        "./ChatHeader"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.a11y.test.tsx",
+      "target": "frontend\\src\\stores\\sidebarStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/sidebarStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.a11y.test.tsx",
+      "target": "frontend\\src\\stores\\panelsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/panelsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\helpStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/helpStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\promptStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/promptStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\confirmStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/confirmStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\components\\SummaryIndicator.tsx",
+      "type": "import",
+      "symbols": [
+        "../SummaryIndicator"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\components\\AuthControls.tsx",
+      "type": "import",
+      "symbols": [
+        "../AuthControls"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\components\\SettingsButton.tsx",
+      "type": "import",
+      "symbols": [
+        "../SettingsButton"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\components\\HeaderOverflowMenu.tsx",
+      "type": "import",
+      "symbols": [
+        "../HeaderOverflowMenu"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "type": "import",
+      "symbols": [
+        "./ExportThreadModal"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\sidebarStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/sidebarStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "target": "frontend\\src\\stores\\panelsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/panelsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\components\\chat\\ChatHeader.tsx",
+      "type": "import",
+      "symbols": [
+        "./ChatHeader"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\components\\chat\\ChatComposer.tsx",
+      "type": "import",
+      "symbols": [
+        "./ChatComposer"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\components\\chat\\DraftMessageView.tsx",
+      "type": "import",
+      "symbols": [
+        "./DraftMessageView"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\components\\chat\\EmptyState.tsx",
+      "type": "import",
+      "symbols": [
+        "./EmptyState"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\components\\chat\\VirtualizedMessageList.tsx",
+      "type": "import",
+      "symbols": [
+        "./VirtualizedMessageList"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\hooks\\useChatSettings.ts",
+      "type": "import",
+      "symbols": [
+        "../../hooks/useChatSettings"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ChatPane.tsx",
+      "target": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "type": "import",
+      "symbols": [
+        "../../hooks/useChatKeyboardShortcuts"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "target": "frontend\\src\\components\\ui\\dialog.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/dialog"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "target": "frontend\\src\\components\\ui\\input.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/input"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\ExportThreadModal.tsx",
+      "target": "frontend\\src\\utils\\exportHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../../utils/exportHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MarkdownRenderer.tsx",
+      "target": "frontend\\src\\components\\chat\\CodeBlock.tsx",
+      "type": "import",
+      "symbols": [
+        "./CodeBlock"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "target": "frontend\\src\\stores\\promptStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/promptStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "target": "frontend\\src\\stores\\confirmStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/confirmStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageList.tsx",
+      "target": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "type": "import",
+      "symbols": [
+        "./MessageView"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageList.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageMetadata.tsx",
+      "target": "frontend\\src\\components\\MetadataTooltip.tsx",
+      "type": "import",
+      "symbols": [
+        "../MetadataTooltip"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageMetadata.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\chat\\MarkdownRenderer.tsx",
+      "type": "import",
+      "symbols": [
+        "./MarkdownRenderer"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\BranchNavigator.tsx",
+      "type": "import",
+      "symbols": [
+        "../BranchNavigator"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\ThinkingTokens.tsx",
+      "type": "import",
+      "symbols": [
+        "../ThinkingTokens"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\chat\\MessageActions.tsx",
+      "type": "import",
+      "symbols": [
+        "./MessageActions"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\chat\\MessageMetadata.tsx",
+      "type": "import",
+      "symbols": [
+        "./MessageMetadata"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\chat\\AgentActivity.tsx",
+      "type": "import",
+      "symbols": [
+        "./AgentActivity"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\chat\\TypingIndicator.tsx",
+      "type": "import",
+      "symbols": [
+        "./TypingIndicator"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\components\\chat\\animations.ts",
+      "type": "import",
+      "symbols": [
+        "./animations"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\stores\\confirmStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/confirmStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\VirtualizedMessageList.tsx",
+      "target": "frontend\\src\\components\\chat\\MessageView.tsx",
+      "type": "import",
+      "symbols": [
+        "./MessageView"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\chat\\VirtualizedMessageList.tsx",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\contact\\ContactForm.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\contact\\ContactForm.tsx",
+      "target": "frontend\\src\\components\\ui\\input.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/input"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\contact\\ContactForm.tsx",
+      "target": "frontend\\src\\components\\ui\\textarea.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/textarea"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\contact\\FAQSection.tsx",
+      "target": "frontend\\src\\lib\\contactPageConstants.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/contactPageConstants"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\landing\\CTASection.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\landing\\HeroSection.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\landing\\HeroSection.tsx",
+      "target": "frontend\\src\\components\\landing\\CheckmarkItem.tsx",
+      "type": "import",
+      "symbols": [
+        "./CheckmarkItem"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\landing\\HeroSection.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\landing\\HowItWorksSection.tsx",
+      "target": "frontend\\src\\lib\\themeHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/themeHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\settings\\SettingToggle.tsx",
+      "target": "frontend\\src\\components\\ui\\switch.tsx",
+      "type": "import",
+      "symbols": [
+        "../ui/switch"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\sidebar\\CollapsedNavItem.test.tsx",
+      "target": "frontend\\src\\components\\sidebar\\CollapsedNavItem.tsx",
+      "type": "import",
+      "symbols": [
+        "./CollapsedNavItem"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\sidebar\\ThreadItem.tsx",
+      "target": "frontend\\src\\components\\sidebar\\CollapsedNavItem.tsx",
+      "type": "import",
+      "symbols": [
+        "./CollapsedNavItem"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\sidebar\\ThreadItem.tsx",
+      "target": "frontend\\src\\components\\SummaryIndicator.tsx",
+      "type": "import",
+      "symbols": [
+        "../SummaryIndicator"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\sidebar\\ThreadItem.tsx",
+      "target": "frontend\\src\\lib\\timeUtils.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/timeUtils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\alert-dialog.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\alert-dialog.tsx",
+      "target": "frontend\\src\\components\\ui\\buttonVariants.ts",
+      "type": "import",
+      "symbols": [
+        "@/components/ui/buttonVariants"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\button.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\button.tsx",
+      "target": "frontend\\src\\components\\ui\\buttonVariants.ts",
+      "type": "import",
+      "symbols": [
+        "./buttonVariants"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\dialog.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\input.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\switch.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\textarea.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\components\\ui\\tooltip.tsx",
+      "target": "frontend\\src\\lib\\utils.ts",
+      "type": "import",
+      "symbols": [
+        "../../lib/utils"
+      ]
+    },
+    {
+      "source": "frontend\\src\\contexts\\LayoutContext.tsx",
+      "target": "frontend\\src\\stores\\sidebarStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/sidebarStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\contexts\\LayoutContext.tsx",
+      "target": "frontend\\src\\stores\\panelsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/panelsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\contexts\\ThemeContext.ts",
+      "target": "frontend\\src\\contexts\\themeTypes.ts",
+      "type": "import",
+      "symbols": [
+        "./themeTypes"
+      ]
+    },
+    {
+      "source": "frontend\\src\\contexts\\ThemeContext.tsx",
+      "target": "frontend\\src\\contexts\\themeTypes.ts",
+      "type": "import",
+      "symbols": [
+        "./themeTypes"
+      ]
+    },
+    {
+      "source": "frontend\\src\\contexts\\ThemeContext.tsx",
+      "target": "frontend\\src\\contexts\\ThemeContext.ts",
+      "type": "import",
+      "symbols": [
+        "./ThemeContext"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "target": "frontend\\src\\lib\\hooks.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/hooks"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatKeyboardShortcuts.ts",
+      "target": "frontend\\src\\stores\\helpStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/helpStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatSettings.ts",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useChatSettings.ts",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useIncidents.ts",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\usePriceStream.ts",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useProducts.ts",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\hooks\\useTheme.ts",
+      "target": "frontend\\src\\contexts\\ThemeContext.ts",
+      "type": "import",
+      "symbols": [
+        "../contexts/ThemeContext"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api.ts",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "./apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\authApi.ts",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "./apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\branchUtils.ts",
+      "target": "frontend\\src\\components\\BranchNavigator.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/BranchNavigator"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\hooks.ts",
+      "target": "frontend\\src\\lib\\constants.ts",
+      "type": "import",
+      "symbols": [
+        "@/lib/constants"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\messageApi.ts",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\messageApi.ts",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\sseClient.ts",
+      "target": "frontend\\src\\stores\\settingsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/settingsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\sseClient.ts",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\sseClient.ts",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\threadApi.ts",
+      "target": "frontend\\src\\lib\\apiClient.ts",
+      "type": "import",
+      "symbols": [
+        "../apiClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\lib\\api\\threadApi.ts",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "../../stores/threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\AuthPage.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\AuthPage.tsx",
+      "target": "frontend\\src\\components\\Navigation.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Navigation"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\AuthPage.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\AuthPage.tsx",
+      "target": "frontend\\src\\lib\\themeHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/themeHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\AuthPage.tsx",
+      "target": "frontend\\src\\hooks\\useTheme.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useTheme"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ChatPage.tsx",
+      "target": "frontend\\src\\stores\\authStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/authStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\components\\Navigation.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Navigation"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\components\\Footer.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Footer"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\components\\contact\\ContactForm.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/contact/ContactForm"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\components\\contact\\ContactInfoCards.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/contact/ContactInfoCards"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\components\\contact\\FAQSection.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/contact/FAQSection"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\hooks\\useTheme.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useTheme"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\ContactPage.tsx",
+      "target": "frontend\\src\\lib\\themeHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/themeHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\components\\Navigation.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Navigation"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\components\\Footer.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Footer"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\components\\landing\\HeroSection.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/landing/HeroSection"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\components\\landing\\FeaturesSection.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/landing/FeaturesSection"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\components\\landing\\HowItWorksSection.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/landing/HowItWorksSection"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\components\\landing\\CTASection.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/landing/CTASection"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\lib\\themeHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/themeHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\LandingPage.tsx",
+      "target": "frontend\\src\\hooks\\useTheme.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useTheme"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\PricingPage.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\PricingPage.tsx",
+      "target": "frontend\\src\\components\\Navigation.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Navigation"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\PricingPage.tsx",
+      "target": "frontend\\src\\components\\Footer.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/Footer"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\PricingPage.tsx",
+      "target": "frontend\\src\\hooks\\useTheme.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useTheme"
+      ]
+    },
+    {
+      "source": "frontend\\src\\pages\\PricingPage.tsx",
+      "target": "frontend\\src\\lib\\themeHelpers.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/themeHelpers"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\authStore.ts",
+      "target": "frontend\\src\\lib\\authApi.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/authApi"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\authStore.ts",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "./threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\authStore.ts",
+      "target": "frontend\\src\\stores\\messageStore.ts",
+      "type": "import",
+      "symbols": [
+        "./messageStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\messageStore.ts",
+      "target": "frontend\\src\\stores\\threadStore.ts",
+      "type": "import",
+      "symbols": [
+        "./threadStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\messageStore.ts",
+      "target": "frontend\\src\\stores\\toastStore.ts",
+      "type": "import",
+      "symbols": [
+        "./toastStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\messageStore.ts",
+      "target": "frontend\\src\\lib\\api\\sseClient.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/api/sseClient"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\messageStore.ts",
+      "target": "frontend\\src\\lib\\types.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/types"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\messageStore.ts",
+      "target": "frontend\\src\\lib\\api\\messageApi.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/api/messageApi"
+      ]
+    },
+    {
+      "source": "frontend\\src\\stores\\threadStore.ts",
+      "target": "frontend\\src\\lib\\api\\threadApi.ts",
+      "type": "import",
+      "symbols": [
+        "../lib/api/threadApi"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\App.backdrop.test.tsx",
+      "target": "frontend\\src\\App.tsx",
+      "type": "import",
+      "symbols": [
+        "../App"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\App.backdrop.test.tsx",
+      "target": "frontend\\src\\stores\\sidebarStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/sidebarStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\App.backdrop.test.tsx",
+      "target": "frontend\\src\\stores\\panelsStore.ts",
+      "type": "import",
+      "symbols": [
+        "../stores/panelsStore"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\Button.test.tsx",
+      "target": "frontend\\src\\components\\ui\\button.tsx",
+      "type": "import",
+      "symbols": [
+        "../components/ui/button"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\Products.test.tsx",
+      "target": "frontend\\src\\hooks\\useProducts.ts",
+      "type": "import",
+      "symbols": [
+        "../hooks/useProducts"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\setup.ts",
+      "target": "frontend\\src\\test\\mocks\\server.ts",
+      "type": "import",
+      "symbols": [
+        "./mocks/server"
+      ]
+    },
+    {
+      "source": "frontend\\src\\test\\mocks\\browser.ts",
+      "target": "frontend\\src\\test\\mocks\\handlers.ts",
+      "type": "import",
+      "symbols": [
+        "./handlers"
+      ]
+    }
+  ]
+}

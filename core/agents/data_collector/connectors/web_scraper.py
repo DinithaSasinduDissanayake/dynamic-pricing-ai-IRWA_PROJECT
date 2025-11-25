@@ -1,14 +1,14 @@
 """
 Simple web scraping tool to fetch a competitor price from a given URL.
+Refactored to use async httpx for better integration with the agent system.
 
 Note: The CSS selector used is an example and must be adapted to the actual target site.
 """
 from __future__ import annotations
 
 import re
-from typing import Dict
-
-import requests
+from typing import Dict, Any
+import httpx
 from bs4 import BeautifulSoup
 
 
@@ -25,8 +25,8 @@ def _extract_price(text: str) -> float:
     return float(cleaned)
 
 
-def fetch_competitor_price(url: str) -> Dict[str, object]:
-    """Scrapes a given URL to find the main product price.
+async def fetch_competitor_price(url: str) -> Dict[str, Any]:
+    """Scrapes a given URL to find the main product price asynchronously.
 
     Returns a dict with keys: status, price (on success), source, or message (on error).
     """
@@ -45,10 +45,13 @@ def fetch_competitor_price(url: str) -> Dict[str, object]:
             "Connection": "keep-alive",
             "Upgrade-Insecure-Requests": "1"
         }
-        resp = requests.get(url, headers=headers, timeout=15)
-        resp.raise_for_status()
+        
+        async with httpx.AsyncClient(follow_redirects=True, timeout=15.0) as client:
+            resp = await client.get(url, headers=headers)
+            resp.raise_for_status()
+            html_content = resp.text
 
-        soup = BeautifulSoup(resp.text, "html.parser")
+        soup = BeautifulSoup(html_content, "html.parser")
         
         price_selectors = [
             ".a-price .a-offscreen",

@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Codebase Architecture</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style type="text/css">
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #333;
+            --panel-bg: rgba(255, 255, 255, 0.95);
+            --panel-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            --border-color: #ddd;
+            --btn-bg: #007bff;
+            --btn-hover: #0056b3;
+            --btn-text: white;
+        }
+        
+        /* Obsidian-like Dark Mode */
+        body.dark-mode {
+            --bg-color: #1e1e1e;
+            --text-color: #dcddde;
+            --panel-bg: rgba(37, 37, 37, 0.95);
+            --panel-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            --border-color: #444;
+            --btn-bg: #7b68ee;
+            --btn-hover: #6a5acd;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .panel {
+            position: absolute;
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--panel-shadow);
+            z-index: 10;
+            transition: background 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border-color);
+        }
+        #controls {
+            top: 20px;
+            left: 20px;
+            width: 280px;
+        }
+        #info-panel {
+            bottom: 20px;
+            right: 20px;
+            max-width: 300px;
+            display: none;
+        }
+        h2, h3 { margin-top: 0; font-size: 18px; font-weight: 600; }
+        h3 { font-size: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        
+        /* Legend Grid Layout */
+        .legend-grid {
+            display: grid;
+            grid-template-columns: auto auto 1fr;
+            gap: 8px 12px;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .legend-label { cursor: pointer; user-select: none; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        
+        .backend { background-color: #97C2FC; border: 1px solid #2B7CE9; }
+        .core { background-color: #7BE141; border: 1px solid #41A906; }
+        .frontend { background-color: #FFC0CB; border: 1px solid #FB7E81; }
+        
+        #search-container { margin-top: 15px; margin-bottom: 15px; }
+        input { 
+            width: 100%; padding: 8px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            transition: background 0.2s;
+        }
+        .btn:hover { background: var(--btn-hover); }
+        
+        .stats-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; opacity: 0.8; }
+        
+        #theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            z-index: 20;
+            box-shadow: var(--panel-shadow);
+            transition: background 0.3s;
+        }
+        #theme-toggle:hover { background: var(--bg-color); }
+        
+        /* Checkbox styling */
+        input[type="checkbox"] { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+    <span class="material-icons">dark_mode</span>
+</button>
+
+<div id="controls" class="panel">
+    <h2>Architecture Map</h2>
+    
+    <div class="stats-row"><span>Modules:</span> <b>33</b></div>
+    <div class="stats-row"><span>Files:</span> <b>209</b></div>
+    <div class="stats-row"><span>Dependencies:</span> <b>80</b></div>
+    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 10px 0;">
+    
+    <div id="search-container">
+        <input type="text" id="search" placeholder="Search modules..." onkeyup="searchNode()">
+    </div>
+    
+    <div class="legend-grid">
+        <input type="checkbox" checked onchange="toggleGroup('backend')" id="cb-backend">
+        <div class="dot backend"></div>
+        <label for="cb-backend" class="legend-label">Backend</label>
+        
+        <input type="checkbox" checked onchange="toggleGroup('core')" id="cb-core">
+        <div class="dot core"></div>
+        <label for="cb-core" class="legend-label">Core Logic</label>
+        
+        <input type="checkbox" checked onchange="toggleGroup('frontend')" id="cb-frontend">
+        <div class="dot frontend"></div>
+        <label for="cb-frontend" class="legend-label">Frontend</label>
+    </div>
+    
+    <div class="btn-group">
+        <button class="btn" onclick="resetView()">Clear & Reset</button>
+        <button class="btn" onclick="fitAll()">Fit All</button>
+    </div>
+</div>
+
+<div id="info-panel" class="panel">
+    <h3 id="panel-title">Module</h3>
+    <div id="panel-content"></div>
+</div>
+
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+    const data = {"nodes": [{"id": 0, "label": "backend", "title": "<b>backend</b><br>Files: 6<br><br>backend/deps.py<br>backend/main.py<br>backend/test_auth_settings_api.py<br>backend/test_catalog_delete_api.py<br>backend/test_chat_api.py<br>backend/__init__.py", "group": "backend", "value": 6}, {"id": 1, "label": "routers", "title": "<b>backend/routers</b><br>Files: 12<br><br>backend/routers/alerts.py<br>backend/routers/auth.py<br>backend/routers/catalog.py<br>backend/routers/collector.py<br>backend/routers/debug.py<br>backend/routers/messages.py<br>backend/routers/prices.py<br>backend/routers/settings.py<br>backend/routers/streaming.py<br>backend/routers/threads.py<br>...and 2 more", "group": "backend", "value": 12}, {"id": 2, "label": "core", "title": "<b>core</b><br>Files: 9<br><br>core/auth_db.py<br>core/chat_db.py<br>core/create_market_db.py<br>core/payloads.py<br>core/settings.py<br>core/tool_registry.py<br>core/users.py<br>core/workflow_templates.py<br>core/__init__.py", "group": "core", "value": 9}, {"id": 3, "label": "agents", "title": "<b>core/agents</b><br>Files: 13<br><br>core/agents/auto_applier.py<br>core/agents/auto_applier_db.py<br>core/agents/base_chat_handler.py<br>core/agents/chat_executor.py<br>core/agents/governance_execution_agent.py<br>core/agents/key_manager.py<br>core/agents/llm_client.py<br>core/agents/llm_provider_manager.py<br>core/agents/market_collector.py<br>core/agents/policy_guard.py<br>...and 3 more", "group": "core", "value": 13}, {"id": 4, "label": "agent_sdk", "title": "<b>core/agents/agent_sdk</b><br>Files: 8<br><br>core/agents/agent_sdk/activity_log.py<br>core/agents/agent_sdk/auth.py<br>core/agents/agent_sdk/events_models.py<br>core/agents/agent_sdk/event_bus.py<br>core/agents/agent_sdk/health_tools.py<br>core/agents/agent_sdk/mcp_client.py<br>core/agents/agent_sdk/protocol.py<br>core/agents/agent_sdk/__init__.py", "group": "core", "value": 8}, {"id": 5, "label": "alert_service", "title": "<b>core/agents/alert_service</b><br>Files: 11<br><br>core/agents/alert_service/api.py<br>core/agents/alert_service/auth.py<br>core/agents/alert_service/config.py<br>core/agents/alert_service/correlate.py<br>core/agents/alert_service/detectors.py<br>core/agents/alert_service/engine.py<br>core/agents/alert_service/repo.py<br>core/agents/alert_service/rules.py<br>core/agents/alert_service/schemas.py<br>core/agents/alert_service/tools.py<br>...and 1 more", "group": "core", "value": 11}, {"id": 6, "label": "sinks", "title": "<b>core/agents/alert_service/sinks</b><br>Files: 5<br><br>core/agents/alert_service/sinks/email.py<br>core/agents/alert_service/sinks/slack.py<br>core/agents/alert_service/sinks/ui.py<br>core/agents/alert_service/sinks/webhook.py<br>core/agents/alert_service/sinks/__init__.py", "group": "core", "value": 5}, {"id": 7, "label": "data_collector", "title": "<b>core/agents/data_collector</b><br>Files: 5<br><br>core/agents/data_collector/agent.py<br>core/agents/data_collector/collector.py<br>core/agents/data_collector/mcp_server.py<br>core/agents/data_collector/repo.py<br>core/agents/data_collector/tools.py", "group": "core", "value": 5}, {"id": 8, "label": "connectors", "title": "<b>core/agents/data_collector/connectors</b><br>Files: 2<br><br>core/agents/data_collector/connectors/mock.py<br>core/agents/data_collector/connectors/web_scraper.py", "group": "core", "value": 2}, {"id": 9, "label": "langchain_integration", "title": "<b>core/agents/langchain_integration</b><br>Files: 2<br><br>core/agents/langchain_integration/langchain_client.py<br>core/agents/langchain_integration/__init__.py", "group": "core", "value": 2}, {"id": 10, "label": "price_optimizer", "title": "<b>core/agents/price_optimizer</b><br>Files: 6<br><br>core/agents/price_optimizer/agent.py<br>core/agents/price_optimizer/algorithms.py<br>core/agents/price_optimizer/llm_brain.py<br>core/agents/price_optimizer/optimizer.py<br>core/agents/price_optimizer/tools.py<br>core/agents/price_optimizer/__init__.py", "group": "core", "value": 6}, {"id": 11, "label": "pricing_optimizer_bus", "title": "<b>core/agents/pricing_optimizer_bus</b><br>Files: 3<br><br>core/agents/pricing_optimizer_bus/bus_events.py<br>core/agents/pricing_optimizer_bus/bus_iface.py<br>core/agents/pricing_optimizer_bus/pricing_ui_integration.py", "group": "core", "value": 3}, {"id": 12, "label": "user_interact", "title": "<b>core/agents/user_interact</b><br>Files: 6<br><br>core/agents/user_interact/context.py<br>core/agents/user_interact/prompts.py<br>core/agents/user_interact/tools.py<br>core/agents/user_interact/tool_schemas.py<br>core/agents/user_interact/user_interaction_agent.py<br>core/agents/user_interact/__init__.py", "group": "core", "value": 6}, {"id": 13, "label": "evaluation", "title": "<b>core/evaluation</b><br>Files: 4<br><br>core/evaluation/evaluation_engine.py<br>core/evaluation/metrics.py<br>core/evaluation/performance_monitor.py<br>core/evaluation/__init__.py", "group": "core", "value": 4}, {"id": 14, "label": "observability", "title": "<b>core/observability</b><br>Files: 2<br><br>core/observability/logging.py<br>core/observability/__init__.py", "group": "core", "value": 2}, {"id": 15, "label": "src", "title": "<b>frontend/src</b><br>Files: 2<br><br>frontend/src/App.tsx<br>frontend/src/main.tsx", "group": "frontend", "value": 2}, {"id": 16, "label": "components", "title": "<b>frontend/src/components</b><br>Files: 23<br><br>frontend/src/components/AlertDetailModal.tsx<br>frontend/src/components/AuthControls.tsx<br>frontend/src/components/BranchNavigator.tsx<br>frontend/src/components/CatalogModal.tsx<br>frontend/src/components/CatalogUpload.tsx<br>frontend/src/components/ConfirmModal.tsx<br>frontend/src/components/ErrorBoundary.tsx<br>frontend/src/components/Footer.tsx<br>frontend/src/components/HeaderOverflowMenu.tsx<br>frontend/src/components/HelpModal.tsx<br>...and 13 more", "group": "frontend", "value": 23}, {"id": 17, "label": "chat", "title": "<b>frontend/src/components/chat</b><br>Files: 18<br><br>frontend/src/components/chat/AgentActivity.tsx<br>frontend/src/components/chat/animations.ts<br>frontend/src/components/chat/ChatComposer.tsx<br>frontend/src/components/chat/ChatHeader.a11y.test.tsx<br>frontend/src/components/chat/ChatHeader.tsx<br>frontend/src/components/chat/ChatPane.tsx<br>frontend/src/components/chat/CodeBlock.tsx<br>frontend/src/components/chat/DraftMessageView.tsx<br>frontend/src/components/chat/EmptyState.tsx<br>frontend/src/components/chat/ExportThreadModal.tsx<br>...and 8 more", "group": "frontend", "value": 18}, {"id": 18, "label": "contact", "title": "<b>frontend/src/components/contact</b><br>Files: 3<br><br>frontend/src/components/contact/ContactForm.tsx<br>frontend/src/components/contact/ContactInfoCards.tsx<br>frontend/src/components/contact/FAQSection.tsx", "group": "frontend", "value": 3}, {"id": 19, "label": "landing", "title": "<b>frontend/src/components/landing</b><br>Files: 5<br><br>frontend/src/components/landing/CheckmarkItem.tsx<br>frontend/src/components/landing/CTASection.tsx<br>frontend/src/components/landing/FeaturesSection.tsx<br>frontend/src/components/landing/HeroSection.tsx<br>frontend/src/components/landing/HowItWorksSection.tsx", "group": "frontend", "value": 5}, {"id": 20, "label": "settings", "title": "<b>frontend/src/components/settings</b><br>Files: 1<br><br>frontend/src/components/settings/SettingToggle.tsx", "group": "frontend", "value": 1}, {"id": 21, "label": "sidebar", "title": "<b>frontend/src/components/sidebar</b><br>Files: 3<br><br>frontend/src/components/sidebar/CollapsedNavItem.test.tsx<br>frontend/src/components/sidebar/CollapsedNavItem.tsx<br>frontend/src/components/sidebar/ThreadItem.tsx", "group": "frontend", "value": 3}, {"id": 22, "label": "ui", "title": "<b>frontend/src/components/ui</b><br>Files: 9<br><br>frontend/src/components/ui/alert-dialog.tsx<br>frontend/src/components/ui/button.tsx<br>frontend/src/components/ui/buttonVariants.ts<br>frontend/src/components/ui/collapsible.tsx<br>frontend/src/components/ui/dialog.tsx<br>frontend/src/components/ui/input.tsx<br>frontend/src/components/ui/switch.tsx<br>frontend/src/components/ui/textarea.tsx<br>frontend/src/components/ui/tooltip.tsx", "group": "frontend", "value": 9}, {"id": 23, "label": "contexts", "title": "<b>frontend/src/contexts</b><br>Files: 4<br><br>frontend/src/contexts/LayoutContext.tsx<br>frontend/src/contexts/ThemeContext.ts<br>frontend/src/contexts/ThemeContext.tsx<br>frontend/src/contexts/themeTypes.ts", "group": "frontend", "value": 4}, {"id": 24, "label": "hooks", "title": "<b>frontend/src/hooks</b><br>Files: 6<br><br>frontend/src/hooks/useChatKeyboardShortcuts.ts<br>frontend/src/hooks/useChatSettings.ts<br>frontend/src/hooks/useIncidents.ts<br>frontend/src/hooks/usePriceStream.ts<br>frontend/src/hooks/useProducts.ts<br>frontend/src/hooks/useTheme.ts", "group": "frontend", "value": 6}, {"id": 25, "label": "lib", "title": "<b>frontend/src/lib</b><br>Files: 13<br><br>frontend/src/lib/api.ts<br>frontend/src/lib/apiClient.ts<br>frontend/src/lib/authApi.ts<br>frontend/src/lib/branchUtils.ts<br>frontend/src/lib/constants.ts<br>frontend/src/lib/contactPageConstants.ts<br>frontend/src/lib/conversationExport.ts<br>frontend/src/lib/hooks.ts<br>frontend/src/lib/modal.ts<br>frontend/src/lib/themeHelpers.ts<br>...and 3 more", "group": "frontend", "value": 13}, {"id": 26, "label": "api", "title": "<b>frontend/src/lib/api</b><br>Files: 3<br><br>frontend/src/lib/api/messageApi.ts<br>frontend/src/lib/api/sseClient.ts<br>frontend/src/lib/api/threadApi.ts", "group": "frontend", "value": 3}, {"id": 27, "label": "pages", "title": "<b>frontend/src/pages</b><br>Files: 5<br><br>frontend/src/pages/AuthPage.tsx<br>frontend/src/pages/ChatPage.tsx<br>frontend/src/pages/ContactPage.tsx<br>frontend/src/pages/LandingPage.tsx<br>frontend/src/pages/PricingPage.tsx", "group": "frontend", "value": 5}, {"id": 28, "label": "stores", "title": "<b>frontend/src/stores</b><br>Files: 11<br><br>frontend/src/stores/authStore.ts<br>frontend/src/stores/catalogStore.ts<br>frontend/src/stores/confirmStore.ts<br>frontend/src/stores/helpStore.ts<br>frontend/src/stores/messageStore.ts<br>frontend/src/stores/panelsStore.ts<br>frontend/src/stores/promptStore.ts<br>frontend/src/stores/settingsStore.ts<br>frontend/src/stores/sidebarStore.ts<br>frontend/src/stores/threadStore.ts<br>...and 1 more", "group": "frontend", "value": 11}, {"id": 29, "label": "test", "title": "<b>frontend/src/test</b><br>Files: 4<br><br>frontend/src/test/App.backdrop.test.tsx<br>frontend/src/test/Button.test.tsx<br>frontend/src/test/Products.test.tsx<br>frontend/src/test/setup.ts", "group": "frontend", "value": 4}, {"id": 30, "label": "mocks", "title": "<b>frontend/src/test/mocks</b><br>Files: 3<br><br>frontend/src/test/mocks/browser.ts<br>frontend/src/test/mocks/handlers.ts<br>frontend/src/test/mocks/server.ts", "group": "frontend", "value": 3}, {"id": 31, "label": "utils", "title": "<b>frontend/src/utils</b><br>Files: 1<br><br>frontend/src/utils/exportHelpers.ts", "group": "frontend", "value": 1}, {"id": 32, "label": "workers", "title": "<b>frontend/src/workers</b><br>Files: 1<br><br>frontend/src/workers/markdownWorker.ts", "group": "frontend", "value": 1}], "edges": [{"from": 0, "to": 2, "arrows": "to"}, {"from": 1, "to": 2, "arrows": "to"}, {"from": 1, "to": 14, "arrows": "to"}, {"from": 1, "to": 0, "arrows": "to"}, {"from": 2, "to": 14, "arrows": "to"}, {"from": 3, "to": 2, "arrows": "to"}, {"from": 3, "to": 12, "arrows": "to"}, {"from": 3, "to": 14, "arrows": "to"}, {"from": 4, "to": 2, "arrows": "to"}, {"from": 4, "to": 5, "arrows": "to"}, {"from": 4, "to": 14, "arrows": "to"}, {"from": 5, "to": 2, "arrows": "to"}, {"from": 5, "to": 4, "arrows": "to"}, {"from": 5, "to": 14, "arrows": "to"}, {"from": 5, "to": 6, "arrows": "to"}, {"from": 6, "to": 2, "arrows": "to"}, {"from": 6, "to": 5, "arrows": "to"}, {"from": 7, "to": 14, "arrows": "to"}, {"from": 7, "to": 4, "arrows": "to"}, {"from": 7, "to": 2, "arrows": "to"}, {"from": 7, "to": 1, "arrows": "to"}, {"from": 7, "to": 5, "arrows": "to"}, {"from": 8, "to": 2, "arrows": "to"}, {"from": 9, "to": 14, "arrows": "to"}, {"from": 10, "to": 2, "arrows": "to"}, {"from": 10, "to": 3, "arrows": "to"}, {"from": 10, "to": 14, "arrows": "to"}, {"from": 10, "to": 4, "arrows": "to"}, {"from": 11, "to": 2, "arrows": "to"}, {"from": 12, "to": 2, "arrows": "to"}, {"from": 12, "to": 14, "arrows": "to"}, {"from": 12, "to": 4, "arrows": "to"}, {"from": 13, "to": 14, "arrows": "to"}, {"from": 15, "to": 16, "arrows": "to"}, {"from": 15, "to": 17, "arrows": "to"}, {"from": 15, "to": 23, "arrows": "to"}, {"from": 15, "to": 28, "arrows": "to"}, {"from": 15, "to": 25, "arrows": "to"}, {"from": 16, "to": 22, "arrows": "to"}, {"from": 16, "to": 20, "arrows": "to"}, {"from": 16, "to": 28, "arrows": "to"}, {"from": 16, "to": 25, "arrows": "to"}, {"from": 16, "to": 21, "arrows": "to"}, {"from": 16, "to": 24, "arrows": "to"}, {"from": 17, "to": 16, "arrows": "to"}, {"from": 17, "to": 22, "arrows": "to"}, {"from": 17, "to": 31, "arrows": "to"}, {"from": 17, "to": 28, "arrows": "to"}, {"from": 17, "to": 25, "arrows": "to"}, {"from": 17, "to": 24, "arrows": "to"}, {"from": 18, "to": 25, "arrows": "to"}, {"from": 18, "to": 22, "arrows": "to"}, {"from": 19, "to": 28, "arrows": "to"}, {"from": 19, "to": 25, "arrows": "to"}, {"from": 19, "to": 22, "arrows": "to"}, {"from": 20, "to": 22, "arrows": "to"}, {"from": 21, "to": 16, "arrows": "to"}, {"from": 21, "to": 25, "arrows": "to"}, {"from": 22, "to": 25, "arrows": "to"}, {"from": 23, "to": 28, "arrows": "to"}, {"from": 24, "to": 23, "arrows": "to"}, {"from": 24, "to": 28, "arrows": "to"}, {"from": 24, "to": 25, "arrows": "to"}, {"from": 25, "to": 16, "arrows": "to"}, {"from": 26, "to": 28, "arrows": "to"}, {"from": 26, "to": 25, "arrows": "to"}, {"from": 27, "to": 16, "arrows": "to"}, {"from": 27, "to": 22, "arrows": "to"}, {"from": 27, "to": 18, "arrows": "to"}, {"from": 27, "to": 19, "arrows": "to"}, {"from": 27, "to": 28, "arrows": "to"}, {"from": 27, "to": 25, "arrows": "to"}, {"from": 27, "to": 24, "arrows": "to"}, {"from": 28, "to": 26, "arrows": "to"}, {"from": 28, "to": 25, "arrows": "to"}, {"from": 29, "to": 24, "arrows": "to"}, {"from": 29, "to": 22, "arrows": "to"}, {"from": 29, "to": 28, "arrows": "to"}, {"from": 29, "to": 30, "arrows": "to"}, {"from": 29, "to": 15, "arrows": "to"}]};
+    let network;
+    let allNodes = new vis.DataSet(data.nodes);
+    let allEdges = new vis.DataSet(data.edges);
+    
+    // Theme Colors
+    const themes = {
+        light: { bg: '#f0f2f5', font: '#333', edge: '#888' },
+        dark: { bg: '#1e1e1e', font: '#dcddde', edge: '#666' }
+    };
+    let currentTheme = 'light';
+
+    const options = {
+        nodes: {
+            shape: 'dot',
+            scaling: { min: 10, max: 30, label: { min: 8, max: 20, drawThreshold: 5, maxVisible: 20 } },
+            font: { size: 14, face: 'Inter, Tahoma', color: '#333', strokeWidth: 2, strokeColor: '#fff' },
+            borderWidth: 2
+        },
+        edges: {
+            width: 0.5,
+            color: { inherit: 'from', opacity: 0.5 },
+            smooth: { type: 'continuous', roundness: 0.5 },
+            arrows: { to: { enabled: true, scaleFactor: 0.5 } }
+        },
+        physics: {
+            stabilization: false,
+            barnesHut: { 
+                gravitationalConstant: -12000, // Increased repulsion
+                centralGravity: 0.3,
+                springLength: 120, // Increased spacing
+                springConstant: 0.04,
+                damping: 0.09,
+                avoidOverlap: 0.2
+            },
+            adaptiveTimestep: true
+        },
+        interaction: { tooltipDelay: 200, hideEdgesOnDrag: true, hover: true, zoomView: true }
+    };
+
+    function init() {
+        const container = document.getElementById('mynetwork');
+        network = new vis.Network(container, { nodes: allNodes, edges: allEdges }, options);
+        
+        network.on("click", function (params) {
+            if (params.nodes.length > 0) {
+                const nodeId = params.nodes[0];
+                showNodeDetails(nodeId);
+                highlightNeighborhood(nodeId);
+            } else {
+                hideNodeDetails();
+                resetHighlight();
+            }
+        });
+    }
+
+    function showNodeDetails(nodeId) {
+        const node = allNodes.get(nodeId);
+        if (node) {
+            document.getElementById('info-panel').style.display = 'block';
+            document.getElementById('panel-title').innerText = node.label;
+            document.getElementById('panel-content').innerHTML = node.title;
+        }
+    }
+
+    function hideNodeDetails() {
+        document.getElementById('info-panel').style.display = 'none';
+    }
+
+    function highlightNeighborhood(nodeId) {
+        const connectedNodes = network.getConnectedNodes(nodeId);
+        const allNodeIds = allNodes.getIds();
+        
+        const dimColor = currentTheme === 'dark' ? '#333' : '#e0e0e0';
+        const dimFont = currentTheme === 'dark' ? '#555' : '#ccc';
+        
+        const updateArray = [];
+        allNodeIds.forEach(id => {
+            if (id !== nodeId && !connectedNodes.includes(id)) {
+                updateArray.push({ 
+                    id: id, 
+                    color: { background: dimColor, border: dimColor }, 
+                    font: { color: dimFont } 
+                });
+            } else {
+                // Reset to default (group color)
+                updateArray.push({ 
+                    id: id, 
+                    color: null, 
+                    font: { color: currentTheme === 'dark' ? '#dcddde' : '#333' } 
+                });
+            }
+        });
+        allNodes.update(updateArray);
+    }
+
+    function resetHighlight() {
+        const allNodeIds = allNodes.getIds();
+        const updateArray = allNodeIds.map(id => ({ 
+            id: id, 
+            color: null, 
+            font: { color: currentTheme === 'dark' ? '#dcddde' : '#333' } 
+        }));
+        allNodes.update(updateArray);
+    }
+
+    function toggleGroup(group) {
+        const checkbox = document.getElementById('cb-' + group);
+        const nodesToToggle = allNodes.get({ filter: item => item.group === group });
+        
+        nodesToToggle.forEach(node => {
+            allNodes.update({ id: node.id, hidden: !checkbox.checked });
+        });
+    }
+
+    function searchNode() {
+        const term = document.getElementById('search').value.toLowerCase();
+        if (!term) return;
+        
+        const foundNodes = allNodes.get({ filter: item => item.label.toLowerCase().includes(term) });
+        
+        if (foundNodes.length > 0) {
+            const nodeId = foundNodes[0].id;
+            network.focus(nodeId, { scale: 1.2, animation: true });
+            network.selectNodes([nodeId]);
+            showNodeDetails(nodeId);
+            highlightNeighborhood(nodeId);
+        }
+    }
+
+    function resetView() {
+        network.fit();
+        resetHighlight();
+        hideNodeDetails();
+        document.getElementById('search').value = '';
+        // Reset checkboxes
+        ['backend', 'core', 'frontend'].forEach(g => {
+            document.getElementById('cb-' + g).checked = true;
+            toggleGroup(g);
+        });
+    }
+    
+    function fitAll() {
+        network.fit({ animation: true });
+    }
+
+    function toggleTheme() {
+        currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.body.classList.toggle('dark-mode');
+        
+        const icon = document.querySelector('#theme-toggle span');
+        icon.textContent = currentTheme === 'light' ? 'dark_mode' : 'light_mode';
+        
+        // Update node font colors and strokes
+        const textColor = currentTheme === 'light' ? '#333' : '#dcddde';
+        const strokeColor = currentTheme === 'light' ? '#fff' : '#2b2b2b';
+        
+        options.nodes.font.color = textColor;
+        options.nodes.font.strokeColor = strokeColor;
+        network.setOptions(options);
+        
+        // Refresh nodes
+        resetHighlight();
+    }
+
+    init();
+</script>
+
+</body>
+</html>
+    

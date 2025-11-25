@@ -107,17 +107,15 @@ export function PricingPage() {
               {plans.map((plan, idx) => (
                 <div
                   key={idx}
-                  className={`${planCardBase} ${
-                    plan.highlighted
-                      ? `border-indigo-500 shadow-2xl shadow-indigo-500/25 transform scale-105 ${
-                          isDark
-                            ? 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10'
-                            : 'bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100'
-                        }`
+                  className={`${planCardBase} ${plan.highlighted
+                      ? `border-indigo-500 shadow-2xl shadow-indigo-500/25 transform scale-105 ${isDark
+                        ? 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10'
+                        : 'bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100'
+                      }`
                       : isDark
                         ? 'border-white/10 bg-[#1E293B]/50 hover:border-indigo-500/35'
                         : 'hover:border-indigo-500/30 hover:shadow-[0_24px_55px_rgba(79,70,229,0.16)]'
-                  }`}
+                    }`}
                 >
                   {plan.highlighted && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -139,14 +137,13 @@ export function PricingPage() {
                     </div>
 
                     <Button
-                      onClick={() => navigate('/auth?mode=signup')}
-                      className={`w-full mb-8 h-11 ${
-                        plan.highlighted
+                      onClick={() => navigate('/login?mode=signup')}
+                      className={`w-full mb-8 h-11 ${plan.highlighted
                           ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0'
                           : isDark
                             ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15'
                             : 'bg-white hover:bg-slate-100 text-slate-800 border border-slate-300'
-                      }`}
+                        }`}
                     >
                       Get Started
                       <ArrowRight className="h-4 w-4" />
@@ -210,11 +207,10 @@ export function PricingPage() {
         </section>
 
         <section
-          className={`px-6 py-24 bg-gradient-to-br ${
-            isDark
+          className={`px-6 py-24 bg-gradient-to-br ${isDark
               ? 'from-indigo-500/10 via-purple-500/10 to-pink-500/10'
               : 'from-indigo-100 via-purple-100 to-pink-100'
-          }`}
+            }`}
         >
           <div className="container mx-auto max-w-4xl text-center">
             <h2 className="text-4xl font-bold mb-6">Need a custom plan?</h2>

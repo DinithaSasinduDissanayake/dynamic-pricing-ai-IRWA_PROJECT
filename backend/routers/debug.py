@@ -23,8 +23,8 @@ def get_db_path(database: str) -> Path:
         return Path("app/chat_threads/chat.db")
     elif database == "market":
         try:
-            from core.config import resolve_market_db
-            return resolve_market_db()
+            from core.settings import get_settings
+            return get_settings().resolve_market_db()
         except Exception:
             return Path("data/market.db")
     else:

@@ -8,7 +8,10 @@ export function ChatPage({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const t = token ?? localStorage.getItem('token')
-    if (!t) navigate('/auth')
+    // Redirect to login if not authenticated
+    if (!t) {
+      navigate('/login')
+    }
   }, [token, navigate])
 
   return <>{children}</>

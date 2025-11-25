@@ -39,11 +39,10 @@ export function HeroSection({
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-8 inline-block">
             <span
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium ${
-                isDark
-                  ? 'border-indigo-500/20 bg-indigo-500/10 text-indigo-300'
-                  : 'border-indigo-500/30 bg-white/80 text-indigo-700 shadow-[0_10px_25px_rgba(79,70,229,0.12)]'
-              }`}
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium ${isDark
+                ? 'border-indigo-500/20 bg-indigo-500/10 text-indigo-300'
+                : 'border-indigo-500/30 bg-white/80 text-indigo-700 shadow-[0_10px_25px_rgba(79,70,229,0.12)]'
+                }`}
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -80,12 +79,13 @@ export function HeroSection({
               <>
                 <Button
                   className="text-lg h-14 px-10 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0 shadow-[0_18px_40px_rgba(79,70,229,0.25)]"
-                  onClick={() => navigate('/auth?mode=signup')}
+                  onClick={() => navigate('/login?mode=signup')}
                 >
                   Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button
+                  variant="ghost"
                   className={secondaryCta}
                   onClick={() =>
                     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })
@@ -117,11 +117,10 @@ export function HeroSection({
 
             <div className="flex-1">
               <div
-                className={`rounded-2xl border p-4 backdrop-blur-xl shadow-2xl ${
-                  isDark
-                    ? 'border-white/10 bg-gradient-to-br from-slate-800/50 to-slate-900/50'
-                    : 'border-slate-200 bg-white/95 shadow-[0_24px_60px_rgba(15,23,42,0.18)]'
-                }`}
+                className={`rounded-2xl border p-4 backdrop-blur-xl shadow-2xl ${isDark
+                  ? 'border-white/10 bg-gradient-to-br from-slate-800/50 to-slate-900/50'
+                  : 'border-slate-200 bg-white/95 shadow-[0_24px_60px_rgba(15,23,42,0.18)]'
+                  }`}
               >
                 <div
                   className={`rounded-lg p-8 border ${isDark ? 'bg-[#1E293B] border-white/5' : 'bg-slate-50 border-slate-200'}`}

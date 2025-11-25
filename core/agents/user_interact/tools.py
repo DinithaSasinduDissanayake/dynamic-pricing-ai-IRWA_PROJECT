@@ -11,10 +11,10 @@ except Exception:
 
 def get_db_paths():
     try:
-        from core.config import resolve_app_db, resolve_market_db
+        from core.settings import get_settings
         return {
-            "app": resolve_app_db(),
-            "market": resolve_market_db()
+            "app": get_settings().resolve_app_db(),
+            "market": get_settings().resolve_market_db()
         }
     except Exception:
         root = Path(__file__).resolve().parents[3]

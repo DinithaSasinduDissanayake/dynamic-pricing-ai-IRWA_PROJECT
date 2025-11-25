@@ -2,9 +2,9 @@
 import os, ssl, smtplib, asyncio
 from email.message import EmailMessage
 from typing import Any
+from tenacity import retry, stop_after_attempt, wait_fixed
 
 from ..config import load_runtime_defaults, merge_defaults_db
-from ..util.retry import retry
 
 class EmailSink:
     def __init__(self, repo):
@@ -78,12 +78,13 @@ class EmailSink:
 
         delivery_id = f"deliv_{inc.get('id','')}_email"
 
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
         async def _send_async():
             await asyncio.to_thread(_send_sync)
 
         try:
             # Retry transient failures
-            await retry(_send_async, attempts=3)
+            await _send_async()
             if hasattr(self.repo, "record_delivery"):
                 await self.repo.record_delivery(
                     delivery_id=delivery_id,

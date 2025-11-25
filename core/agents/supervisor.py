@@ -12,7 +12,7 @@ from core.agents.data_collector.collector import DataCollector
 from core.agents.agent_sdk.mcp_client import get_data_collector_client
 import uuid
 from core.agents.price_optimizer.agent import PricingOptimizerAgent
-from core.agents.agent_sdk.bus_factory import get_bus
+from core.agents.agent_sdk.event_bus import get_bus
 from core.agents.agent_sdk.protocol import Topic
 from core.workflow_templates import collect_and_optimize_prelude
 from core.agents.agent_sdk.events_models import PriceProposal
@@ -155,9 +155,9 @@ class Supervisor:
         return {"items": results, "count": len(results)}
 
     def _seed_market_if_needed(self, sku: str, owner_id: int = 1) -> None:
-        from core.config import resolve_market_db
+        from core.settings import get_settings
 
-        mdb = resolve_market_db().as_posix()
+        mdb = get_settings().resolve_market_db().as_posix()
         conn = sqlite3.connect(mdb, check_same_thread=False)
         cur = conn.cursor()
         cur.execute(
@@ -179,9 +179,9 @@ class Supervisor:
         conn.close()
 
     def _read_product_prices(self, sku: str) -> tuple[Optional[float], Optional[float]]:
-        from core.config import resolve_app_db
+        from core.settings import get_settings
 
-        adb = resolve_app_db().as_posix()
+        adb = get_settings().resolve_app_db().as_posix()
         conn = sqlite3.connect(adb, check_same_thread=False)
         cur = conn.cursor()
         cur.execute(

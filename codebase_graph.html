@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codebase Architecture Mind Map</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .node circle {
+            stroke: #fff;
+            stroke-width: 1.5px;
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+
+        .node circle:hover {
+            stroke: #61dafb;
+            stroke-width: 3px;
+        }
+
+        .node text {
+            font-size: 12px;
+            fill: #e0e0e0;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .link {
+            stroke: #555;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+            fill: none;
+        }
+
+        .group-hull {
+            fill-opacity: 0.1;
+            stroke-width: 30;
+            stroke-linejoin: round;
+        }
+
+        #tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #444;
+            border-radius: 5px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        #legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        h1 {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            margin: 0;
+            color: #61dafb;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dynamic Pricing AI - Architecture</h1>
+    <div id="container"></div>
+    <div id="tooltip"></div>
+    <div id="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ff6b6b;"></div>Frontend
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #4ecdc4;"></div>Backend API
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ffe66d;"></div>Core Agents
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #a78bfa;"></div>Database
+        </div>
+    </div>
+
+    <script>
+        // Curated Data - "Intelligence" applied here
+        const data = {
+            nodes: [
+                // Frontend
+                { id: "App.tsx", group: "frontend", label: "App Entry", desc: "Main React application entry point" },
+                { id: "main.tsx", group: "frontend", label: "DOM Render", desc: "Mounts React app to DOM" },
+                { id: "ChatInterface", group: "frontend", label: "Chat UI", desc: "Main chat window and interaction component" },
+                { id: "Dashboard", group: "frontend", label: "Dashboard", desc: "Analytics and metrics visualization" },
+                { id: "PricingStore", group: "frontend", label: "Pricing Store", desc: "State management for pricing data" },
+                { id: "AuthStore", group: "frontend", label: "Auth Store", desc: "User authentication state" },
+                { id: "api_client", group: "frontend", label: "API Client", desc: "Axios/Fetch wrapper for backend calls" },
+
+                // Backend API
+                { id: "main.py", group: "backend", label: "FastAPI App", desc: "Backend entry point, middleware, and router inclusion" },
+                { id: "routers/auth", group: "backend", label: "Auth Router", desc: "Login, register, and token endpoints" },
+                { id: "routers/prices", group: "backend", label: "Prices Router", desc: "Price optimization endpoints" },
+                { id: "routers/chat", group: "backend", label: "Chat Router", desc: "Message handling and thread management" },
+                { id: "routers/streaming", group: "backend", label: "Streaming", desc: "SSE/WebSocket for real-time updates" },
+                { id: "routers/catalog", group: "backend", label: "Catalog", desc: "Product catalog management" },
+
+                // Core Agents & Logic
+                { id: "PricingOptimizer", group: "core", label: "Pricing Optimizer", desc: "Agent that calculates optimal prices based on data" },
+                { id: "DataCollector", group: "core", label: "Data Collector", desc: "Gathers market data and competitor prices" },
+                { id: "ProposalLogger", group: "core", label: "Proposal Logger", desc: "Logs price changes and proposals for audit" },
+                { id: "AlertService", group: "core", label: "Alert Service", desc: "Monitors conditions and triggers alerts" },
+                { id: "LLMClient", group: "core", label: "LLM Client", desc: "Interface to OpenAI/Anthropic/Gemini" },
+                { id: "AgentSDK", group: "core", label: "Agent SDK", desc: "Base classes and utilities for agents" },
+
+                // Database
+                { id: "auth.db", group: "database", label: "Auth DB", desc: "User and session data (SQLite)" },
+                { id: "chat.db", group: "database", label: "Chat DB", desc: "Message history and threads (SQLite)" },
+                { id: "catalog.db", group: "database", label: "Catalog DB", desc: "Product and inventory data" }
+            ],
+            links: [
+                // Frontend Internal
+                { source: "main.tsx", target: "App.tsx" },
+                { source: "App.tsx", target: "ChatInterface" },
+                { source: "App.tsx", target: "Dashboard" },
+                { source: "ChatInterface", target: "PricingStore" },
+                { source: "Dashboard", target: "PricingStore" },
+                { source: "App.tsx", target: "AuthStore" },
+                { source: "PricingStore", target: "api_client" },
+                { source: "AuthStore", target: "api_client" },
+
+                // Frontend -> Backend
+                { source: "api_client", target: "main.py", type: "http" },
+
+                // Backend Internal
+                { source: "main.py", target: "routers/auth" },
+                { source: "main.py", target: "routers/prices" },
+                { source: "main.py", target: "routers/chat" },
+                { source: "main.py", target: "routers/streaming" },
+                { source: "main.py", target: "routers/catalog" },
+
+                // Backend -> Core
+                { source: "routers/prices", target: "PricingOptimizer" },
+                { source: "routers/chat", target: "LLMClient" },
+                { source: "routers/catalog", target: "DataCollector" },
+
+                // Core Internal
+                { source: "PricingOptimizer", target: "LLMClient" },
+                { source: "PricingOptimizer", target: "DataCollector" },
+                { source: "PricingOptimizer", target: "ProposalLogger" },
+                { source: "PricingOptimizer", target: "AgentSDK" },
+                { source: "DataCollector", target: "AgentSDK" },
+                { source: "AlertService", target: "DataCollector" },
+
+                // Data Persistence
+                { source: "routers/auth", target: "auth.db" },
+                { source: "routers/chat", target: "chat.db" },
+                { source: "routers/catalog", target: "catalog.db" },
+                { source: "DataCollector", target: "catalog.db" }
+            ]
+        };
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const color = d3.scaleOrdinal()
+            .domain(["frontend", "backend", "core", "database"])
+            .range(["#ff6b6b", "#4ecdc4", "#ffe66d", "#a78bfa"]);
+
+        const svg = d3.select("#container").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .call(d3.zoom().on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            }))
+            .append("g");
+
+        const g = svg.append("g");
+
+        // Arrow marker
+        svg.append("defs").selectAll("marker")
+            .data(["end"])
+            .enter().append("marker")
+            .attr("id", "arrow")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 25)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#555");
+
+        const simulation = d3.forceSimulation(data.nodes)
+            .force("link", d3.forceLink(data.links).id(d => d.id).distance(150))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collide", d3.forceCollide().radius(50));
+
+        const link = g.append("g")
+            .selectAll("line")
+            .data(data.links)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("marker-end", "url(#arrow)");
+
+        const node = g.append("g")
+            .selectAll("g")
+            .data(data.nodes)
+            .enter().append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", 10)
+            .attr("fill", d => color(d.group));
+
+        node.append("text")
+            .attr("dx", 15)
+            .attr("dy", 4)
+            .text(d => d.label);
+
+        // Tooltip interaction
+        node.on("mouseover", (event, d) => {
+            const tooltip = d3.select("#tooltip");
+            tooltip.transition().duration(200).style("opacity", .9);
+            tooltip.html(`<strong>${d.label}</strong><br/>${d.desc}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+
+            // Highlight connections
+            link.style("stroke", l => (l.source === d || l.target === d) ? "#fff" : "#555")
+                .style("stroke-opacity", l => (l.source === d || l.target === d) ? 1 : 0.1);
+            node.style("opacity", n => {
+                const isConnected = data.links.some(l =>
+                    (l.source.id === d.id && l.target.id === n.id) ||
+                    (l.target.id === d.id && l.source.id === n.id) ||
+                    n.id === d.id
+                );
+                return isConnected ? 1 : 0.1;
+            });
+        })
+            .on("mouseout", () => {
+                d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+                link.style("stroke", "#555").style("stroke-opacity", 0.6);
+                node.style("opacity", 1);
+            });
+
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+    </script>
+</body>
+
+</html>

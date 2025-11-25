@@ -1,7 +1,7 @@
 # core/agents/alert_service/sinks/webhook.py
 import aiohttp
+from tenacity import retry, stop_after_attempt, wait_fixed
 from ..config import load_runtime_defaults, merge_defaults_db
-from ..util.retry import retry
 
 class WebhookSink:
     def __init__(self, repo):
@@ -36,6 +36,7 @@ class WebhookSink:
             "status": inc.get("status", "OPEN"),
         }
 
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
         async def _post():
             timeout = aiohttp.ClientTimeout(total=10)
             async with aiohttp.ClientSession(timeout=timeout) as sess:
@@ -46,7 +47,7 @@ class WebhookSink:
 
         delivery_id = f"deliv_{inc.get('id','')}_webhook"
         try:
-            await retry(_post, attempts=3)
+            await _post()
             if hasattr(self.repo, "record_delivery"):
                 await self.repo.record_delivery(
                     delivery_id=delivery_id,

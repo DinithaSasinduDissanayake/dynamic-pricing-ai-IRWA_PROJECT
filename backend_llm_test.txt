@@ -1,0 +1,4 @@
+Testing LLM client with model: gemini/gemini-2.5-flash
+KeyManager has 6 keys
+[SUCCESS] Response: <coroutine object LLMClient.chat at 0x000001EB2AC0CF40>
+sys:1: RuntimeWarning: coroutine 'LLMClient.chat' was never awaited

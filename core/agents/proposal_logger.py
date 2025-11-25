@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict
 
-from core.agents.agent_sdk.bus_factory import get_bus
+from core.agents.agent_sdk.event_bus import get_bus
 from core.agents.agent_sdk.protocol import Topic
 
 
