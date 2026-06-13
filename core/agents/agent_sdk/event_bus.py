@@ -48,7 +48,10 @@ def validate_payload(topic: str, payload: Mapping) -> Tuple[bool, Optional[str]]
         return False, str(e)
 
 def write_event(topic: str, payload: Mapping[str, Any]) -> None:
-    """Write event to the journal file (best-effort)."""
+    """Write event to the journal file (best-effort).
+
+    Optimize: use read-append without fsync to reduce latency.
+    """
     try:
         _JOURNAL_DIR.mkdir(parents=True, exist_ok=True)
         rec = {
@@ -56,11 +59,13 @@ def write_event(topic: str, payload: Mapping[str, Any]) -> None:
             "topic": topic,
             "payload": dict(payload),
         }
+        # Keep simple append for now - outbox + flusher will ensure durability
         with _JOURNAL_FILE.open("a", encoding="utf-8") as f:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
     except Exception:
         # best effort: never raise from journaling
         pass
+
 
 class EventBus:
     """Asynchronous in-memory event bus."""
@@ -84,13 +89,28 @@ class EventBus:
         write_event(topic, message)
 
         # Dispatch
+        # Dispatch subscribers concurrently so one slow sink doesn't block others
+        tasks = []
         for cb in list(self._subs.get(topic, [])):
             try:
                 res = cb(message)
                 if asyncio.iscoroutine(res):
-                    await res
+                    tasks.append(asyncio.create_task(res))
+                else:
+                    # Wrap sync callbacks into a threadpool task to avoid blocking
+                    loop = asyncio.get_running_loop()
+                    tasks.append(loop.run_in_executor(None, lambda cb=cb, m=message: cb(m)))
             except Exception as e:
                 logger.error("bus_sink_error", topic=topic, error=str(e), sink=repr(cb))
+
+        if tasks:
+            # Fire and forget, but await completion to allow exceptions to be logged
+            for t in asyncio.as_completed(tasks):
+                try:
+                    await t
+                except Exception as e:
+                    logger.error("bus_sink_error", topic=topic, error=str(e))
+
 
 # Singleton instance
 _BUS: Optional[EventBus] = None

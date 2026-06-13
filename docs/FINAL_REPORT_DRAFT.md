@@ -38,7 +38,7 @@ This project implements a **production-ready dynamic pricing system** using a mu
 
 ### 1.1 Architecture Overview
 
-The system follows a **microservice agent architecture** with four independent agents communicating via two standardized protocols:
+The system follows a **modular monolith agent architecture** with four independent agents (Data Collector, Price Optimizer, Alert Service, User Interaction) implemented as modular components within a single process; they communicate via internal event bus + shared tooling.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐

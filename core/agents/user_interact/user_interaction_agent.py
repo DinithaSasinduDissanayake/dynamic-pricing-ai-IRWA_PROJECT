@@ -74,8 +74,10 @@ class UserInteractionAgent:
             return
 
         llm = get_llm_client()
+        print(f"DEBUG: UserInteractionAgent llm.is_available={llm.is_available()}")
         if not llm.is_available():
-            yield "LLM not available."
+            print("DEBUG: UserInteractionAgent yielding fallback")
+            yield "LLM is not available."
             return
 
         msgs = [{"role": "system", "content": system_prompt}]

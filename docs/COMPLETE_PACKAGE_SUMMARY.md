@@ -243,7 +243,7 @@ EVENTS LOGGED: 7 events in events.jsonl
 
 Your system demonstrates **institutional knowledge** of software engineering best practices:
 
-✅ **Architecture:** Microservice agents (not monolithic)  
+✅ **Architecture:** Modular monolith agents (single-process modules, not distributed microservices)  
 ✅ **Protocols:** Industry standards (MCP, not custom)  
 ✅ **Communication:** Two layers (sync + async, not just one)  
 ✅ **Auditability:** Immutable logs (not in-memory state)  

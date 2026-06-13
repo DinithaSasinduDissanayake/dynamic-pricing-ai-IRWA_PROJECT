@@ -237,7 +237,7 @@ def optimize_price(sku: str) -> Dict[str, Any]:
             return {"ok": False, "error": f"SKU '{sku}' not found in your inventory"}
     
     try:
-        from core.agents.agent_sdk.bus_factory import get_bus
+        from core.agents.agent_sdk.event_bus import get_bus
         from core.agents.agent_sdk.protocol import Topic
         import asyncio
         
@@ -249,6 +249,7 @@ def optimize_price(sku: str) -> Dict[str, Any]:
             "product_name": sku,
             "user_request": f"Optimize price for {sku}",
         }
+
         
         try:
             loop = asyncio.get_running_loop()

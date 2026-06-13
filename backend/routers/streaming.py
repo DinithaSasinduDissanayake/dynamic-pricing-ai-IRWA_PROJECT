@@ -182,9 +182,9 @@ def api_post_message(thread_id: int, req: PostMessageRequest, request: Request, 
     try:
         update_message(
             um.id,
-            agents=json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
-            tools=json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
-            meta=(None if metadata is None else json.dumps(metadata, ensure_ascii=False)),
+            agents=_json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
+            tools=_json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
+            meta=(None if metadata is None else _json.dumps(metadata, ensure_ascii=False)),
         )
     except Exception:
         pass
@@ -197,11 +197,11 @@ def api_post_message(thread_id: int, req: PostMessageRequest, request: Request, 
         token_in=token_in,
         token_out=token_out,
         cost_usd=cost_usd,
-        agents=json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
-        tools=json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
+        agents=_json.dumps(agents_obj, ensure_ascii=False) if agents_obj else None,
+        tools=_json.dumps(tools_obj, ensure_ascii=False) if tools_obj else None,
         api_calls=api_calls,
         parent_id=um.id,
-        meta=(None if metadata is None else json.dumps(metadata, ensure_ascii=False)),
+        meta=(None if metadata is None else _json.dumps(metadata, ensure_ascii=False)),
     )
 
     try:
@@ -264,7 +264,7 @@ def api_post_message_stream(thread_id: int, req: PostMessageRequest, request: Re
     async def _iter():
         try:
             if _get_show_thinking():
-                yield "event: thinking\n" + "data: " + json.dumps({"status": "started"}) + "\n\n"
+                yield "event: thinking\n" + "data: " + _json.dumps({"status": "started"}) + "\n\n"
             else:
                 yield "event: ping\n" + "data: {}\n\n"
         except Exception:
@@ -294,7 +294,7 @@ def api_post_message_stream(thread_id: int, req: PostMessageRequest, request: Re
                     try:
                         if isinstance(delta, str) and delta:
                             full_parts.append(delta)
-                            yield "event: message\n" + "data: " + json.dumps({"id": am.id, "delta": delta}, ensure_ascii=False) + "\n\n"
+                            yield "event: message\n" + "data: " + _json.dumps({"id": am.id, "delta": delta}, ensure_ascii=False) + "\n\n"
                             continue
 
                         if isinstance(delta, dict):

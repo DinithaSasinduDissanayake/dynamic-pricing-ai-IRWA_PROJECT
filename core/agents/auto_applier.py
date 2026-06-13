@@ -93,49 +93,56 @@ class AutoApplier:
             )
             return
 
+        # Acquire per-SKU thread lock to guard against concurrent applies
+        from core.agents.agent_sdk.locks import get_thread_lock_registry
+
+        tlock = get_thread_lock_registry().get_lock(pp.sku)
+
         def _apply():
-            market_db_path = self._market_path()
-            proposal_id = self._db.get_proposal_id(pp.sku, proposed_price)
-            backoff = [0.01, 0.02, 0.05, 0.1, 0.25, 0.5]
-            committed = False
-            for delay in backoff:
-                success = self._db.apply_price_atomic(
-                    market_db_path=market_db_path,
-                    sku=pp.sku,
-                    proposed_price=proposed_price,
-                    margin=float(pp.margin) if pp.margin is not None else None,
-                    algorithm=str(pp.algorithm) if pp.algorithm is not None else None,
-                    proposal_id=proposal_id,
-                    current_price=pp.current_price,
-                )
-                if success:
-                    committed = True
-                    break
-                time.sleep(delay)
-            if not committed:
-                return
+            with tlock:
+                market_db_path = self._market_path()
+                proposal_id = self._db.get_proposal_id(pp.sku, proposed_price)
+                backoff = [0.01, 0.02, 0.05, 0.1, 0.25, 0.5]
+                committed = False
+                for delay in backoff:
+                    success = self._db.apply_price_atomic(
+                        market_db_path=market_db_path,
+                        sku=pp.sku,
+                        proposed_price=proposed_price,
+                        margin=float(pp.margin) if pp.margin is not None else None,
+                        algorithm=str(pp.algorithm) if pp.algorithm is not None else None,
+                        proposal_id=proposal_id,
+                        current_price=pp.current_price,
+                    )
+                    if success:
+                        committed = True
+                        break
+                    time.sleep(delay)
+                if not committed:
+                    return
 
-            # Publish schema-compliant price.update event after commit
-            payload = {
-                "proposal_id": proposal_id or str(uuid.uuid4()),
-                "product_id": pp.sku,
-                "final_price": proposed_price,
-            }
+                # Publish schema-compliant price.update event after commit
+                payload = {
+                    "proposal_id": proposal_id or str(uuid.uuid4()),
+                    "product_id": pp.sku,
+                    "final_price": proposed_price,
+                }
 
-            async def _pub():
-                try:
-                    await get_bus().publish(Topic.PRICE_UPDATE.value, payload)
-                except Exception as e:
+                async def _pub():
                     try:
-                        print(f"[AutoApplier] publish PRICE_UPDATE failed: {e}")
-                    except Exception:
-                        pass
+                        await get_bus().publish(Topic.PRICE_UPDATE.value, payload)
+                    except Exception as e:
+                        try:
+                            print(f"[AutoApplier] publish PRICE_UPDATE failed: {e}")
+                        except Exception:
+                            pass
 
-            try:
-                loop = asyncio.get_running_loop()
-                loop.create_task(_pub())
-            except RuntimeError:
-                threading.Thread(target=lambda: asyncio.run(_pub()), daemon=True).start()
+                try:
+                    loop = asyncio.get_running_loop()
+                    loop.create_task(_pub())
+                except RuntimeError:
+                    threading.Thread(target=lambda: asyncio.run(_pub()), daemon=True).start()
 
         # Offload to background thread to avoid blocking the bus callback
         threading.Thread(target=_apply, daemon=True).start()
+

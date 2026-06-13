@@ -164,10 +164,11 @@ class Tools:
         algorithm: str = "unknown",
     ) -> Dict[str, Any]:
         try:
-            from core.agents.agent_sdk.bus_factory import get_bus
+            from core.agents.agent_sdk.event_bus import get_bus
             from core.agents.agent_sdk.protocol import Topic
 
             bus = get_bus()
+
             proposal_payload = {
                 "proposal_id": uuid.uuid4().hex,
                 "sku": sku,
@@ -179,13 +180,22 @@ class Tools:
                 "margin": float(margin),
                 "algorithm": algorithm,
             }
-            await bus.publish(Topic.PRICE_PROPOSAL.value, proposal_payload)
+            # Enqueue to outbox first - ensures we can recover if publishing fails
+            try:
+                from core.agents.agent_sdk.outbox import OutboxRepo
+                repo = OutboxRepo(path=self.app_db)
+                await repo.init()
+                await repo.enqueue(Topic.PRICE_PROPOSAL.value, proposal_payload)
+            except Exception:
+                # Fallback to direct publish if outbox unavailable
+                await bus.publish(Topic.PRICE_PROPOSAL.value, proposal_payload)
             
             return {
                 "ok": True,
                 "proposal_id": proposal_payload["proposal_id"],
                 "message": f"Published price proposal: {sku} {old_price} → {new_price}",
             }
+
         except Exception as e:
             logger.error(f"Failed to publish price proposal: {e}")
             return {"ok": False, "error": str(e)}
@@ -258,7 +268,7 @@ class Tools:
     async def start_market_data_collection(self, sku: str) -> Dict[str, Any]:
         """Trigger market data collection for a product."""
         try:
-            from core.agents.agent_sdk.bus_factory import get_bus
+            from core.agents.agent_sdk.event_bus import get_bus
             from core.agents.agent_sdk.protocol import Topic
             from core.payloads import MarketFetchRequestPayload
             

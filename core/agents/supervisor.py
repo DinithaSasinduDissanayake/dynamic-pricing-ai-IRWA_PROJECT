@@ -144,7 +144,15 @@ class Supervisor:
                         "previous_price": float(current_price or 0.0),
                         "proposed_price": float(price),
                     }
-                    await get_bus().publish(Topic.PRICE_PROPOSAL.value, payload)
+                    # Use Outbox to avoid lost publish after DB commit
+                    try:
+                        from core.agents.agent_sdk.outbox import OutboxRepo
+                        outbox = OutboxRepo(path=get_settings().resolve_app_db())
+                        await outbox.init()
+                        await outbox.enqueue(Topic.PRICE_PROPOSAL.value, payload)
+                    except Exception:
+                        await get_bus().publish(Topic.PRICE_PROPOSAL.value, payload)
+
                     summary["proposal_published"] = True
                 except Exception as e:
                     summary["error"] = str(e)

@@ -401,8 +401,8 @@ class DataRepo:
                 "created_at", "started_at", "finished_at"]
         return {k: row[i] for i, k in enumerate(keys)}
 
-    async def insert_price_proposal(self, pp: Dict[str, Any]) -> None:
-        """Insert a price proposal row."""
+async def insert_price_proposal(self, pp: Dict[str, Any]) -> None:
+        """Insert a price proposal row and write an outbox event for propagation."""
         pid = pp.get("id") or str(uuid.uuid4())
         ts = pp.get("ts") or _utc_now_iso()
         engine = self._get_engine()
@@ -424,3 +424,13 @@ class DataRepo:
                     "ts": ts,
                 }
             )
+        # Write outbox record for reliable publish without losing event on commit
+        try:
+            from core.agents.agent_sdk.outbox import OutboxRepo
+            outbox = OutboxRepo(path=self.path)
+            await outbox.init()
+            await outbox.enqueue("price.proposal", {"proposal_id": pid, "product_id": pp["sku"], "previous_price": pp.get("current_price"), "proposed_price": pp.get("proposed_price")})
+        except Exception:
+            # best-effort: ignore
+            pass
+

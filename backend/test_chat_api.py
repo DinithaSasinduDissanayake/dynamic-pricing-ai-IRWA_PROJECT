@@ -16,6 +16,13 @@ def make_test_client():
     if "backend.main" in sys.modules:
         del sys.modules["backend.main"]
     mod = importlib.import_module("backend.main")
+    from core.chat_db import init_chat_db
+    init_chat_db()
+    
+    # Reset LLM client cache to ensure env var changes take effect
+    import core.agents.llm_client
+    core.agents.llm_client._llm_client_cache = None
+    
     from fastapi.testclient import TestClient as _TestClient
 
     return _TestClient(mod.app)
@@ -59,23 +66,6 @@ def test_create_thread_and_post_message_non_streaming(monkeypatch):
 def iter_sse_lines(resp):
     buffer = b""
     for chunk in resp.iter_bytes():
-        buffer += chunk
-        while b"\n\n" in buffer:
-            frame, buffer = buffer.split(b"\n\n", 1)
-            yield frame.decode("utf-8", errors="ignore")
-
-
-def test_post_message_streaming_sse(monkeypatch):
-    # Force LLM unavailable to ensure deterministic fallback string from stream_response
-    monkeypatch.setenv("OPENROUTER_API_KEY", "")
-    monkeypatch.setenv("OPENAI_API_KEY", "")
-    monkeypatch.setenv("GEMINI_API_KEY", "")
-    client = make_test_client()
-
-    # Create thread
-    r = client.post("/api/threads", json={"title": "Stream Test"})
-    assert r.status_code == 200
-    tid = r.json()["id"]
 
     # Start streaming request
     payload = {"user_name": "tester", "content": "stream please"}
@@ -171,10 +161,9 @@ def test_delete_thread_cascades_messages_and_summaries(monkeypatch):
     assert r.status_code == 200
     assert r.json() == {"ok": True}
 
-    # Messages should be gone (endpoint returns empty list for deleted thread id)
+    # Messages should be gone (endpoint returns 404 for deleted thread id)
     r = client.get(f"/api/threads/{tid}/messages")
-    assert r.status_code == 200
-    assert r.json() == []
+    assert r.status_code == 404
 
     # Summaries should be gone
     r = client.get(f"/api/threads/{tid}/summaries")

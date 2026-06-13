@@ -6,7 +6,7 @@
 
 **Strong Answer:**
 ```
-FluxPricer uses a 4-agent microservice architecture:
+FluxPricer uses a 4-agent modular monolith architecture (single-process modules):
 
 1. DATA COLLECTOR: Ingests market data from APIs, normalizes, catalogs
 2. PRICE OPTIMIZER: Analyzes data, runs algorithms, generates proposals

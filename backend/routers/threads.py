@@ -1,6 +1,6 @@
 import json
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from core.chat_db import (
     create_thread,
     delete_thread,
@@ -25,12 +25,16 @@ from core.payloads import (
 router = APIRouter(prefix="/api/threads", tags=["threads"])
 
 
+from backend.deps import get_optional_user
+
 @router.post("", response_model=ThreadOut)
-def api_create_thread(req: CreateThreadRequest, token: Optional[str] = Query(None)):
+def api_create_thread(
+    req: CreateThreadRequest, 
+    user: Optional[Dict[str, Any]] = Depends(get_optional_user)
+):
     try:
-        owner_id = None
-        # Note: Auth migrated to fastapi-users, token validation removed for now
-        # Threads created without owner_id until frontend updated
+        owner_id = user["user_id"] if user else None
+        # Threads created with owner_id if user is logged in
         t = create_thread(title=req.title, owner_id=owner_id)
         return ThreadOut(id=t.id, title=t.title, created_at=t.created_at.isoformat(), updated_at=t.updated_at.isoformat())
     except Exception as e:
@@ -41,10 +45,12 @@ def api_create_thread(req: CreateThreadRequest, token: Optional[str] = Query(Non
 
 
 @router.get("", response_model=List[ThreadOut])
-def api_list_threads(token: Optional[str] = Query(None)):
-    owner_id = None
-    # Note: Auth migrated to fastapi-users, token validation removed
-    # List all threads for now until frontend updated
+def api_list_threads(
+    user: Optional[Dict[str, Any]] = Depends(get_optional_user)
+):
+    owner_id = user["user_id"] if user else None
+    # List threads for the current user (or all public threads if no user)
+    # Note: If owner_id is None (not logged in), list_threads(None) returns all threads with owner_id=None
     rows = list_threads(owner_id=owner_id)
     return [ThreadOut(id=t.id, title=t.title, created_at=t.created_at.isoformat(), updated_at=t.updated_at.isoformat()) for t in rows]
 
@@ -60,8 +66,12 @@ def api_update_thread(thread_id: int, req: UpdateThreadRequest):
 
 
 @router.delete("/{thread_id}")
-def api_delete_thread(thread_id: int):
-    ok = delete_thread(thread_id)
+def api_delete_thread(
+    thread_id: int,
+    user: Optional[Dict[str, Any]] = Depends(get_optional_user)
+):
+    owner_id = user["user_id"] if user else None
+    ok = delete_thread(thread_id, owner_id=owner_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Thread not found")
     return {"ok": True}

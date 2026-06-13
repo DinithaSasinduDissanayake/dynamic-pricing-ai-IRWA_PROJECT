@@ -129,7 +129,7 @@ This IR layer enables fast, relevant data retrieval supporting pricing decisions
 **Key Talking Points:**
 
 1. **Architecture Design Philosophy**
-   - "We modeled our system after microservices patterns but for agents"
+    - "We modeled our system as a modular monolith: independent agent modules within a single process, communicating via an internal event bus and shared DB repositories. This reduces operational complexity while preserving clear separation of concerns for testing and evolution."
    - "Each agent is independently deployable and testable"
    - "Event bus enables loose coupling and easy scaling"
 

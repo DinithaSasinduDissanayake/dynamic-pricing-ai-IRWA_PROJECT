@@ -33,7 +33,7 @@ class Thread(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(255), nullable=False, default="New Thread")
-    owner_id = Column(Integer, nullable=True, index=True)
+    owner_id = Column(String(36), nullable=True, index=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
@@ -93,7 +93,8 @@ def init_chat_db() -> None:
 
 # Convenience helpers
 
-def create_thread(title: Optional[str] = None, owner_id: Optional[int] = None) -> Thread:
+def create_thread(title: Optional[str] = None, owner_id: Optional[str] = None) -> Thread:
+    print(f"DEBUG: create_thread title={title} owner_id={owner_id}")
     with SessionLocal() as db:
         t = Thread(title=(title or "New Thread").strip() or "New Thread", owner_id=owner_id)
         db.add(t)
@@ -167,7 +168,7 @@ def get_thread_messages(thread_id: int) -> list[Message]:
         return rows
 
 
-def list_threads(owner_id: Optional[int] = None) -> list[Thread]:
+def list_threads(owner_id: Optional[str] = None) -> list[Thread]:
     with SessionLocal() as db:
         q = db.query(Thread)
         if owner_id is not None:
@@ -194,10 +195,16 @@ def update_thread(thread_id: int, **fields) -> Optional[Thread]:
         return t
 
 
-def delete_thread(thread_id: int) -> bool:
+def delete_thread(thread_id: int, owner_id: Optional[str] = None) -> bool:
+    print(f"DEBUG: delete_thread id={thread_id} owner_id={owner_id}")
     with SessionLocal() as db:
         t = db.get(Thread, thread_id)
         if not t:
+            print(f"DEBUG: delete_thread thread not found")
+            return False
+        print(f"DEBUG: delete_thread found thread owner_id={t.owner_id}")
+        if t.owner_id != owner_id:
+            print(f"DEBUG: delete_thread owner mismatch {t.owner_id} != {owner_id}")
             return False
         db.query(Summary).filter(Summary.thread_id == thread_id).delete(synchronize_session=False)
         db.delete(t)
@@ -205,7 +212,7 @@ def delete_thread(thread_id: int) -> bool:
         return True
 
 
-def cleanup_empty_threads(owner_id: Optional[int] = None) -> int:
+def cleanup_empty_threads(owner_id: Optional[str] = None) -> int:
     with SessionLocal() as db:
         q = db.query(Thread)
         if owner_id is not None:

@@ -1,136 +1,100 @@
 from __future__ import annotations
 
-import inspect
-from typing import Any, Callable, Dict, List, Optional, Type, Union
+from typing import Any, Dict, List, Optional
 
 from core.agents.data_collector.repo import DataRepo
 from core.agents.agent_sdk.mcp_client import get_data_collector_client
 
 
-class Tool:
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        func: Callable,
-        schema: Optional[Dict[str, Any]] = None,
-    ):
-        self.name = name
-        self.description = description
-        self.func = func
-        self.schema = schema or self._infer_schema()
+async def _start_data_collection(
+    sku: str, market: str = "DEFAULT", connector: str = "mock", depth: int = 3
+) -> Dict[str, Any]:
+    client = get_data_collector_client()
+    return await client.start_collection(sku, market=market, connector=connector, depth=depth)
 
-    def _infer_schema(self) -> Dict[str, Any]:
-        sig = inspect.signature(self.func)
-        properties = {}
-        required = []
 
-        for name, param in sig.parameters.items():
-            param_type = "string"
-            if param.annotation == int:
-                param_type = "integer"
-            elif param.annotation == float:
-                param_type = "number"
-            elif param.annotation == bool:
-                param_type = "boolean"
+async def _get_job_status(job_id: str) -> Dict[str, Any]:
+    client = get_data_collector_client()
+    return await client.get_job_status(job_id)
 
-            properties[name] = {"type": param_type}
-            if param.default == inspect.Parameter.empty:
-                required.append(name)
 
-        return {
+async def _optimize_price(sku: str, objective: str = "maximize profit") -> Dict[str, Any]:
+    from core.agents.price_optimizer.agent import PricingOptimizerAgent
+    optimizer = PricingOptimizerAgent()
+    return await optimizer.process_full_workflow(objective, sku)
+
+
+async def _upsert_product(product_data: Dict[str, Any]) -> Dict[str, Any]:
+    from core.agents.user_interact.context import get_owner_id
+    owner_id = get_owner_id()
+    if not owner_id:
+        return {"status": "ignored", "reason": "missing_owner_id"}
+    repo = DataRepo()
+    await repo.init()
+    await repo.upsert_products([product_data], owner_id)
+    return {"status": "ok", "sku": product_data.get("sku"), "owner_id": owner_id}
+
+
+TOOLS: Dict[str, Dict[str, Any]] = {
+    "start_data_collection": {
+        "fn": _start_data_collection,
+        "description": "Start collecting data for a specific SKU and market",
+        "schema": {
             "type": "object",
-            "properties": properties,
-            "required": required,
-        }
-
-    async def execute(self, **kwargs: Any) -> Any:
-        if inspect.iscoroutinefunction(self.func):
-            return await self.func(**kwargs)
-        else:
-            return self.func(**kwargs)
+            "properties": {
+                "sku": {"type": "string"},
+                "market": {"type": "string"},
+                "connector": {"type": "string"},
+                "depth": {"type": "integer"},
+            },
+            "required": ["sku"],
+        },
+    },
+    "get_job_status": {
+        "fn": _get_job_status,
+        "description": "Get the status of a data collection job",
+        "schema": {
+            "type": "object",
+            "properties": {"job_id": {"type": "string"}},
+            "required": ["job_id"],
+        },
+    },
+    "optimize_price": {
+        "fn": _optimize_price,
+        "description": "Run price optimization for a specific SKU",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "sku": {"type": "string"},
+                "objective": {"type": "string"},
+            },
+            "required": ["sku"],
+        },
+    },
+    "upsert_product": {
+        "fn": _upsert_product,
+        "description": "Insert or update a product in the catalog",
+        "schema": {
+            "type": "object",
+            "properties": {"product_data": {"type": "object"}},
+            "required": ["product_data"],
+        },
+    },
+}
 
 
 class ToolRegistry:
-    def __init__(self):
-        self._tools: Dict[str, Tool] = {}
-        self._register_default_tools()
-
-    def _register_default_tools(self) -> None:
-        self.register(
-            "start_data_collection",
-            "Start collecting data for a specific SKU and market",
-            self._start_data_collection,
-        )
-        self.register(
-            "get_job_status",
-            "Get the status of a data collection job",
-            self._get_job_status,
-        )
-        self.register(
-            "optimize_price",
-            "Run price optimization for a specific SKU",
-            self._optimize_price,
-        )
-        self.register(
-            "upsert_product",
-            "Insert or update a product in the catalog",
-            self._upsert_product,
-        )
-
-    def register(
-        self,
-        name: str,
-        description: str,
-        func: Callable,
-        schema: Optional[Dict[str, Any]] = None,
-    ) -> None:
-        tool = Tool(name, description, func, schema)
-        self._tools[name] = tool
-
-    def get_tool(self, name: str) -> Optional[Tool]:
-        return self._tools.get(name)
-
     def list_tools(self) -> List[Dict[str, Any]]:
         return [
-            {
-                "name": tool.name,
-                "description": tool.description,
-                "schema": tool.schema,
-            }
-            for tool in self._tools.values()
+            {"name": name, "description": t["description"], "schema": t["schema"]}
+            for name, t in TOOLS.items()
         ]
 
     async def execute_tool(self, name: str, **kwargs: Any) -> Any:
-        tool = self.get_tool(name)
+        tool = TOOLS.get(name)
         if not tool:
             raise ValueError(f"Tool '{name}' not found")
-        return await tool.execute(**kwargs)
-
-    async def _start_data_collection(
-        self, sku: str, market: str = "DEFAULT", connector: str = "mock", depth: int = 3
-    ) -> Dict[str, Any]:
-        client = get_data_collector_client()
-        return await client.start_collection(sku, market=market, connector=connector, depth=depth)
-
-    async def _get_job_status(self, job_id: str) -> Dict[str, Any]:
-        client = get_data_collector_client()
-        return await client.get_job_status(job_id)
-
-    async def _optimize_price(self, sku: str, objective: str = "maximize profit") -> Dict[str, Any]:
-        from core.agents.price_optimizer.agent import PricingOptimizerAgent
-        optimizer = PricingOptimizerAgent()
-        return await optimizer.process_full_workflow(objective, sku)
-
-    async def _upsert_product(self, product_data: Dict[str, Any]) -> Dict[str, Any]:
-        from core.agents.user_interact.context import get_owner_id
-        owner_id = get_owner_id()
-        if not owner_id:
-            return {"status": "ignored", "reason": "missing_owner_id"}
-        repo = DataRepo()
-        await repo.init()
-        await repo.upsert_products([product_data], owner_id)
-        return {"status": "ok", "sku": product_data.get("sku"), "owner_id": owner_id}
+        return await tool["fn"](**kwargs)
 
 
 _global_registry: Optional[ToolRegistry] = None

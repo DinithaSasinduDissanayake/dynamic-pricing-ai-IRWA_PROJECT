@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, Any
 
-from core.agents.agent_sdk.bus_factory import get_bus
+from core.agents.agent_sdk.event_bus import get_bus
 from core.agents.agent_sdk.protocol import Topic
 from core.payloads import PriceProposalPayload, PriceUpdatePayload
 from core.observability.logging import get_logger
@@ -145,8 +145,16 @@ class GovernanceExecutionAgent:
                 print(f"Failed to log invalid payload: {e}")
             return
 
-        # Offload to background thread to avoid blocking bus
-        threading.Thread(target=lambda: self._apply_sync(pp), daemon=True).start()
+        # Offload to background thread to avoid blocking bus; ensure per-SKU locking to avoid races
+        from core.agents.agent_sdk.locks import get_thread_lock_registry
+        lock = get_thread_lock_registry().get_lock(pp["product_id"]) if isinstance(pp, dict) else get_thread_lock_registry().get_lock(pp.product_id)
+        threading.Thread(target=lambda: self._apply_sync_locked(pp, lock), daemon=True).start()
+
+    def _apply_sync_locked(self, pp: PriceProposalPayload, lock) -> None:
+        # Acquire lock on this SKU to serialize applies
+        with lock:
+            self._apply_sync(pp)
+
 
     def _apply_sync(self, pp: PriceProposalPayload) -> None:
         guards = self._load_guardrails()

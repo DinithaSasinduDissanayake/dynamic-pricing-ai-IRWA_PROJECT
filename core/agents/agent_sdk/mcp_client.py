@@ -471,7 +471,7 @@ class _MCPPriceOptimizerTools:
             # If apply_proposal not implemented, fallback to local event bus publish
             if res and res.get("ok"):
                 return {"ok": True, "message": "Published via MCP apply_proposal"}
-            from core.agents.agent_sdk.bus_factory import get_bus
+            from core.agents.agent_sdk.event_bus import get_bus
             from core.agents.agent_sdk.protocol import Topic
             bus = get_bus()
             proposal_payload = {"proposal_id": uuid.uuid4().hex, "sku": sku, "previous_price": float(old_price), "proposed_price": float(new_price)}

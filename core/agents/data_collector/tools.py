@@ -159,7 +159,7 @@ class Tools:
         depth: int = 5,
     ) -> Dict[str, Any]:
         try:
-            from core.agents.agent_sdk.bus_factory import get_bus
+from core.agents.agent_sdk.event_bus import get_bus
             from core.agents.agent_sdk.protocol import Topic
             from core.payloads import MarketFetchRequestPayload
             

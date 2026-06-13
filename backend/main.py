@@ -71,6 +71,26 @@ async def lifespan(app: FastAPI):
     # Start agents
     logger.info("agents_starting")
     await alert_api.start()
+
+    # Start consolidated PricingService for modular monolith setup
+    try:
+        from core.agents.pricing_service import PricingService
+        ps = PricingService()
+        await ps.start()
+        app.state.pricing_service = ps
+    except Exception:
+        logger.warning("pricing_service_failed_to_start")
+
+    # Start outbox flusher for reliable event delivery
+    try:
+        from core.agents.agent_sdk.event_bus import get_bus
+        from core.agents.agent_sdk.outbox import start_outbox_flusher
+        bus = get_bus()
+        await start_outbox_flusher(bus)
+        logger.info("outbox_flusher_started")
+    except Exception:
+        logger.warning("outbox_flusher_failed_to_start")
+
     
     # if pricing_optimizer:
     #     try:
@@ -178,6 +198,7 @@ app.include_router(auth.router)
 app.include_router(settings.router)
 app.include_router(threads.router)
 app.include_router(messages.router)
+app.include_router(messages.router_global)
 app.include_router(streaming.router)
 app.include_router(prices.router)
 app.include_router(catalog.router)
