@@ -1,0 +1,152 @@
+diff --git a/compare_bundle.py b/compare_bundle.py
+new file mode 100644
+index 00000000..44b9a177
+--- /dev/null
++++ b/compare_bundle.py
+@@ -0,0 +1,32 @@
++import pathlib, re
++root=pathlib.Path.cwd()
++log=root/"bundle_20250830_010613_limit25000"/"bundle_creation.log"
++if not log.exists():
++    print("Log file not found:", log)
++    raise SystemExit(1)
++added=[]
++for line in log.read_text(encoding="utf-8").splitlines():
++    m=re.search(r'Added (.+?) to part', line)
++    if m:
++        added.append(str((root/ m.group(1)).resolve()))
++exts={'.py','.md','.txt','.json','.yaml','.yml','.ini','.cfg','.js','.ts','.html','.css','.java','.c','.cpp','.h','.rb','.go','.rs','.sh','.ps1','.sql'}
++all_files=[]
++for p in root.rglob('*'):
++    try:
++        if p.is_file() and (p.suffix.lower() in exts or p.name in ('requirements.txt','README.md')):
++            all_files.append(str(p.resolve()))
++    except Exception:
++        pass
++exclude_dirs={'.git','__pycache__','build','dist','node_modules','venv','.venv','env','site-packages','.egg-info','.parcel-cache','vendor'}
++all_files=[f for f in all_files if not any(part in exclude_dirs for part in pathlib.Path(f).parts)]
++added_set=set(added)
++missing=[f for f in all_files if f not in added_set]
++print("Total candidate files (text/code):",len(all_files))
++print("Total added from log:",len(added_set))
++print()
++if not missing:
++    print("All candidate files were included in the bundle.")
++else:
++    print("Missing files (not in bundle):", len(missing))
++    for m in sorted(missing):
++        print(m)
+diff --git a/scripts/git_branch_audit.ps1 b/scripts/git_branch_audit.ps1
+new file mode 100644
+index 00000000..a991372c
+--- /dev/null
++++ b/scripts/git_branch_audit.ps1
+@@ -0,0 +1,108 @@
++# Git Branch Audit Script
++param(
++    [string]$Base = 'DEV',
++    [int]$TopCommits = 5,
++    [int]$TopFiles = 15
++)
++
++Set-StrictMode -Version Latest
++$ErrorActionPreference = 'Stop'
++
++function Get-AheadBehind {
++    param([string]$Left, [string]$Right)
++    $ahead = 0; $behind = 0
++    try {
++        # left-right counts: output is "<leftOnly> <rightOnly>" separated by whitespace (often tab)
++        $counts = git rev-list --left-right --count "$Left...$Right"
++        if ($counts) {
++            $parts = $counts -split '\s+'
++            if ($parts.Length -ge 2) {
++                # leftOnly = behind for Right relative to Left
++                $behind = [int]$parts[0]
++                $ahead  = [int]$parts[1]
++            }
++        }
++    } catch {}
++    [pscustomobject]@{Ahead=$ahead;Behind=$behind}
++}
++
++function Get-BranchInfo {
++    param([string]$Branch, [string]$Base)
++
++    $ab = Get-AheadBehind -Left $Base -Right $Branch
++    $last = git log -1 --pretty=format:"%h|%ad|%an|%s" --date=short "$Branch"
++
++    $mergedIntoBase = $false
++    try {
++        git merge-base --is-ancestor "$Branch" "$Base" | Out-Null
++        if ($LASTEXITCODE -eq 0) { $mergedIntoBase = $true }
++    } catch { $mergedIntoBase = $false }
++
++    $aheadCommits = @()
++    try {
++        $aheadCommits = git --no-pager log --no-decorate --no-color --date=short --pretty=format:"%h|%ad|%an|%s" "$Base..$Branch" | Select-Object -First $TopCommits
++    } catch { $aheadCommits = @() }
++
++    $filesList = @()
++    $filesChanged = 0
++    try {
++        $filesList = git --no-pager diff --name-status --no-renames --diff-filter=ACDMRTUXB "$Base..$Branch"
++        if ($filesList) { $filesChanged = ($filesList | Measure-Object -Line).Lines }
++    } catch { $filesList = @(); $filesChanged = 0 }
++
++    $sampleFiles = @()
++    if ($filesList) { $sampleFiles = $filesList | Select-Object -First $TopFiles }
++
++    # Rough conflict predictor using merge-tree
++    $wouldConflict = $null
++    try {
++        $baseSha = git merge-base "$Base" "$Branch"
++        $mt = git merge-tree $baseSha "$Base" "$Branch"
++        $wouldConflict = [bool]($mt -match '<<<<<<<')
++    } catch { $wouldConflict = $null }
++
++    [pscustomobject]@{
++        branch        = $Branch
++        base          = $Base
++        ahead         = $ab.Ahead
++        behind        = $ab.Behind
++        mergedIntoBase= $mergedIntoBase
++        last          = $last
++        aheadCommits  = $aheadCommits
++        filesChanged  = $filesChanged
++    sampleFiles   = $sampleFiles
++        wouldConflict = $wouldConflict
++    }
++}
++
++# Ensure we're in a Git repo
++git rev-parse --is-inside-work-tree | Out-Null
++
++$branches = @(git --no-pager for-each-ref refs/heads --format="%(refname:short)" | Sort-Object)
++
++Write-Output "JSON_START"
++$results = @()
++foreach ($b in $branches) {
++    $info = Get-BranchInfo -Branch $b -Base $Base
++    $results += $info
++    $info | ConvertTo-Json -Compress
++}
++Write-Output "JSON_END"
++
++# Compact readable table
++"" | Out-Null
++Write-Output "TABLE_START"
++$results |
++    Select-Object branch, ahead, behind, mergedIntoBase, wouldConflict, filesChanged, @{n='lastCommit';e={$_.last}} |
++    Format-Table -AutoSize | Out-String | Write-Output
++Write-Output "TABLE_END"
++
++# Heuristic: likely merge-ready if ahead>0, behind=0, not merged, no conflicts predicted, and has changes
++Write-Output "READY_LIST_START"
++$ready = $results | Where-Object { $_.branch -ne $Base -and $_.mergedIntoBase -eq $false -and $_.ahead -gt 0 -and $_.behind -eq 0 -and ($_.wouldConflict -eq $false -or $_.wouldConflict -eq $null) }
++if ($ready) {
++    $ready | Select-Object -ExpandProperty branch | ForEach-Object { "$_" }
++} else {
++    Write-Output "(none)"
++}
++Write-Output "READY_LIST_END"

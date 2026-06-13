@@ -1,0 +1,12 @@
+diff --git a/.gitignore b/.gitignore
+index 12a67498..52af24e6 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -78,6 +78,7 @@ node_modules/
+ project_code_dump.txt
+ prompts.md
+ scripts/collect_project_code.ps1
++AGENTS.md
+ 
+ # Specific generated text artifacts (root-scoped)
+ /files.txt

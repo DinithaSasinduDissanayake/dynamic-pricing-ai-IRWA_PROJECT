@@ -1,0 +1,532 @@
+diff --git a/loc_reports/loc_evolution.png b/loc_reports/loc_evolution.png
+index bfe51aea..7d1c7f85 100644
+Binary files a/loc_reports/loc_evolution.png and b/loc_reports/loc_evolution.png differ
+diff --git a/loc_reports/loc_history.csv b/loc_reports/loc_history.csv
+index a20e6e56..344b876b 100644
+--- a/loc_reports/loc_history.csv
++++ b/loc_reports/loc_history.csv
+@@ -1,3 +1,511 @@
+ commit_hash,commit_number,date,total_loc,added,removed,message
+ 83ac1a4d3549246d407195f7c3121f58f1df31c8,1,2025-08-13T08:51:08+05:30,0,0,0,Initial commit
+-863c12248112345ca553a8e59d15b743d8edb2dc,56,2025-08-28T18:13:20+05:30,0,0,0,Restore preferred .gitignore
++7d7c59938c8cda83e6784ef2ad559dad315ab210,2,2025-08-24T14:00:43+05:30,564,564,0,initial commit
++2fcbfdd653b3d7dc0153db4849c044bc54424658,3,2025-08-24T14:06:08+05:30,564,0,0,Merge pull request #1 from ManushiChamika:alert-and-notifications-manushi
++ade543ca8f43b0b6ad4b61b4e70de7982a346602,4,2025-08-25T07:47:59+05:30,655,91,0,implemented the dashboard ⏫
++266f1ab81d879ab66d62ff611487a27f873b37af,5,2025-08-25T08:12:02+05:30,655,0,0,Refactor login redirection and add dashboard page with dynamic pricing features
++76ff8281b079e5ebfa5dadd82e5ca8cfd1a41dd7,6,2025-08-25T11:33:09+05:30,655,0,0,new changes
++5ea226fce9c4991d03e51e3a5a33dd42ed44463c,7,2025-08-26T00:02:54+05:30,655,0,0,Add plotly to requirements for enhanced data visualization
++78aa426c5fd3a250721575c7b9d3e8e8334d6080,8,2025-08-27T09:22:23+05:30,655,0,0,Add .gitignore file to establish standard ignore rules for the project.
++e8e33fad61f4315eea310a8780eb3391a6152026,9,2025-08-27T09:38:03+05:30,655,0,0,"Add .gitignore and stop tracking IDE caches, local DBs, and envs"
++af8a37aa41eb335fe548eb0b0924da73fc969cbb,10,2025-08-27T09:38:51+05:30,655,0,0,"Add .gitignore and stop tracking IDE caches, local DBs, and envs"
++dd4d482a8fe61c89928a4b6a3e28ed2514ef7cc4,11,2025-08-27T15:07:16+05:30,2124,1469,0,alerts and notification model
++c1db0234c8ab1a8400d58fe69d4f5f1f0ca74551,12,2025-08-27T15:07:37+05:30,2124,0,0,Remove unnecessary blank lines in ui.py for cleaner code
++369a553a897fdf6dd1de156f5a797fe1acb4ac0d,13,2025-08-27T15:15:25+05:30,2147,23,0,Enhance dashboard theming and data generation functions for improved user experience
++3dbcea0a3cf476c6074b4b6e26faed19fcbeb574,14,2025-08-27T15:53:50+05:30,655,0,1492,Nothing Important
++e1a8923508f84381d49a0adb22fe9244ccff0ea5,15,2025-08-27T15:54:01+05:30,2147,1492,0,Resolve merge: dashboard.py; ignore pycache & .db
++285bbf76883bef2b26253660fea3771c1dd26819,16,2025-08-27T15:55:28+05:30,655,0,1492,Remove compiled Python files and database files to clean up the repository
++6c5b1dade0216f0a83a86c6b8edb1dcd427a2797,17,2025-08-27T16:04:25+05:30,2147,1492,0,Remove unnecessary blank line in 0_Home.py for cleaner code
++2137a3cdb434f7e116af60df7583b37e89e90018,18,2025-08-27T16:12:11+05:30,2147,0,0,Resolve merge: dashboard.py; drop DB files from version control
++c362bc854e4eef5a28ee2ce3c456c12b64904f28,19,2025-08-27T16:13:44+05:30,2147,0,0,commit
++dab5c1b7254f0ff2adf6566f1408e3f2c29451e2,20,2025-08-27T16:17:03+05:30,2147,0,0,Fix formatting by removing unnecessary blank lines in dashboard.py
++b35ffa9e12501e40569897672ce97c835b7ad6f0,21,2025-08-27T16:19:04+05:30,2147,0,0,Add a blank line for improved readability before the Tabs section in dashboard.py
++6c33d3cc2f51800ac7891f616e6f8f780a058f47,22,2025-08-27T16:19:59+05:30,2147,0,0,Add a blank line for improved readability before the Metrics section in dashboard.py
++638c7e26f2cfe5593789d972936ff4ce95870bf8,23,2025-08-27T16:22:23+05:30,2147,0,0,Merge pull request #5 from ManushiChamika:alert-and-notifications-manushi
++72231cb1369e4e41525667ced495557f62a0b317,24,2025-08-27T16:52:40+05:30,2147,0,0,cleanup: remove tracked pycache/pyc files
++1360eb8ddaad7e6ae5e62efcfe5feadcc448fd8a,25,2025-08-27T16:56:13+05:30,2147,0,0,Add blank lines for improved readability in 0_Home.py
++cab516cdd7c74584fcef3bdd6e4cd600e4660901,26,2025-08-27T16:57:18+05:30,2147,0,0,Fix formatting by removing an unnecessary blank line in 0_Home.py
++c3060760e5646210c1bdb49d08d4038c04099126,27,2025-08-27T17:00:03+05:30,2147,0,0,Remove compiled Python bytecode files from the __pycache__ directory
++2cf2953863a3cbac30dcfff636ddf544ed11df37,28,2025-08-27T17:00:37+05:30,2147,0,0,Merge branch 'test' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into alert-and-notifications-manushi
++34fd0c4bf59e7ebb92bc7bf5ca0a7d0297194fa0,29,2025-08-27T17:02:53+05:30,2147,0,0,cleanup: remove compiled Python bytecode files from __pycache__ directories
++f302931bec9ac430b20d53f2327fb4c952b411b6,30,2025-08-27T17:03:34+05:30,2147,0,0,Remove compiled Python bytecode files from the __pycache__ directories
++ba08c9efbe91ccd9f26e67dbdd944822ab538b16,31,2025-08-27T17:04:04+05:30,2147,0,0,Merge branch 'test' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into alert-and-notifications-manushi
++3904826e101645817152f0871595cd78535fcd19,32,2025-08-27T17:20:42+05:30,2147,0,0,fix: clean .gitignore and untrack cached files
++3649eba5873e98111760f7804a357359c7f8c4dc,33,2025-08-27T17:34:58+05:30,2147,0,0,fix: clean .gitignore and untrack cached files
++1ee7542df73f1adf72b9a5582209bb05a81b0f96,34,2025-08-27T17:39:54+05:30,2147,0,0,Merge branch 'test' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into alert-and-notifications-manushi
++19d6e03b241d1160968d3778b05b256f1aff5f53,35,2025-08-27T17:44:42+05:30,655,0,1492,fix: clean .gitignore and untrack cached files
++048ea060648b1343a7c7194b8ad0d5ef01d8917f,36,2025-08-27T17:45:21+05:30,2147,1492,0,Merge branch 'test' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into DEV
++49a5d65098f0b87444a9d5fe2fc309bea376fa98,37,2025-08-27T23:22:37+05:30,655,0,1492,chore: update files
++d956c245194f9797ea4bca5c44aff6eefa96a853,38,2025-08-27T23:24:45+05:30,655,0,0,chore: remove unwanted files and update .gitignore
++b706709ba8f7a12f2d716259861237385144ae92,39,2025-08-27T23:27:56+05:30,655,0,0,chore: update .gitignore to ignore dump and script files
++92d358d78ade87bd07a8409710ec4fa10b5f3d8f,40,2025-08-27T23:30:15+05:30,2147,1492,0,fix: resolve .gitignore merge conflict and finalize ignore rules
++e7239f662744b24974bfd8ffdca79042ab6e6eae,41,2025-08-28T00:45:34+05:30,701,0,1446,user_history update
++d1eb7af7c1d68633580fcb9076b0d27194f76782,42,2025-08-28T08:52:09+05:30,2183,1482,0,chat_history updated 💥
++f689f3ae911a331e1e0d16dd67aebe4b0ef8c525,43,2025-08-28T08:55:11+05:30,701,0,1482,user_history upddated
++3125c7b76cfb80345d82aa4a60a26bc49de065f3,44,2025-08-28T09:10:52+05:30,701,0,0,new changes
++c96a1d29e42b794c6dfaff3642047f8ba7745d1f,45,2025-08-28T10:19:05+05:30,2146,1445,0,changes
++26d89078616e982bf5e16b830ba3bb6b0861dbe0,46,2025-08-28T10:19:30+05:30,2183,37,0,refactor: reorganize user interaction agent and update imports
++afd27c40d3739f6909f2c346dad1cb3a52fa86ce,47,2025-08-28T10:28:24+05:30,2183,0,0,chore: remove ignored files from repo
++c920fd34c075c85a39ef43ba1531e6aeed5b9c70,48,2025-08-28T10:55:12+05:30,2183,0,0,fix: correct comment formatting in dashboard.py
++e43c318f46252d5217aba0b7f4f6779b6429965d,49,2025-08-28T11:38:38+05:30,2201,18,0,Merge remote-tracking branch 'origin/DEV' into user_interaction_branch
++89e471076144cb766efe1508bd6399aeb94df479,50,2025-08-28T11:40:36+05:30,2201,0,0,Merge pull request #10 from ManushiChamika:user_interaction_branch
++15848e47961811f3c98876128fe4c251d37318bb,51,2025-08-28T13:55:19+05:30,2183,0,18,chore(env): add .env.example and .gitignore (no code changes)
++eb073f638e45d52bc4432fd202ddc914161e7985,52,2025-08-28T13:55:27+05:30,2183,0,0,chore(security): stop tracking user_data.json; file remains locally
++8ee0fd580cddd929818d0343c992d693449360c2,53,2025-08-28T14:59:08+05:30,2183,0,0,Save preferred .gitignore
++d9d2d69fa87a4db6b6011eb225fdfb6507d6b47e,54,2025-08-28T14:59:56+05:30,2201,18,0,"Accept remote user_data.json, keep local .gitignore"
++f7dbca958bb55666b66b544d1707bd26215a7605,55,2025-08-28T15:02:57+05:30,2201,0,0,"Sync dev branch: keep local .gitignore, update requirements.txt"
++863c12248112345ca553a8e59d15b743d8edb2dc,56,2025-08-28T18:13:20+05:30,0,0,2201,Restore preferred .gitignore
++44eea354f37a3c877d8e0e4934cd838ccd108e7c,57,2025-08-28T18:22:09+05:30,2201,2201,0,Resolve .gitignore merge: keep restore/gitignore and add missing DEV entries
++e1e94d92fb8642f6e842b702925f5b45414ab275,58,2025-08-28T18:32:37+05:30,2201,0,0,chore(gitignore): add explanatory comments for contributors
++846accf7ea8d4cb0093f7d1bc929af9ada27e1ef,59,2025-08-28T20:18:14+05:30,937,0,1264,WIP: save local work on pricing_optimizer1
++1a211751f24273c9e4d264e65dd4fb65062e8776,60,2025-08-28T20:18:26+05:30,2201,1264,0,Merge branch 'dev' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into alert-and-notifications-manushi
++4383188e8ed858c6a000f082f0df550d27ccfa1b,61,2025-08-28T23:15:38+05:30,2201,0,0,"chore(data-collector): add deps, .env.example, update .gitignore; untrack PII/db"
++d41954047627ca7d35629cfa6aa874e2a40984c4,62,2025-08-28T23:35:13+05:30,2201,0,0,fix: correct constructor method name and update user_data.json with new chat history
++ab4ceec427d1e1bff37d63cc75af6de08b63d721,63,2025-08-28T23:43:43+05:30,2361,160,0,chore(data-collector): finalize hygiene edits after rebase
++ddd57614d4e4e33597260518d181e48ae93fee17,64,2025-08-28T23:43:43+05:30,2361,0,0,feat(data-collector): repo hygiene and deps for data collector (finalized)
++fa21e7efb44fe0fd8730d5a7265d8c969403daaf,65,2025-08-28T23:53:05+05:30,2361,0,0,chore(deps): remove duplicate pydantic line
++ecac9f36b30d0dfddfc9b53ce827aa5ce2c71c1c,66,2025-08-29T00:33:55+05:30,2449,88,0,"feat(data-collector): add skeleton (repo, collector, mock connector, demo, docs)"
++bace7de814183eb5b946814d3d41c4bb38493161,67,2025-08-29T00:45:59+05:30,2530,81,0,feat(data-collector): MVP repo+collector+MCP tools and mock; add smoke test
++c7900fa155c2061df19b86ed347e4f584b0a6f96,68,2025-08-29T13:13:56+05:30,2792,262,0,Clean up old scripts and add improved project bundle manager
++a7376d16cbcab60bda18bdd4752009f1f0125928,69,2025-08-29T13:19:24+05:30,2891,99,0,Merge MVP data collector implementation
++8f5f53de39e2a106fb051f5d228a211ec96c7e03,70,2025-08-29T14:26:14+05:30,937,0,1954,Merge branch 'DEV' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into pricing_optimizer1
++1ccc6a5584f6511d495c4df90246130326bdb916,71,2025-08-29T16:09:36+05:30,1039,102,0,refactor: agentic architecture overhaul
++0f2437e33f7d6164b0cb1925ccc630abb4b99b5b,72,2025-08-29T16:49:28+05:30,1032,0,7,"Restore classic dashboard UI, fix agent import errors, and ensure Streamlit app routes to dashboard. Added async stubs for market_collector and pricing_optimizer agents. All critical errors resolved."
++29abb181f89bf48c6b3054a4b76c54f26fa169cd,73,2025-08-29T17:31:52+05:30,2891,1859,0,Clean up old bundle files and stage new bundle directory
++42ea5d43c6584af117d334721029dfc7e955ed3d,74,2025-08-29T17:39:24+05:30,2891,0,0,feat: Start data collector improvement branch
++78d0f6fd57a1973de2b89e4111fa482968e13e36,75,2025-08-29T18:11:27+05:30,1704,0,1187,Merge DEV into pricing_optimizer1 (accept DEV for conflicts)
++70efced2553238483c82a60927c2e8349e746e35,76,2025-08-29T18:46:24+05:30,1756,52,0,Add pricing_optimizer_bus module
++e23985fb7d1b7b7ae3c007548a44d13cc51ad291,77,2025-08-29T18:47:22+05:30,1756,0,0,chore: restore .gitignore from DEV
++e24ccc5f1d0fb2a225da93fc75624364cbb3ff67,78,2025-08-29T18:48:36+05:30,1756,0,0,"chore: untrack pycache, db files, and logs per .gitignore"
++33f8732e6fb604acbb3f82ad87dc1f89e2d60b0b,79,2025-08-29T19:05:42+05:30,1756,0,0,Merge branch 'pricing_optimizer1' into DEV
++7e9f7ece5cf55229a671bb9f6fd8881db9bb62b8,80,2025-08-29T19:10:29+05:30,1756,0,0,chore(gitignore): ignore pricing agent JSON outputs
++2f4cfaf68de15cca54e0cab38a642fe8c71ae929,81,2025-08-29T19:53:32+05:30,1756,0,0,"Dashboard: safe, lightweight page with lazy chat agent (stub default), fixed subheader emoji; ignore bundle artifacts locally."
++427c26d2ebf91531661756b623883fdd5cd34d1e,82,2025-08-29T19:54:02+05:30,1756,0,0,gitignore: ignore bundle_*; remove tracked bundle artifacts
++0a2217a64ab2a6c2b4a0eeb781c24925b5ff1d13,83,2025-08-29T20:02:23+05:30,1756,0,0,Dashboard: demo-friendly when not logged in; theme-aware charts; safe set_page_config.
++81ea3f54dcca9c9a86a3ba7f16354c544c6cb4b3,84,2025-08-29T20:08:58+05:30,1849,93,0,Update dashboard with working version
++2b45c5722d93db6e50a383052a3d21261531b88e,85,2025-08-29T20:14:26+05:30,1861,12,0,"Restore original dashboard styling and layout with light blue theme, keep demo mode fix"
++1221759423c4657c655c9fda2be99f389bea12af,86,2025-08-29T23:43:28+05:30,2891,1030,0,Finish work: notes + data-collector improvements
++c4c1ab4f504d48cffde47f3eb05704546c0f6ff4,87,2025-08-29T23:54:46+05:30,1861,0,1030,Merge feat/improve-data-collector into DEV [automated by agent]
++88ba79a0d60228504d514ad401b82ce821d5705d,88,2025-08-30T00:54:48+05:30,1861,0,0,WIP: backup current working state (deletions of bundle/diff/log artifacts)
++990a121d949a75fcea96f8d44a2ef2af86541be3,89,2025-08-30T00:58:45+05:30,1861,0,0,chore(gitignore): ignore local patch/diff files (*.diff)
++8e60b3dc6de0ecf42488852abd41b7db45de09a4,90,2025-08-30T00:59:58+05:30,1861,0,0,chore(gitignore): ignore generated bundle/diff/log artifacts and root text dumps
++72b2ef7243d43762e628cd29013a5b10587cf432,91,2025-08-30T01:01:48+05:30,1861,0,0,Merge branch 'feat/save-uncommitted-20250830' into DEV
++28f1405dffae42e8e25e5ce494a63ef57d625361,92,2025-08-30T01:35:28+05:30,1861,0,0,chore: initialize branch feat/data-collector-mvp
++284840d744486feef6c2b24a0480f84c008f67b5,93,2025-08-30T01:48:38+05:30,1904,43,0,fix(data-collector): publish MarketTick to global bus; implement market_collector feeder
++40754b3864b27302de0bb64d216c2eeddb95aeb8,94,2025-08-30T01:55:15+05:30,2044,140,0,"feat(data-repo): add product_catalog, ingestion_jobs, price_proposals and helpers"
++b9dd46ac3df5a93665aea7d066459882c9f88a69,95,2025-08-30T02:04:20+05:30,2102,58,0,"feat(data-collector-mcp): add MCP tools import_product_catalog, start_collection, get_job_status"
++990cfc01d9fa5a8fff0c2dc0569d49bc79ac098e,96,2025-08-30T02:04:56+05:30,2102,0,0,fix(data-collector-mcp): relax type hints for FastMCP tool arg compatibility
++d940a7bf656e8221b801fc97b41b3d5dc92d7cec,97,2025-08-30T02:05:50+05:30,2102,0,0,fix(data-collector-mcp): align all tool return annotations to dict for FastMCP
++decd2591449f287061df17cedc45c597d7822d9f,98,2025-08-30T02:06:52+05:30,2101,0,1,fix(data-collector-mcp): drop __future__ annotations to avoid FastMCP type inspection issues
++be635a3e36e76d021a62d5f6e6158791c4c9f39a,99,2025-08-30T02:12:20+05:30,2172,71,0,test(smoke): add end-to-end smoke test verifying ingestion → alerts → features
++d39ec24a52e26b3349ec6cd0db2fac8e6f57d234,100,2025-08-30T02:39:32+05:30,2268,96,0,feat(price-proposals): publish & persist PriceProposal after optimization
++d84ab320a512e803e52d35510f143bcdf3536473,101,2025-08-30T02:41:41+05:30,2268,0,0,test(price-proposals): seed market.db and run collection in smoke to ensure optimizer proceeds
++05e2fbe2024bb35a9e3f24141ff9d7ccf980376d,102,2025-08-30T02:59:21+05:30,2449,181,0,feat(ui): add Proposals & Approvals page + CLI apply test
++b9298baebf42ef5e83efcad4f4da42073ad58edc,103,2025-08-30T03:04:00+05:30,2526,77,0,feat(ui): add Revert action for accepted proposals + CLI revert test
++134e7f758fde8c6823c8af8c3e3df424a3518380,104,2025-08-30T03:08:34+05:30,2654,128,0,feat(ui): add Jobs page and jobs CLI test
++fcb3f58ba092d1b187777fca90e5fbd7d3e206b8,105,2025-08-30T03:15:38+05:30,2898,244,0,feat(auto-apply): subscribe to PriceProposal and auto‑apply offers per merchant guardrails
++4c5179c251b04541cf6fb547fae3f6f3f22dae87,106,2025-08-30T09:19:04+05:30,2935,37,0,fix(auto-apply): atomic apply + retry/backoff to ensure idempotency
++6ea4e328d7b4d44cc5eb030169b519ab7fcab6b1,107,2025-08-30T09:23:52+05:30,3119,184,0,feat(supervisor): add lightweight orchestrator + poc runner
++e44fe5c99c3b56869da874306f5dc532d8418d46,108,2025-08-30T09:35:08+05:30,3119,0,0,"chore(repo): document recent data-collector, MCP, UI, auto-apply, and supervisor work (long description below)"
++b8ba3732b01bc5f9b9f07a3e8388246d2ce4503d,109,2025-08-30T12:19:41+05:30,1861,0,1258,"Revert ""chore: untrack pycache, db files, and logs per .gitignore"""
++43ff5b1414decb27185d59aa7ffc9dae5eaed189,110,2025-08-30T12:25:48+05:30,2927,1066,0,"Revert ""refactor: agentic architecture overhaul"""
++c946071bbe1c42ffdafffd93b0aae07d08b10cb5,111,2025-08-30T14:50:13+05:30,2927,0,0,chore: ignore artifacts and untrack generated files (alerts restore cleanup)
++e9ba087766c51e02e50081f2a96ca9dc1a9181ab,112,2025-08-30T15:15:08+05:30,2211,0,716,feat: enhance UI styling and update user chat history in user_data.json
++2973324a9a2242c9501afc2192dfa4f761b4bb6e,113,2025-08-30T15:45:12+05:30,2201,0,10,feat: add new user interaction entries to chat history
++dc09604a84b2a0b4aaef2eaa38f1754605779b7f,114,2025-08-30T15:45:23+05:30,2167,0,34,feat: update user interaction agent to use OpenRouter API and enhance response handling
++992a26e77da9d8b26ad9f170eea0756361d1ca0a,115,2025-08-30T15:56:08+05:30,3134,967,0,"feat: add minimal agent SDK, user interaction agent, LLM client; harden session bootstrap; ignore real .env and add .env.example"
++ac48bf3567c00d580dad0c66dddc7ef8427d6bcd,116,2025-08-30T21:24:19+05:30,3134,0,0,merge: integrate revert/restore-alerts into DEV for import fixes and validation
++68d0dbc1a266f85acb66788fe14bbfb1507bf9ba,117,2025-08-30T21:51:38+05:30,3134,0,0,Merge pull request #14 from ManushiChamika/fix/revert-restore-alerts-imports
++c9e8e7dc6a8a93a887558a29c40dcd686c292c60,118,2025-08-30T22:49:20+05:30,3144,10,0,Merge branch 'revert/restore-alerts' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into alert-and-notifications-manushi
++d0ecf8b09ba32aa8236ea6c3c2a4387fedc35d0d,119,2025-08-30T23:14:43+05:30,3134,0,10,"chore(gitignore): ignore root-level local notes (summary.md, imasha_compare_restore_vs_backup.txt)"
++9569bcd901926bdf935dfdc69a3eab751f2aaf23,120,2025-08-30T23:58:36+05:30,3134,0,0,chore: assess merge of origin/Sasindu/feature/data-collector/mvp into merge-assess/DEV
++d27c5fade724b4f7e723226d4ab9191728fd1b63,121,2025-08-30T23:58:36+05:30,3177,43,0,chore: assess merge of origin/Sasindu/feature/data-collector/wiring into merge-assess/DEV
++a591689b2a7dfda1cb695530990e1f71891cd3a1,122,2025-08-30T23:58:37+05:30,3317,140,0,chore: assess merge of origin/Sasindu/feature/data-collector/repo-jobs into merge-assess/DEV
++50525fe4f936f88ce303bc82cc715c1ea61c559e,123,2025-08-30T23:58:37+05:30,3374,57,0,chore: assess merge of origin/Sasindu/feature/data-collector/mcp into merge-assess/DEV
++8c915a38572de4f51cce137f3338fcbcfe452f5b,124,2025-08-30T23:58:37+05:30,3445,71,0,chore: assess merge of origin/Sasindu/feature/data-collector/smoke into merge-assess/DEV
++74ba6e1b55560bd6977e1dad94ad90a5bb02640a,125,2025-08-30T23:59:31+05:30,3541,96,0,chore: assess merge of origin/Sasindu/feature/data-collector/price-proposal-publish into merge-assess/DEV
++b6bd06c5600ad6c771a873dc86d6a8c96288925f,126,2025-08-30T23:59:31+05:30,3722,181,0,chore: assess merge of origin/Sasindu/feature/data-collector/proposals-ui into merge-assess/DEV
++69d3fa0b68fd93c58ab8ee1ed2ac55404029c076,127,2025-08-30T23:59:32+05:30,3799,77,0,chore: assess merge of origin/Sasindu/feature/data-collector/proposals-revert into merge-assess/DEV
++8b546804247472b354c835bd54612617b5def9fc,128,2025-08-30T23:59:32+05:30,3927,128,0,chore: assess merge of origin/Sasindu/feature/data-collector/proposals-jobs-ui into merge-assess/DEV
++25a44226e94e6f8c50bdaa26e71ca163386ee959,129,2025-08-30T23:59:39+05:30,4171,244,0,chore: assess merge of origin/Sasindu/feature/data-collector/auto-apply into merge-assess/DEV
++1ea5454148af404314186e8e8d5d07df263c9eb8,130,2025-08-30T23:59:39+05:30,4208,37,0,chore: assess merge of origin/Sasindu/feature/data-collector/auto-apply-hardening into merge-assess/DEV
++19ae79e61eed0933ce558dc91fb6ef03ff3a6afb,131,2025-08-30T23:59:40+05:30,4392,184,0,chore: assess merge of origin/Sasindu/feature/data-collector/supervisor-orchestrator into merge-assess/DEV
++d88765a2b155c8d52b519e1dd765f879b742c11d,132,2025-08-31T00:34:24+05:30,4392,0,0,Merge pull request #15 from ManushiChamika/merge-assess/DEV
++a1527580225928cf23672e528961e583abfbc50c,133,2025-09-01T08:36:46+05:30,2239,0,2153,feat: enhance user interaction agent with dynamic pricing context and memory management✍️
++981e6e0d5ff116d79e98bf8067b53e485916973d,134,2025-09-01T09:06:55+05:30,4417,2178,0,Merge branch 'DEV' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into user_interaction_branch
++b2181ab7142206e7d6f4d5eaa66039ac13778aed,135,2025-09-01T09:08:04+05:30,4415,0,2,refactor: remove env_bootstrap.py and update user_data.json with dynamic pricing interactions
++b8efbf493f46f100eae7e3eb65aa5d08f683a2a3,136,2025-09-01T09:09:29+05:30,4415,0,0,Merge pull request #16 from ManushiChamika:user_interaction_branch
++51e5b432d4fd85f9cb63f5bb78e1046a9a22e971,137,2025-09-01T14:35:01+05:30,4425,10,0,Merge branch 'DEV' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into alert-and-notifications-manushi
++71197a78302369eae328041163ca57116d3fa28e,138,2025-09-01T14:40:07+05:30,4425,0,0,refactor: clean up user_data.json
++7e654efc4cb23548136f356f3f281eaedd912744,139,2025-09-06T17:58:09+05:30,4445,20,0,wip: save local edits to user_interaction_agent.py for comparison
++a1d62be2757255f677a4d98de9d3ef53c36f4e01,140,2025-09-12T03:05:10+05:30,4445,0,0,Add PowerShell script for collecting selected files and update other scripts
++678bbf43560590e75f22f199e1ca3c9a142cc90f,141,2025-09-12T08:47:54+05:30,4556,111,0,feat(pricing): add web_scraper tool and agentic tool-calling in PricingOptimizer
++ee69cc087a3304020d5272b7a13085e03bfbec2b,142,2025-09-12T22:56:26+05:30,4642,86,0,feat(ui): add activity feed and high-level agent logging
++9389e8504137184852a001aa914f5201cc4de3ef,143,2025-09-13T10:24:47+05:30,5010,368,0,"feat: OpenAI-style tool-calling, multi-thread chat, and DB-backed agent tools"
++dceaf93c6d205757fcaf2db680b304514c308c88,144,2025-09-24T13:53:18+05:30,5010,0,0,chore: stop tracking user_data.json (contains PII and should remain local)
++869d97fd00283960927b7cc0b79d5e620be1fddd,145,2025-09-24T16:41:05+05:30,5269,259,0,"feat(agents): stabilize agent SDK integrations and add deterministic intents\n\nIntroduce lightweight event dataclasses in core.agents.agent_sdk.events_models to standardize MarketTick, PriceProposal, and AlertEvent payloads across agents.\n\nMigrate several agents to use agent_sdk bus and protocol helpers (data_collector, alert_notifier, pricing_optimizer) to centralize messaging.\n\nAdd fallback shim for mcp.server.fastmcp so tools can register in environments without the optional dependency.\n\nBuffer LLM output and improve error messages (avoid non-ASCII emoji prints) and safer margin defaults when cost unavailable.\n\nAdd deterministic, fast-path intent handlers in UserInteractionAgent to answer common queries (cheapest, most_expensive, trending, pressure, stats) without invoking an LLM.\n\nUpdate .gitignore to include AGENTS.md and branch-diff helpers.\n\nThis commit focuses on runtime robustness and developer experience: safer prints for Windows consoles, deterministic assistants when LLM isn't available, and consistent agent event types for cleaner bus messaging."
++defea84a8600fa4cc393792ad5b5e56e68821b12,200,2025-09-29T00:37:06+05:30,9047,3778,0,"refactor(repo)!: remove legacy UI, demos, and tests; consolidate LLM client"
++fa3212d838b9ca02bcd3e132de6f65fc79eebfc7,201,2025-09-29T16:22:37+05:30,10744,1697,0,"Introduce a full chat API and UI to enable agent-driven dynamic pricing collaboration with streaming, summary-based memory, and per-message usage/cost observability. Persist threads/messages in SQLite and propagate agents/tools metadata to user messages; add tests to validate API, streaming, and CRUD flows."
++f39a7eb6f7b962128dbd0d16f36e1956f14a423d,202,2025-09-29T22:33:03+05:30,10843,99,0,"feat(auth+ui+docs+dx): Optional chat auth gating, richer streaming UI, configurable memory/price flags, Quickstart/docs overhaul, and Windows launcher; add tests for auth gating and dev-mode defaults"
++4d6de82f60046646d85012d6c75e2c91a407cc76,203,2025-10-01T12:02:01+05:30,11442,599,0,feat(frontend+docs): Implement modern React-based chat interface with comprehensive evaluation framework and IRWA compliance documentation
++82d85f26be78e54d7ae55676ba1b14908a109a0d,204,2025-10-12T17:47:20+05:30,11556,114,0,feat: integrate comprehensive testing and code quality tools for frontend
++991fec007d4b453a2c00847793238671a9007f31,205,2025-10-16T14:06:16+05:30,11556,0,0,feat: Add git_diff_since_last_commit.patch file
++5e0563692539d548b3b17af80c658d835a61c995,206,2025-10-16T16:03:38+05:30,11556,0,0,Fix Navigation component: replace theme toggle emoji with half-moon (☾) and sun (☀) characters
++e83c34b847b9b9b8458049db3334866a4ef01394,207,2025-10-16T19:23:35+05:30,11556,0,0,"feat: add chat threads persistence, streamlit dashboard, and pricing page"
++2fd6acf2722146df5894aa541a3b94ff3172724a,208,2025-10-16T20:37:45+05:30,11556,0,0,chore: integrate sithu/pricing_page into feature/ui/pricing-contact-theme for review
++b3ece8f8ff639a0e30578d55c0f4dd88bf582f3e,209,2025-10-16T20:44:08+05:30,11556,0,0,Resolve merge conflict in frontend/src/App.tsx: accept ours (keep modular component structure)
++e837ae7a196a7831a1e7341ddd947759f1ef0a47,210,2025-10-16T21:14:03+05:30,11825,269,0,feat: Refactor frontend into modular components and stores
++31a116e7c0c1312504f87ec4513232a9ea873bbe,211,2025-10-17T12:32:49+05:30,12251,426,0,"feat(auth+ui+docs+dx): Optional chat auth gating, richer streaming UI, configurable memory/price flags, Quickstart/docs overhaul, and Windows launcher; add tests for auth gating and dev-mode defaults"
++a1a2391299a9bf01a16758cf1bd42d97e160fbd5,212,2025-10-17T13:08:02+05:30,12251,0,0,feat(ui): introduce design tokens system and collapse header actions into overflow menu
++ba14d79fb02cf77666847b367e539ea98f26f86c,213,2025-10-17T14:26:38+05:30,12329,78,0,feat: implement empty draft thread prevention system
++9e334f7a498546747fa9ee018a4b270297765b5c,214,2025-10-17T14:34:59+05:30,12332,3,0,fix: display user messages before streaming assistant response
++326f475ca3e6b2cad07238579d81dd7af4cbaa69,215,2025-10-17T14:58:32+05:30,12332,0,0,feat(ui): implement agent badge display system with animations
++afe89d69b8c23d0b55005922938dcf9431660d3a,216,2025-10-17T15:20:59+05:30,12336,4,0,Fix agent badge display by using collected agents instead of tools-based derivation
++7a19968fbf69454806adeb504734b458d598435c,217,2025-10-17T15:22:38+05:30,12336,0,0,docs: Add comprehensive implementation and analysis documentation for system components
++110b39f7a583a245007063055670c073afe0757b,218,2025-10-18T02:18:21+05:30,11983,0,353,fix: Replace removed get_response() with stream_response() in non-streaming message endpoint
++22e20cc624944ef4f95a112702c7e2a66b5fdbfd,219,2025-10-18T03:00:58+05:30,11983,0,0,refactor: Enhance code quality with comprehensive documentation and formatting
++e757299d3e7273500b00352be810dee527edc527,220,2025-10-18T10:16:40+05:30,11993,10,0,Fix: Update tool-to-agent mappings to match current tool names
++4cc091023f0d34ebab6bc3cc34c5c7c7772a9b42,221,2025-10-18T11:03:44+05:30,11993,0,0,Implement markdown rendering for assistant messages in chat UI
++b72a97ee2536cc92389f9d8a63aa1ac4427608ee,222,2025-10-18T11:08:21+05:30,11993,0,0,Reduce excessive spacing in markdown prose rendering
++f3c3ac7ef5924d558b2c25780fa1d3838dcaa917,223,2025-10-18T12:54:51+05:30,11993,0,0,docs: Add comprehensive viva preparation and submission package documentation
++8c980f84aa76bc6e42f3c45628239774f050a053,224,2025-10-18T13:29:42+05:30,11993,0,0,Add commit message and finalize viva documentation
++6939c586ef37363bc906a69fae82249a973dad79,225,2025-10-18T13:40:41+05:30,11993,0,0,Improve run_full_app.bat UX: minimize windows and add unified stop; safer cleanup by targeting titled windows
++7b2b898823a0377b4f5488687a8526dcbdbeabd5,226,2025-10-18T13:46:45+05:30,11993,0,0,Add draft thread visibility in sidebar when new chat is created
++b3a65db8b4c5c7e90cf6274dcd5721edcba3a30e,227,2025-10-18T13:49:48+05:30,11993,0,0,Auto-close main window after stopping servers
++e38e61a1303cd7e7be142d5858dd178e36e5183c,228,2025-10-18T13:53:29+05:30,11993,0,0,Fix markdown list spacing by using custom component overrides
++f91e25090151a6bb6291969e884f47c6f203b76c,229,2025-10-18T13:57:54+05:30,11993,0,0,Add aggressive CSS resets to eliminate list and paragraph spacing
++d21aca5ec69f0dc909c267a7cf416c63f59d0eb1,230,2025-10-18T13:58:48+05:30,11997,4,0,Replace tailwind prose plugin with custom spacing rules
++f30c60089eeb756eafff01809415cf8dc0b7c4e7,231,2025-10-18T14:12:12+05:30,11997,0,0,refactor: simplify App.tsx by extracting modals to dedicated components
++a1b40c5ef8afbce4f809dc74038a0ec5dddaf571,232,2025-10-18T14:21:55+05:30,12159,162,0,refactor: extract ChatPane logic into dedicated hooks and components
++d41f1389ced69c942ef830e00c63e53b3fab2f14,233,2025-10-18T14:26:41+05:30,12159,0,0,fix: add missing useState import in ChatPane
++03343fd9bb8ce216acbb9b642edd1431d0d3409e,234,2025-10-18T14:28:00+05:30,12159,0,0,test: validate ChatPane refactoring - all components working correctly
++43759f54520bf997bae3ecde128ac6d256ece9ff,235,2025-10-18T14:38:48+05:30,12034,0,125,refactor: extract messageStore.ts API/SSE logic into dedicated modules
++2ccbb33647674da38bc055703ecbe94e10ebc226,236,2025-10-18T14:41:53+05:30,12034,0,0,chore: update build artifacts after messageStore refactoring
++61c3f040de7f419d71ccc8089657b720982a79e8,237,2025-10-18T14:52:16+05:30,12031,0,3,refactor: extract thread API logic from threadStore into threadApi module
++0ba65e1bd44df76816685b1ab317ea228fb82229,238,2025-10-18T14:59:53+05:30,12025,0,6,refactor: extract auth API logic from authStore into authApi module
++56489cce357b7fa149cdb7b33a016bd40c2ace1e,239,2025-10-18T15:08:21+05:30,11969,0,56,feat: integrate LLMClient into pricing optimizer and update documentation
++ce1e8713b79294390a6aa8b4ed92f71a9a1622b3,240,2025-10-18T15:11:33+05:30,12023,54,0,chore: remove dead code (unused vars/imports)
++59ab932569453b342e3a5b94fa600c6213d0d985,241,2025-10-18T15:27:44+05:30,12023,0,0,"feat: add error boundaries, API retry logic, and fix ESLint warnings"
++14ae79b150e2139d15b8c6764991bd1136e60f00,242,2025-10-18T15:39:16+05:30,12023,0,0,refactor: extract branch utilities to separate module
++b5a64903c10cc853886b7eacace5062ac94e3239,243,2025-10-18T15:42:40+05:30,12023,0,0,refactor: consolidate duplicate theme classes into helpers
++6573a0b50454ddf67100b4a4678984002de4046f,244,2025-10-18T15:50:58+05:30,12023,0,0,refactor: extract button and card theme variants to helpers
++3c4095c5789d602e885b831296dce97035facbda,245,2025-10-18T15:53:46+05:30,12028,5,0,refactor: strengthen TypeScript types (remove 12+ any types)
++9b03e34fc55d9ef31f9f6b92bb03644b0faeaf74,246,2025-10-18T15:58:52+05:30,11245,0,783,fix: Complete backend router modularization - correct imports and restore models
++d49e450378b0fd658fa07e1c998f12fcd0af0682,247,2025-10-18T16:59:09+05:30,12029,784,0,fix: add missing full_name to User interface and fix markdown component types
++d794426a8009c4d35768ef1d840b19903125af4b,248,2025-10-18T17:09:32+05:30,12029,0,0,refactor(frontend): decompose LandingPage into modular section components
++619b5d6672b2348ad6ea43dd00b4babf4599f57c,249,2025-10-18T17:13:18+05:30,12029,0,0,refactor(frontend): decompose MessageView into modular components with memoization
++4c252a8c36f61c1281556e1385ccd6ca640d0d3d,250,2025-10-18T17:16:27+05:30,12029,0,0,refactor(frontend): decompose ContactPage into modular components (78% size reduction)
++48e6586bde2f438273f3f217b282b4df696c28b2,251,2025-10-18T17:17:56+05:30,12029,0,0,perf: wrap extracted components with React.memo() to prevent unnecessary re-renders
++40b259e1c89e26bdecb2afb15ec0b7a665d3e52b,252,2025-10-18T17:20:04+05:30,12029,0,0,refactor(frontend): decompose SettingsModal into reusable SettingToggle component (55% size reduction)
++55ae58ee092fe02fdf988d2ce1089ad8b5667317,253,2025-10-18T17:22:56+05:30,12029,0,0,refactor(frontend): decompose ChatPane into modular components (50% size reduction)
++1b105428ebcb10a723fee76efd0e0226ae30efe1,254,2025-10-18T17:27:13+05:30,12029,0,0,refactor(frontend): extract ThreadItem component to eliminate duplicate sidebar rendering (26% size reduction)
++abfee934f55ee46c4bab001874028d3f89d5727f,255,2025-10-18T17:32:06+05:30,10585,0,1444,feat: Consolidate pricing agents with LLM-powered algorithm selection
++9fc00632343a26d94e07aae4cb5a547ab458ef97,256,2025-10-18T17:35:21+05:30,12029,1444,0,style: apply prettier formatting to refactored components
++0ecb73f5310546c4644de84bf582448a61378bb5,257,2025-10-18T17:54:22+05:30,10621,0,1408,Merge pull request #25 from ManushiChamika/feature/Sithu/pricing-contact-theme
++7916122c87ea760c56115a0ef3f85b957d1ead3d,258,2025-10-18T18:29:09+05:30,10680,59,0,Fix: Update all code references from data/market.db to consolidated app/data.db
++ed763a8fd5522f2b5a9377694977b0007bf6bd79,259,2025-10-18T18:32:55+05:30,10680,0,0,Fix server stop: kill processes by port instead of window title
++65148d5936ceb4190d2406fe679536b95ef8b585,260,2025-10-18T18:40:05+05:30,10683,3,0,Improve error handling for thread creation failures
++d4fd09749f436e70bccb7a6148018ca71935e756,261,2025-10-18T18:53:00+05:30,10676,0,7,Remove fork thread feature and clean up database files
++58fbd7c84656d7d4d45ec14784669e38d05b1bc7,262,2025-10-18T19:19:46+05:30,10685,9,0,Add user isolation to prices panel with owner_id filtering
++3244d7b94e21418853d0e0addfb333436da25128,263,2025-10-18T19:24:17+05:30,10687,2,0,Update scripts to include owner_id in market data operations
++c25411f321af65527575a5f11c0c11b1d07455eb,264,2025-10-18T19:25:59+05:30,10687,0,0,Clean up database lock files
++fad48413f1cf3a0cfd2167a9d34f8c5f8a96fac7,265,2025-10-18T19:36:58+05:30,10834,147,0,feat: implement product catalog upload system with multi-tenant support
++f22ec365d47ca9435a388eae90b1b4e2d32af740,266,2025-10-18T19:37:51+05:30,10836,2,0,Fix optimistic UI: show user message immediately in draft threads
++a4114ca9fd85b4fff6d6ed447682d274aa9767cb,267,2025-10-18T19:38:33+05:30,10844,8,0,feat: add catalog button to sidebar for opening catalog modal
++96dd7771addedc612a9846f9c29ebaeba69be31c,268,2025-10-18T19:43:51+05:30,10844,0,0,chore: update Obsidian workspace with recent file access history
++4ef082d093a73e0ad8db51ace2bb4e42bdae0382,269,2025-10-18T19:44:12+05:30,10844,0,0,chore: remove temporary diff file
++ad0f7799004087b2cdb2003091c9e336cf233a4e,270,2025-10-18T20:51:56+05:30,10855,11,0,"enhance catalog upload UI with modern design, animations, and improved UX"
++4245bc6f56e23d286cca36177db9503de6f379f5,271,2025-10-18T20:56:10+05:30,10855,0,0,chore: update Obsidian workspace metadata with latest file access history
++2745e767cf78580083b6dcd03b0847fd06a54a71,272,2025-10-18T21:21:11+05:30,10987,132,0,Implement Phase 3: Frontend reactivity for auto-thread rename feature
++c21a160fb3092a85bf0716f92031d587b1c65373,273,2025-10-18T22:44:12+05:30,10977,0,10,Add concise response protocol with numbered options to UIA system prompt
++158093b03d6a5a19158457c74f9716c10b30f383,274,2025-10-18T22:46:01+05:30,11001,24,0,Implement missing auto-thread-rename functions
++acaac6e84f5ce05a1d93114c1a6d631bd012d9b1,275,2025-10-18T22:47:34+05:30,11023,22,0,Add visual response enhancement guidelines to UIA system prompt
++6b5f04b1d7c61e791aa723a042ee40db25f2b422,276,2025-10-18T22:49:51+05:30,11027,4,0,Add user-friendly notification when thread is auto-renamed
++9cf001b9d80191bdbcb80a1d13d9f27231231bb3,277,2025-10-18T23:16:20+05:30,11041,14,0,refactor(frontend): standardize code formatting and fix linting issues across UI components
++86b03c2663be7c6fab937a6c7811e1243b515bb3,278,2025-10-18T23:28:40+05:30,11041,0,0,Add URL-based thread navigation and fix LLM client for auto-rename
++4f405016fbef027f8c7c281114ded1daaabb9300,279,2025-10-18T23:54:59+05:30,11051,10,0,Add multi-key Gemini fallback support with gemini-2.5-flash model
++565a4134934692cdf0363d187546c34da483cec5,280,2025-10-18T23:58:33+05:30,11080,29,0,Implement persistent working Gemini API key caching to avoid repeated fallback cycling
++e75cfb974f3ba49e9825c106d50336b2ff9f163e,281,2025-10-19T00:04:13+05:30,11039,0,41,refactor: Remove redundant AlertNotifier in favor of AlertEngine
++a0dc4cd35aed53fd2a2becf858e740f4b5d1cbed,282,2025-10-19T00:06:59+05:30,11039,0,0,fix: correct indentation errors in llm_client.py for gemini provider initialization
++4af5dee6fbf17161e1f637842eebd46908f88d1c,283,2025-10-19T00:13:33+05:30,11044,5,0,Implement LLMClient singleton caching to fix availability check at runtime
++ed0aa7c5aba58c93c227a5b41d7ecb7c69b6f33e,284,2025-10-19T00:17:23+05:30,11044,0,0,docs: Update all AlertNotifier references to AlertEngine
++b29e62ba05f129931ffb442fb9c485b918dc1c12,285,2025-10-19T00:25:18+05:30,11047,3,0,Fix LLM client initialization error with Gemini key sorting
++18700b47797c73bea6eeeb9836420225a0a88d9b,286,2025-10-19T00:43:55+05:30,11128,81,0,Fix: Update LLM model/provider attributes after successful fallback in chat() method
++f436ecc218a6c11cb3dd5fe0b07947a7826206fc,287,2025-10-19T00:49:57+05:30,11128,0,0,Refactor: Extract provider management and usage capture logic from llm_client.py
++2c4df5b5c242e2e490b7b36575bc9f03f506d6ec,288,2025-10-19T00:51:09+05:30,11103,0,25,Refactor: Extract tool execution and result serialization into helper methods
++ec8324c3727ad73f4101294c573a03ef7c27411e,289,2025-10-19T00:54:09+05:30,11112,9,0,Refactor: Extract prompt templates from user_interaction_agent.py
++b8353b20ca3286e2c975eea4fb09f17c4cf63e0d,290,2025-10-19T00:55:35+05:30,11118,6,0,Refactor: Extract tool schemas from user_interaction_agent.py
++6f9bccf3f0ca7cb19bf022294f153fec7c5b07c6,291,2025-10-19T01:06:34+05:30,11106,0,12,Add comprehensive LLM testing suite
++281bf62a856c62bc6504395f61e990afa3f933e4,292,2025-10-19T01:17:43+05:30,11106,0,0,Add comprehensive MCP implementation analysis and fix LLM test suite
++d474896f67b64dc8532647d555c9354c1045a7ba,293,2025-10-19T01:19:50+05:30,11106,0,0,Refactor: Archive unused MCP server infrastructure
++add9307c3ea3c884f1ee50f884389ef7326d4fc2,294,2025-10-19T01:20:57+05:30,11106,0,0,docs: Update MCP analysis with archival notice and restoration path
++5f92bdfe4339e6a3bc23e303dc76aaa467f04a19,295,2025-10-19T01:31:14+05:30,11247,141,0,feat: Transform AlertEngine into autonomous LLM-powered agent
++64aaf11b97cff2bac41158413e03af6fefdafab4,296,2025-10-19T01:44:19+05:30,11264,17,0,fix: Add datetime JSON serialization and LLM tool calling integration
++589c0a5ee683a1969197b9ac00c7754d74fd54e3,297,2025-10-19T01:45:43+05:30,11264,0,0,Fix LLM provider metadata bug and reorder providers
++8940a9da1aa4c1cb46b306c578b4bb860123ddda,298,2025-10-19T01:48:25+05:30,11264,0,0,Reverse provider fallback order for metadata verification
++fcd418609267809f8106d6141ab8dbb0fb31a868,299,2025-10-19T01:51:33+05:30,11263,0,1,Fix provider metadata bug: remove redundant _set_active_provider call
++bb634f54917f8468a63b03fa4b154ac6e4891c36,300,2025-10-19T02:01:37+05:30,11106,0,157,Add Home button and fix light theme backgrounds (#28)
++a64bdffa8352b95bfa9cb09a123e8efdf89a7ff6,301,2025-10-19T02:05:41+05:30,11263,157,0,Merge branch 'minor-ui-bug-fixes' of https://github.com/ManushiChamika/dynamic-pricing-ai-IRWA_PROJECT into minor-ui-bug-fixes
++b2f025901427eae8c6f92432a281293c588e2782,302,2025-10-19T02:16:42+05:30,11367,104,0,"Configure Gemini models: Pro for summarization, Flash for chat"
++292d2132cc6776be83448dabecde86625c6a31ea,303,2025-10-19T02:21:01+05:30,11378,11,0,fix: Add async function support in LLM tool calling
++8d687238b39498e3ef457ff6c0683af9eb73a3e0,304,2025-10-19T02:25:45+05:30,11406,28,0,Fix chat summarization edge cases and race conditions
++2e3cf166b51fba6ab829d7da6d9414c455a39d8c,305,2025-10-19T02:28:21+05:30,11409,3,0,refactor: consolidate summary validation into safe_add_summary wrapper
++b96bcc6b4e6d42373548d71ca81a429382c8997c,306,2025-10-19T02:29:38+05:30,11412,3,0,Fix prices panel to show uploaded catalog products
++02a73cc46ca2ff24396fbf0827d09abee3a61334,307,2025-10-19T02:32:09+05:30,11427,15,0,feat: Complete LLM Alert Agent with improved prompt and severity mapping
++e7d38856082e7f776f5786ca243c2327333c5782,308,2025-10-19T02:32:54+05:30,11427,0,0,docs: Add comprehensive LLM Alert Agent test report
++76e3cc440d13cd7f0dd9854475c0e18eb3200d03,309,2025-10-19T02:32:56+05:30,11465,38,0,Refactor prices endpoint for reliability and proper error handling
++90b323d049406605f4eedafc4e47ea1380d59a80,310,2025-10-19T02:39:25+05:30,11465,0,0,"Optimize chat interface performance with virtual scrolling, lazy loading, and memoization"
++494e10e9cc68fad61ad0bf10a7f3a9b23477c672,311,2025-10-19T02:41:14+05:30,11491,26,0,Integrate AlertsPanel into main UI layout
++571ef6385846ae081dd274a6e36b6798d6387682,312,2025-10-19T02:56:22+05:30,11491,0,0,perf: optimize chat thread switching performance (INP 228ms -> 118ms)
++d25b9cec264978e85a85ad134de23753e00ca096,313,2025-10-19T03:04:58+05:30,11487,0,4,Remove demo SKU data for accounts with no uploaded products
++4c1a7a0a3fe0ee69c1389adedbac22f891a2776b,314,2025-10-19T03:10:23+05:30,11487,0,0,feat: integrate alert detail modal into prices panel
++5309975862a9678b41a528b394cf1ad6d53e9456,315,2025-10-19T03:13:06+05:30,11487,0,0,Integrate alerts into PricesPanel - remove separate AlertsPanel
++925313039ffffd0b73e253f08ebe4c4b3a053634,316,2025-10-19T03:18:41+05:30,11511,24,0,fix: clear chat state on logout to prevent cross-user data leakage
++f561491fe2f2525530fd1994995a640f477a22d3,317,2025-10-19T03:30:30+05:30,11545,34,0,Secure alert/incident endpoints with authentication and owner_id filtering
++f7e6a7e9576ee4c171a61fa801f96bc19624c35b,318,2025-10-19T03:30:43+05:30,11571,26,0,fix: increase max_tokens to 200 for thread title generation
++5c94309d108029288bf16a37e7aefd59560fc74d,319,2025-10-19T03:32:52+05:30,11603,32,0,Add owner_id lookup for alert creation in both rule engine and LLM agent
++25cc0461db8be940431f108b520528c83893de98,320,2025-10-19T03:35:48+05:30,11778,175,0,Show ACKED and OPEN alerts in dedicated section
++c1490d96e20f627da6940ebace541de0a0bfb688,321,2025-10-19T03:40:39+05:30,11896,118,0,Fix alert database schema: add owner_id column to incidents table
++c5a456f5f9bcdaa73d8eda2e75ca423b7e97f6ba,322,2025-10-19T03:41:09+05:30,11896,0,0,fix: add Query parameter to thread endpoints for proper token authentication
++1f6bdbaf0dffe2ef4b3b6446863290cbfd763acf,323,2025-10-19T03:56:46+05:30,11896,0,0,Fix chat send functionality by auto-creating draft thread on load
++0f930f00b64c202909293aaee95a1292bb3834fd,324,2025-10-19T04:09:06+05:30,11896,0,0,Add diagnostic scripts for pipeline verification
++968eee85f81efca89bc5e97c7e43b3dce2fb3b02,325,2025-10-19T04:25:07+05:30,12486,590,0,Integrate autonomous price optimizer with chat interface and event bus
++2a8f8f1bf69e67ffef333c77c0e561bd4bfe2b95,326,2025-10-19T04:28:47+05:30,12486,0,0,Update sample catalog with realistic product data from manufacturer websites
++3a7d2c723010bdb0abfada18ad4af096b4d6c2b2,327,2025-10-19T04:40:21+05:30,12511,25,0,Add 'Clear All Catalog' feature with complete implementation
++1d3f46c146ac18e49d2382570ef4516bcd7f180e,328,2025-10-19T04:48:37+05:30,12671,160,0,fix: SummaryIndicator now fetches on mount instead of hover
++44bbb434f82cfc12dda740ee689c193829cf9e47,329,2025-10-19T04:50:29+05:30,12671,0,0,Fix product list not refreshing after catalog upload/delete
++52b2dec9da1d3fed6eea0f63ba2003bf2b08d379,330,2025-10-19T04:58:06+05:30,12671,0,0,Increase inventory display limit from 10 to 100 items
++c37da3db6cc6a404b35e53709fa20b0c8cef7971,331,2025-10-19T05:01:45+05:30,12739,68,0,Improve chat sidebar aesthetics with ChatGPT-style design
++150be2f7db8d0195e2486e43b4ee0305289304dd,332,2025-10-19T05:03:37+05:30,12889,150,0,Fix thread item timestamp color display issue
++a9454045c6ef44e2a82959ad319ac764d7d161b7,333,2025-10-19T05:08:53+05:30,12903,14,0,Refactor backend and frontend to extract database and hook logic into reusable modules
++fb7515e75e04ce38ed25c0d57378ad32266cfc1a,334,2025-10-19T05:12:19+05:30,12929,26,0,Center New Chat button text and icon
++009c050754055295343bce8739ce4d2ac714f603,335,2025-10-19T05:14:51+05:30,12946,17,0,Fix remaining ESLint warnings by extracting hooks and context
++40cba9943a3e259110b2fda778e8a77197133854,336,2025-10-19T05:16:48+05:30,12946,0,0,Fix imports after extracting useTheme hook and buttonVariants
++42a54c899983f02f7eccc95b89e34a6796773f09,337,2025-10-19T05:30:28+05:30,12946,0,0,Fix button text readability on hover
++847fdc6eb7f5977d80c539df2b06f4415d5bd245,338,2025-10-19T05:33:34+05:30,12946,0,0,Exclude shadcn/ui buttons from global button hover styles
++6c6db8a5a7a3b5b13238ac16afbdf842bb245462,339,2025-10-19T05:41:03+05:30,13487,541,0,Add autonomous LLM-powered Data Collector agent
++f7fd85b8e518516cdb11e0cae1f7a188d4efa65a,340,2025-10-19T05:45:22+05:30,13487,0,0,Fix: Use correct database path (app/data.db) in autonomous agent runner
++a7282938c5916db9b156fe77af719c154e6920e1,341,2025-10-19T05:49:13+05:30,13487,0,0,Add integration test for autonomous + reactive data collector agents
++c3633ca3ae5aa3a6ce8bb7b4c60147d0b435ca06,342,2025-10-19T05:50:13+05:30,13487,0,0,docs: Add comprehensive documentation for autonomous data collector
++138dd9741f3d50cd3fa3086f95c62b69df7aaca2,343,2025-10-19T06:02:01+05:30,13487,0,0,Merge autonomous data collector feature
++1680b0754e0fb4d60d162d6cd7708e145a4815e0,344,2025-10-19T06:03:55+05:30,13487,0,0,refactor: complete shadcn/ui compliance for chat and catalog components
++5b53be1df2e87dd915ed55ccc76186753100f11d,345,2025-10-19T06:07:16+05:30,13487,0,0,fix: align Send button with bottom of textarea in ChatComposer
++9a8c8d07bb42884aef2e73fd56c36a879f3ce58a,346,2025-10-19T06:09:56+05:30,13487,0,0,fix: center Send button with textarea in ChatComposer
++1256b9ba83a9c47103af7d8f059c9393c2f08b6d,347,2025-10-19T06:13:20+05:30,13833,346,0,fix: add composer class and aria-labels for keyboard shortcuts
++efa475f42eeab257bd9a9faffae1b3e81dc0fdfe,348,2025-10-19T06:13:38+05:30,13833,0,0,Fix Unicode encoding errors in validation script for Windows console compatibility
++629ff43c736677bf77a63bb10a04c83c75c59af0,349,2025-10-19T06:14:14+05:30,13833,0,0,Replace remaining Unicode arrow characters with ASCII alternatives
++98e25b0fe5c1aa50139237e53fb2e3e1e84ee977,350,2025-10-19T06:15:54+05:30,13834,1,0,Update validation scenarios to use existing products from database
++a0fcead2a4da27b190f86df4e0e96c6313a683dc,351,2025-10-19T06:16:15+05:30,13834,0,0,fix: use subtle transparent hover effect for messages instead of solid white
++6e4bfcd1c118b65472545ae1436abcb0541036c8,352,2025-10-19T06:17:45+05:30,13834,0,0,Add comprehensive validation script results documentation (3/4 scenarios passing)
++4a30f3c685f56265ce648a83d23d9b045cea9e2d,353,2025-10-19T06:22:03+05:30,13834,0,0,Replace message action text with icons and improve hover UX
++77b896bec860ec250f019dace52b72f73c3abd77,354,2025-10-19T06:23:53+05:30,13834,0,0,Reduce message action buttons base opacity back to 0
++4df00f75b8da875e6e6f9eb1e8e80db18fddc057,355,2025-10-19T06:25:24+05:30,13834,0,0,Replace agent emoji icons with lucide-react icons and use full names
++e08057f1aedf7c3e6fad56cb399107cc74bde8be,356,2025-10-19T06:30:15+05:30,13946,112,0,Integrate web scraper for live competitor pricing
++a4c40bcf807b7bd2aa25e882ed8a43b4d1e25dfa,357,2025-10-19T06:35:15+05:30,13946,0,0,"Enhance New Chat button aesthetics with gradient background, Sparkles icon, improved typography and hover effects"
++4d4b60fa05cfdf370aaab20716c250f98d1bee18,358,2025-10-19T06:37:49+05:30,13947,1,0,Refactor New Chat button to use proper shadcn variant system
++34337cf52e72e1455cc8d4f887ac6ac353baf0ee,359,2025-10-19T06:44:00+05:30,13947,0,0,"Enhance input box aesthetics with gradient background, indigo accent colors, centered layout, and welcoming placeholder"
++6a3def07ec6c16499bda955011fbb4a3c08f71d4,360,2025-10-19T06:47:27+05:30,13966,19,0,style: modernize scrollbar design with shadcn-friendly styling
++c26bbc2b70cb9f4c35a29fd63a59e1340e19ff03,361,2025-10-19T06:48:31+05:30,13982,16,0,fix: correct prices panel arrow direction and replace emojis with lucide icons
++80bb7b2df2c12c686fbbeb103cf0ac39d689bbf2,362,2025-10-19T06:50:37+05:30,13982,0,0,Prioritize products with URLs for web scraping and auto-select connector
++6637314e6cbebf545fd7f8f83e18569061e92805,363,2025-10-19T06:51:13+05:30,13982,0,0,Enhance visual section distinction with subtle background variations
++3ca6679d668ecbc1137d7d0719cf44335f4580cc,364,2025-10-19T06:51:21+05:30,13982,0,0,Add comprehensive web scraper testing guide
++0345b53b1e5041c2c1fde1ab271ea1edfa11757a,365,2025-10-19T06:53:54+05:30,13982,0,0,Add visual distinction between user and assistant messages with icons and colors
++18965a43f02efc5091b5d08df11e9f8766c53f5f,366,2025-10-19T06:56:53+05:30,13982,0,0,Update chat message icons to match button aesthetic and position on opposite sides
++0e4bc2ac8587a544bdb73bf8fcb037d58006599e,367,2025-10-19T06:59:06+05:30,13982,0,0,Update to professional icons: UserCircle and Sparkles with gradient avatars
++8d4943795ca2451b7fa110ad41a47060c3327786,368,2025-10-19T06:59:47+05:30,13982,0,0,style: improve light theme with softer colors and better contrast
++15d8f134f0c395abc852a2cf96c67398c2b3d696,369,2025-10-19T07:00:26+05:30,13982,0,0,Change user icon to User to match app icon style
++9653dc97929354431bff26803b4d995cefe64797,370,2025-10-19T07:00:55+05:30,13982,0,0,Make user icon less colorful with muted background
++cd9d393adf3b014ddeff62ae028b6ea6df4f3a6f,371,2025-10-19T07:02:24+05:30,13982,0,0,Make user icon more prominent with thicker stroke and darker color
++d3de0a2cd312f02705ee19e83f5d6e350b0d7218,372,2025-10-19T07:02:43+05:30,13982,0,0,Add comprehensive Alert Agent UI analysis documentation
++8a2b71f730348d74159f7743c89d22ef7e1b3fe8,373,2025-10-19T07:16:33+05:30,13982,0,0,Add bulletproof demo prompts for system showcase
++e32d42d37c396c5ec4d686a68c3c2c22a9f24655,374,2025-10-19T07:17:02+05:30,13982,0,0,Add demo quick start reference guide
++ee41e10533cd10b21772000aa66d0d879b0c6e45,375,2025-10-19T07:38:21+05:30,14036,54,0,fix: alert acknowledge/resolve owner_id type comparison
++31cd8f5be063f18649b1e4829eed2a885a254930,376,2025-10-19T07:47:24+05:30,14048,12,0,Fix 500 error in chat threads API by adding exception handling to token validation
++cdfb2f91b1e4540d22b5f0b4edd1e9fbf56ecaf7,377,2025-10-19T07:57:44+05:30,14051,3,0,Add exception handling to POST threads endpoint token validation
++70fae4cc8cf75ab7e6ed16b82f24dffee1cc0fca,378,2025-10-19T08:00:29+05:30,14083,32,0,Add comprehensive error logging to thread creation endpoint
++9a123d6a944066fb92a7067375841ec69c24fbce,379,2025-10-19T08:04:21+05:30,14112,29,0,Fix Thread.updated_at NULL issue with migration script
++7acd1014f141c47f99ae646e8dcb12438fe4d2ef,380,2025-10-19T08:06:00+05:30,14133,21,0,Fix thread date serialization and add diagnostic test script
++619799dceb697747375c7823f333c12dc1b91dc4,381,2025-10-19T08:24:36+05:30,14133,0,0,Clean up temporary files and workspace state
++e85b667b116888a2aeefb618c999a5ebccfa495a,382,2025-10-19T08:38:25+05:30,14132,0,1,Fix thread creation: expunge object to prevent detached instance errors
++358edccd2fff80e12d7c75932781506d140f68b2,383,2025-10-19T08:50:28+05:30,14133,1,0,fix: add error logging to streaming endpoint
++75df67878c0ca1e04d7bc85244b61a23ddf60d52,384,2025-10-19T08:51:27+05:30,14133,0,0,Disable owner filtering in alerts API to show all incidents
++025c1fccbea8d9874090b778eabad3216cacb33d,385,2025-10-19T08:52:16+05:30,14173,40,0,Add demo data verification script for all 5 prompts
++845a039cf45fbc664c902d96b6d007e7af973228,386,2025-10-19T08:54:26+05:30,14174,1,0,"Fix new chat routing: navigate to /chat when creating draft, update URL after thread creation"
++870dbcf1712432a044d2185c18419a45b46d6ac4,387,2025-10-19T09:00:22+05:30,14174,0,0,Fix draft thread override: prevent localStorage from overriding active draft thread
++82bc733e35815158952b3fbb9cabf99946ec5fec,388,2025-10-19T09:11:21+05:30,14174,0,0,Update Obsidian workspace and system event logs
++d794d525c75954357cab52eeec91d1aee1999bd5,389,2025-10-19T09:20:50+05:30,14174,0,0,Fix Gemini model names: use gemini-2.5-flash and gemini-2.5-pro instead of invalid model names
++5946bbb13324a20e9741ef62d0c6b4aacdfed5a1,390,2025-10-19T09:28:14+05:30,14174,0,0,Improve markdown rendering with enhanced styling and table cleanup
++ed03592bbe487ab4f1a410f848cd6a56c083614c,391,2025-10-19T09:30:17+05:30,14174,0,0,update: upgrade Gemini model versions and sync development state
++0871ec5b7d771cd8261343c5b6c9cca1b39436c8,392,2025-10-19T09:31:33+05:30,14174,0,0,Fix TypeScript configuration and clean up unused variables in MarkdownRenderer
++fb0a4a7edc27146267ed0d2a2b9609ea231cc4ab,393,2025-10-19T09:31:48+05:30,14178,4,0,Fix event loop error in price optimization tool - handle no running event loop gracefully
++899007faf04037bf658ea6b95336e11669492ea2,394,2025-10-19T09:34:19+05:30,14182,4,0,Fix price optimization by calling PricingOptimizerAgent directly instead of using event bus
++b1393e3b9dca53529d944c6f4a5342416711ae5c,395,2025-10-19T10:10:54+05:30,14185,3,0,Fix price optimization failures: correct argument order and indentation
++c998bc0f8cfb008938c0bda990ea10d4dde9c4e8,396,2025-10-19T10:24:53+05:30,14225,40,0,"Fix PRICE_PROPOSAL event: include margin, algorithm, and correct field names for Alert Agent"
++87c012f1f8d1a2cc8fc0f38568226f788340c62d,397,2025-10-19T10:31:32+05:30,14237,12,0,Add product identification protocol to system prompt - search by name before using SKU
++7eae36d172754865148eacffe939d6edf50a40a0,398,2025-10-19T10:43:58+05:30,14307,70,0,Add check_stale_market_data tool to detect outdated market data
++481db25526690b552c836ac581eec5ad3b7ea2ab,399,2025-10-22T12:52:06+05:30,14307,0,0,Add testing examples and developer dependencies to enable property-based and improved frontend tests
++d4571b384fecd016b14459aae756c66e36f3d544,400,2025-10-22T13:15:15+05:30,14330,23,0,"Add MSW test mocks, Hypothesis property test for optimizer, and simple Locust load test"
++86c28bbd99add97df6a34e7855aff352bba55b86,401,2025-10-22T13:15:46+05:30,14330,0,0,Ensure tests can import project root by adding to PYTHONPATH in test
++6fff74b0e0fafc692f0341d264f97bac05787586,402,2025-10-22T13:16:25+05:30,14330,0,0,Tolerate rounding in optimizer property test (allow 0.01 epsilon)
++6fdaf41e68a077041e3489b754235349df759085,403,2025-10-22T13:18:50+05:30,14337,7,0,Make MSW server load conditionally for Node/Vitest environments
++70ded6e60edf43589eb2782e566eb7dbc4879106,404,2025-10-22T13:20:14+05:30,14337,0,0,Bump msw to ^2.4.9 for Vitest compatibility
++560232be8698b6c157e23c8f2511147249bad56d,405,2025-10-22T14:16:23+05:30,14383,46,0,test: add frontend Products test with fetch stub and fix MSW mocks/setup
++4f44922ae6a58db8a918fb3a7da900f2acc839c5,406,2025-10-22T14:16:36+05:30,14388,5,0,test(backend): add Hypothesis margin and algorithm tests; fix optimizer rounding clamp
++11fb30b4b0560cbe2ae27e20f7a4cdef7484eaaf,407,2025-10-22T18:39:26+05:30,14411,23,0,test(chat): create TestClient after monkeypatch; ignore Gemini cache under pytest for deterministic tests
++50e2b7c6d32e164f96ce36d0ca56c6ffd86bbb7f,408,2025-10-22T19:05:01+05:30,14430,19,0,Make tests deterministic and fix auth middleware for pytest
++2c621e2f3743eaec5427b28a86212d6780c13620,409,2025-10-22T19:31:21+05:30,14432,2,0,Fix Pydantic V2 migration for alert service schemas
++ae5f5171d57080c12edcdfc905782a8e76ae4a90,410,2025-10-22T19:53:51+05:30,14549,117,0,feat: implement ToolRegistry for centralized tool management
++6299d3e5644649bb12e0b65385ef47f3b7726ef3,411,2025-10-22T20:12:45+05:30,14592,43,0,feat(workflows): add collect_and_optimize_prelude template and integrate optional use in Supervisor
++9628182a17145f1b0d7fedbbb8551c3397f4ca5b,412,2025-10-27T01:26:21+05:30,14575,0,17,remove terminal sound notifications: drop _play_completion_sound and related code
++f67d7d8da882e00df20050a3a0a6f1f0ca7c36fc,413,2025-10-27T01:30:32+05:30,14575,0,0,chore: ignore sqlite journals and local test caches
++933a8f751c173e68aeec0292b2503c6582d9812d,414,2025-10-27T01:52:57+05:30,14925,350,0,$(cat <<'EOF'
++ca126cd3ea70f00d76feee8071e0e873ddceca61,415,2025-10-27T02:31:23+05:30,14949,24,0,fix: improve chat export functionality with better error handling and abort support
++9269dadf3365e11bea343f63f4da0b3c0e084cdf,416,2025-10-27T02:50:15+05:30,15002,53,0,Fix auth API tests - return 401 for auth failures and fix test expectations
++82b7162fa162294a50a91b9f5656710ca2efa891,417,2025-10-27T03:50:31+05:30,15002,0,0,tests: align integration workflow with catalog/alerts APIs; skip SSE
++09c311f8e8d901c26bde130638c1fbb066c517aa,418,2025-10-28T20:08:18+05:30,15002,0,0,sidebar: center icons and normalize collapsed item sizing
++3092683e082e6e47e896ae8ca7a3c1a9c1a468c3,419,2025-10-28T20:13:45+05:30,15002,0,0,refactor(sidebar): add CollapsedNavItem and use for collapsed items
++d12e25a39a0b055d7141de0c67473d9f46c58506,420,2025-10-28T20:15:21+05:30,15002,0,0,refactor(sidebar): use CollapsedNavItem for footer actions in collapsed state
++a00a80b6dbb895036f0468d9eef329b5206500fd,421,2025-10-28T20:36:33+05:30,15002,0,0,fix(sidebar): close footer ternaries to resolve JSX parse error and restore collapsed/expanded actions
++95342409c74a1b74623a2935b7039becf43589c1,422,2025-10-29T00:05:30+05:30,15009,7,0,"refactor(frontend): reduce any usage by typing price data path and props; remove unsafe casts in ChatComposer, MessageView, MessageMetadata; centralize PricePoint type"
++cd9b5a3edac9fbbd982730c519109bd7ba68cdd3,423,2025-10-29T00:07:09+05:30,14977,0,32,refactor(messages): type message metadata via MessageMeta to avoid Record<any>; align with PriceChart usage
++7637045c84c3e94ce6f813e78dda69f3f59b3ef4,424,2025-10-29T00:07:52+05:30,14977,0,0,refactor(metadata): use MessageMeta in MetadataTooltip and drop any casts
++783bd0c7f1170a07fb8f6de0f007a3dbf957e0a5,425,2025-10-29T00:49:55+05:30,14996,19,0,feat(prices): centralize right panel collapsed state in zustand store; wire PricesPanel to usePanels for toggle and persistence
++d1bc1a8312e3dcaafc4cb67a18ac01e8a4ae689e,426,2025-10-29T00:50:04+05:30,14996,0,0,"feat(ui): smooth chat layout transitions; overflow-hidden root, animate ChatPane and header/composer padding"
++10dda44783374f9230566f97616bbe5630c61a4d,427,2025-10-29T12:35:34+05:30,14996,0,0,"feat(ui): center chat column, transform-based sidebar motion, reduced-motion support; add LayoutProvider with CSS vars and wrap app shell"
++4da360f9f1225851cb11574dfd7991e7f1d800d0,428,2025-10-29T12:46:06+05:30,14996,0,0,feat(responsive): overlay sidebars on mobile with transform animations; add backdrop and Escape-to-close; mobile toggles in header
++5d7a36bc2853eee89d82ac3946c89c9dac0cc847,429,2025-10-29T12:51:20+05:30,14996,0,0,$(cat <<'EOF'
++b386d747ed2e061b68ff056e6d3ec456f624be70,430,2025-10-29T13:13:09+05:30,15068,72,0,"feat(a11y): add mobile overlay accessibility with ARIA attributes, focus management, and test coverage"
++6b6efc7f3fea4bc3fb7352bb74f3a0a8af38015b,431,2025-10-29T15:07:43+05:30,15068,0,0,"fix(chat-layout): keep sidebars fixed, restore collapse on desktop, add sticky header to right panel, pad main content to avoid overlap"
++87481ed111dbd5501cd0931a921d2a2c5df56499,432,2025-10-29T21:26:54+05:30,15068,0,0,fix(ui-layout): lock app to viewport and confine scrolling to chat; ensure mobile backdrop/panels behave predictably
++f2afe30412c55e65ddf9be1c70451e1e98ad058a,433,2025-10-30T00:27:46+05:30,15068,0,0,fix(prices-panel): keep 48px collapsed rail on desktop; remain off-canvas on mobile
++8d1eb8c023b1cfc5f2236118bb4ce839d91f3cdc,434,2025-10-30T00:32:12+05:30,15068,0,0,fix(prices-panel): center collapsed expand button and remove offset transform for correct alignment
++084810c4bb3f0dfd6411eaa234e32df81daa4876,435,2025-10-30T01:34:57+05:30,15068,0,0,fix(sidebar): keep 64px collapsed rail on desktop; off-canvas only on mobile; remove offset transform
++54252e0c11ef162dcaac8618cdf34cd812cebaa8,436,2025-10-30T02:55:19+05:30,15068,0,0,ui(chat): expand chat width when panels collapsed; zero mobile padding; widen message and composer containers
++46493c754747a9b236b5a36fc2697ab0945396bd,437,2025-10-30T02:58:41+05:30,15068,0,0,ui(chat): reduce mobile horizontal padding; keep dynamic max width so chat fully expands when panels are collapsed
++148af6e0c4813d640fbd0e347bfc60dbf6befbc2,438,2025-10-30T03:41:31+05:30,15075,7,0,Fix user message box width to fit content
++2f2cdf8731251a3dc98c79c538ea05ff79c0ed9b,439,2025-10-30T03:43:46+05:30,15075,0,0,Keep user avatar aligned with bubble; right-align wrapper
++c888ba3158594fe55777aee6b1e9b56a9e95453e,440,2025-10-30T03:51:51+05:30,15076,1,0,Add debug logging to investigate turnStats visibility
++c4dc666a856c7bd633ef9fb035f5841bdd9f211f,441,2025-10-30T04:02:54+05:30,15088,12,0,Restrict message deletion to user messages with cascade delete of assistant responses
++8b7d0eb3703a358fc081bac0cf8951c057867254,442,2025-10-30T04:10:21+05:30,15088,0,0,"ui(prices): remove unused right panel buttons (view toggle, pause/resume) and related dead code from PricesPanel; always stream + show sparkline only"
++174233c544320cd769f1d9e947798de2db6130b0,443,2025-10-30T04:12:32+05:30,15088,0,0,ui(prices): align Prices header with panel toggle icon
++2520a5aca83f8188681afb72a0c74ef4023eaef6,444,2025-10-30T04:20:39+05:30,15088,0,0,ui(sidebar): blend collapsed sidebars with chat background; distinct when expanded
++ec0bfc933fd913b0ed372d091208ccc7e1722d98,445,2025-10-30T04:26:15+05:30,15088,0,0,ui(sidebars): clearer contrast expanded (popover/90) and lighter collapsed (bg/10)
++aebe3a106b3df5afc2eff38b51e83d3ae0b993ee,446,2025-10-30T04:27:33+05:30,15088,0,0,ui(sidebar): make collapsed list container transparent; expanded list uses popover/40
++bd14f9fcef1fe3856f03a6702bbdaf14f77875ba,447,2025-10-30T04:28:40+05:30,15088,0,0,"ui(sidebars): stronger distinction expanded (bg-muted/80), collapsed fully transparent; adjust headers"
++2a75d64fb3a9a4062b1d2d4215323a5aa0c3c7ad,448,2025-10-30T04:35:15+05:30,15088,0,0,ui(sidebars): fully transparent collapsed and no borders; expanded uses background/0 and no blur for perfect blend with chat
++de51374c97edace977348d7f921307ff0fdbb456,449,2025-10-30T04:40:24+05:30,15088,0,0,fix(sidebar): remove stray closing aside and duplicate braces causing JSX parse error
++bcff5a79d34cf9d171f6a0a2dd594d6ce45397c1,450,2025-10-30T05:00:54+05:30,15088,0,0,fix(ui): blend sidebar colors with chat UI when collapsed
++309bb581d8b9a65a855e2fc0ed2d2e85913e6587,451,2025-10-30T05:13:10+05:30,15088,0,0,feat(ui): add border to collapsed sidebars
++07b9f5841c82c102d6924638f12ebbae0f335ca4,452,2025-10-30T05:15:57+05:30,15088,0,0,refactor(ui): move sidebar navigation to bottom
++2d38e1ccf116c4163b40db783bbc888d4ff49f6e,453,2025-10-30T05:22:06+05:30,15088,0,0,fix(ui): pin sidebar nav to bottom and separate scroll area
++ca5763b37ec8b1cf3818595ebedb97cb90e28a04,454,2025-10-30T08:45:59+05:30,15088,0,0,feat(ui): modernize chat bubbles and spacing for user/assistant messages
++88f306eda89e9310a0f9a79883872ddb5270c57a,455,2025-10-30T08:49:20+05:30,15088,0,0,style(ui): user bubbles only; assistant text on transparent background
++f6e18c9bfe83c1764cb3e2d35912ba67bd1c15d5,456,2025-10-30T08:55:31+05:30,15088,0,0,ui(chat): move agent badges below message content for transparency-friendly layout
++1285069a67ff5ce2409065df8b97f6afe00a715e,457,2025-10-30T09:02:51+05:30,15088,0,0,fix(chat): regenerate assistant after editing user message by branching from edited message; support parent_id in sendMessage
++4bc9da9ab70294bf502f1ab044baba55305a9246,458,2025-10-30T10:24:12+05:30,15088,0,0,chore(chat): remove LiveStatus and AgentBadgeGroup from MessageView; rely on header for runtime status
++2eca999d033429c06bac8622d32ddeca98c0187e,459,2025-10-30T10:25:46+05:30,15088,0,0,refactor: move AgentBadge.tsx and LiveStatus.tsx to .recycle_bin as unused after chat cleanup
++c33767b68392da5077c1fd2a1a498fc2ee84a6ef,460,2025-10-30T10:40:21+05:30,15088,0,0,chore(chat): remove debug logs and harden ChatHeader types/accessibility
++feaa17c43999a7dce8baabf57e47e30216990688,461,2025-10-30T10:44:43+05:30,15088,0,0,chore(repo): move placeholder $null files to .recycle_bin
++c78a384c24ac134e3390b59085ac948798b39932,462,2025-10-30T10:45:26+05:30,15088,0,0,chore(repo): move placeholder $null files to .recycle_bin (nested)
++8cbf5df3432b771c221ed537c5f6381c84464bec,463,2025-10-30T10:55:15+05:30,15088,0,0,fix(chat): guard SummaryIndicator threadId and enable query only for valid ids
++a7d538b8a490a7177faf44d8a138f3186a1a3e8a,464,2025-10-30T10:58:45+05:30,15088,0,0,fix(chat): type-safe threadId in ChatHeader→ExportThreadModal and correct zustand usage for toasts
++a4895302cd099dab56ffa97aac96d0251037cacb,465,2025-10-30T11:01:16+05:30,15088,0,0,fix(export): align toasts with zustand API and add API response typing for export flow
++379c70e69f421885ef6145953fb8ca8741ed7a4e,466,2025-10-30T11:15:13+05:30,15088,0,0,chore(build): update TypeScript incremental build metadata
++f3eb2e41a5f9e324985146fb8739b61f0b9eab42,467,2025-10-31T16:52:17+05:30,15094,6,0,fix(chat): thread visibility bug by refreshing sidebar after first message and updating thread timestamp when messages are added
++14ebb3855259b022e1bf8dee7df4f380c350a0b0,468,2025-10-31T17:08:45+05:30,15101,7,0,Fix thread title generation by switching to Gemini Flash provider
++3b1e4ea79d0db346e83ebf7dd7e58793cfcdcdae,469,2025-10-31T17:12:12+05:30,15101,0,0,Add test script for thread title generation
++f8fba40d6d8241a15a33a24c19416548a9828a3a,470,2025-10-31T17:16:41+05:30,15101,0,0,Improve title generation test to include database update and verification
++4bce42be4312d5920e37a743ce0d61895c5ec608,471,2025-10-31T17:22:07+05:30,15101,0,0,Checkpoint before security audit
++1091e3b1d8c244b6ae0995a66a92d33cca449851,472,2025-10-31T17:28:32+05:30,15334,233,0,"feat(debug): add comprehensive database inspection API with full visibility into users, threads, messages, catalog, and market data"
++c5762dd74715ae16ceb97a4e1fb454a3fdf7ff94,473,2025-10-31T17:29:22+05:30,15334,0,0,docs: add debuggability enhancement summary
++e0e9285adc1798dc19706427bba02b5c7e4367bc,474,2025-10-31T17:29:50+05:30,15334,0,0,docs: add debug API quick reference card
++0636375e2b05b13e38faf0dd15369d139ba04a1b,475,2025-10-31T19:51:07+05:30,15332,0,2,fix: resolve ImportError in debug router by removing non-existent get_settings import
++797ed16b8a8e7c25dafa33e449cdc22b3010b6c6,476,2025-10-31T20:17:24+05:30,15332,0,0,fix: prioritize Flash models over Pro models to conserve API quota
++fc234c845ec4f707edaced2124478152af63e2e6,477,2025-10-31T20:52:18+05:30,15342,10,0,fix: preserve context at summary boundaries to prevent conversation memory loss
++a79eeddf507fca49abdd0fbe8a950bb3336629da,478,2025-10-31T21:07:48+05:30,15371,29,0,Add owner_id filtering to list_price_proposals tool via JOIN with product_catalog
++7a2712f594e69d1daaac2a7de87e580916364141,479,2025-10-31T21:08:34+05:30,15389,18,0,Add owner_id extraction and context setting in streaming endpoints
++e1bb621971a01bd2407c0a147b4b1c7f79f9c0f4,480,2025-10-31T21:13:52+05:30,15403,14,0,Add owner_id validation to optimize_price and filter alerts by owner
++fd9fbae55213420a519928200d7a1904915db647,481,2025-10-31T21:22:53+05:30,15424,21,0,Add comprehensive debug logging to trace owner_id flow in multi-tenancy
++4f8967b17d1cd8a155f3d20978a5fbfcc0bfbaf6,482,2025-10-31T21:39:25+05:30,15430,6,0,fix(multitenancy): ensure owner_id context is set before tool calls in user interaction stream to prevent cross-tenant inventory leaks
++698a380328c7bc0d9d8ed8b10a076c32e801ed41,483,2025-10-31T21:47:27+05:30,15429,0,1,fix(db): harden supervisor product_catalog creation to include owner_id and composite primary key to prevent multi-tenancy schema drift
++10b1b11eb2db9e9f43f5eb71a12949c00257da42,484,2025-10-31T22:12:46+05:30,15432,3,0,feat(ux): add detailed catalog upload instructions to system prompt for empty inventory state
++8d949d09445f8b9a6d6fdda770008ae871676195,485,2025-10-31T22:32:25+05:30,15441,9,0,fix(ux): return instructional message directly from tool when inventory is empty to ensure consistent user guidance
++18ba1b162dfb5f0f3f646fbaa865a715a1616b6d,486,2025-10-31T22:38:18+05:30,15441,0,0,style(landing): center-align features subtitle for better visual balance
++dc098cbbe13b3e2ad77d1a40e40512651cb21b3d,487,2025-10-31T22:38:40+05:30,15441,0,0,Fix text positioning in Features section subtitle
++b7d876d351b9c515a4fc0b9a1f9d86e8ec9c6c98,488,2025-10-31T22:43:29+05:30,15441,0,0,Move tagline to hero; remove from Features for correct placement
++6013547316e9dc34942e848e6e8f78187e1955c5,489,2025-10-31T22:50:55+05:30,15441,0,0,Restore original hero copy and tagline placement; constrain features header width
++3195b6966b84480d97c17eeae6cb5cac6e5fc6c3,490,2025-10-31T22:53:58+05:30,15441,0,0,Tighten hero/CTA spacing and increase footer column gaps for visual balance
++58aba00cb6a5db804eb67111e977063ea2850e0f,491,2025-10-31T23:05:14+05:30,15441,0,0,feat(ui): show New Chat icon when sidebar collapsed to allow starting threads without expanding
++85a5171681002ed21aafcffd511bcfe6a45e3d73,492,2025-10-31T23:06:19+05:30,15441,0,0,fix(ui): prevent overlap by stacking collapsed header controls vertically
++7b993bc6ba638f6773cd20c56880d3596386aa40,493,2025-10-31T23:15:01+05:30,15441,0,0,feat(chat): replace large Send button with paper plane icon; use lucide Send and icon-sized gradient button for cleaner composer UI
++e50508a5b064018f3b65edd36e5102d1c9571876,494,2025-10-31T23:54:25+05:30,15497,56,0,feat: implement modern chat UI with animations and improved code rendering
++ebaec1c0b8ee41ce2dc72f4c2c289f366047c472,495,2025-10-31T23:56:16+05:30,15493,0,4,feat: add virtualization with React Virtuoso for performance
++33be320a11564b5395e0ebb0537dd9fba39f8ea5,496,2025-10-31T23:56:52+05:30,15493,0,0,Add agent activity visualization to chat messages
++8768d1d53783973fdd539f9a536eca389db3acb9,497,2025-11-01T00:03:01+05:30,15493,0,0,Enhance chat text rendering with improved typography and modern shadows
++1d14c7e525e90a592c7d45abb21f3f8870b6daee,498,2025-11-01T00:08:40+05:30,15493,0,0,Update TypeScript build configuration to include new chat components
++f419cc04fd3b0b08e70559f3e7ca463a2701b98a,499,2025-11-01T00:32:18+05:30,15495,2,0,feat: improve catalog upload guidance
++093c4fba2fdbfe29ebcfb374c3331b7e20edb4ae,500,2025-11-01T00:38:41+05:30,15499,4,0,fix(agent): Provide informative message when no price proposals are found
++fd53c85a548e05e4d119a5d174b832360ca5701f,501,2025-11-01T00:51:29+05:30,15499,0,0,chore(events): add new PricingOptimizerAgent initialization event log entry
++668b719473dbb161c36bda2905a45c1e9776274c,502,2025-11-01T00:56:29+05:30,15499,0,0,fix: align market DB path for user tools and UI agent; add clear no-proposal messaging
++bf1bca1b795922eaf357b72a294c5b6bbd566571,503,2025-11-01T00:57:46+05:30,15505,6,0,feat: add explicit guardrail in system prompt to avoid claiming recommendations before proposals exist
++6b3d5ea292d13e5387cae1cefbbb3f348a368ee1,504,2025-11-01T01:05:59+05:30,15550,45,0,feat(stream): add tool event telemetry and output gating for premature recommendations
++4e926d83717f4b5593b3ab4c73d40bd9d8f6bf10,505,2025-11-01T01:17:30+05:30,15550,0,0,chore: ignore events.jsonl as auto-generated log data
++6f43e4106b8d3ed71077d2334b8d8168c0a8c592,506,2025-11-01T01:28:24+05:30,15554,4,0,"fix(user-scope): hide catalog, proposals, and alerts when no owner_id to prevent cross-tenant sample data exposure for new sessions"
++0eb04d17cbee04627ebacb09e6bcd2392b58d751,507,2025-11-01T01:37:15+05:30,15560,6,0,fix(api): make catalog DI patchable and align prices auth + helper signature to satisfy tests and return 401 for missing token
++c1a3616d65a41a78ca225b9e6d7387063f8044ff,508,2025-11-01T01:38:52+05:30,15560,0,0,chore(scripts): pass owner_id to import_product_catalog and upsert_products in smoke/test utility scripts to match new API
++f89ed373f49f19c576461e3adc15d5ff3bf8662a,509,2025-11-01T01:39:02+05:30,15565,5,0,feat(dc-mcp): require owner_id on import_product_catalog; feat(sdk): pass owner_id through MCP and local tools; fix(tool-reg): enforce owner_id for upsert_product; chore(smoke): adjust seed script call
++83838f240710016a4e2d550504f5fd2353c4483f,510,2025-11-01T01:59:19+05:30,15565,0,0,chore(git): ignore data/market.db; stop tracking test DB explicitly
++c853d1dfca344ad44835757713d92b3431d73e6b,511,2025-11-01T02:22:26+05:30,15565,0,0,fix(frontend): encode token when fetching catalog products to avoid owner scoping mismatch with encoded upload token
++50fbae4108cff6835bb20e54a21ec8f0a4695b4b,512,2025-11-01T02:46:45+05:30,15569,4,0,fix(data): unify DataRepo DB path with user tools by resolving relative paths against repo root; default to absolute app/data.db
++f22841596174d2b0cf44ac408e0018d0df15b13b,513,2025-11-01T02:50:49+05:30,15576,7,0,chore(debug): log owner_id reads in agent context to trace propagation into tools
++2a1240ed0966c5dae4e5cc5716303109563d86c6,514,2025-11-01T02:56:58+05:30,15588,12,0,fix(executor): copy contextvars when running async tools in new thread to preserve owner_id context
++6b0d6ffdaf8b065b62c42731cfe7eb9d3fbf6c0e,515,2025-11-01T03:21:32+05:30,15577,0,11,Fix: Ensure owner_id is passed to UserInteractionAgent
++db5cc401cfb8fe8362077f60df108006c0131724,516,2025-11-01T04:23:07+05:30,15570,0,7,test: ensure pytest imports project root by adding root conftest with sys.path insert
++cbb805f44367c6fcc40a68c4a71028624e488736,517,2025-11-01T04:26:54+05:30,15570,0,0,frontend: URL-encode token for incidents list/ack/resolve to prevent query parsing issues
++cae716191884483ad50a9d7f22c39e3684f88453,518,2025-11-01T06:43:35+05:30,15570,0,0,frontend: harden SSE parsing (normalize CRLF; accept thread_renamed with thread_id or id)
++f1d1b86164b860861518eb002cb458ef4476ff51,519,2025-11-01T06:53:38+05:30,15570,0,0,frontend: add SSE inactivity watchdog to auto-stop spinner and toast on stall
++67e30f6a32933eef2e0d813323c72dcf2eb19db5,520,2025-11-01T07:12:36+05:30,15597,27,0,core: require owner_id to list inventory; return upload guidance when empty. backend: plumb owner_id into UserInteractionAgent in streaming and log context set. tests: add inventory tool tests for empty states
++61c1c682bda66c9aac3d0b7c6574882b5e0e7560,521,2025-11-01T07:24:43+05:30,15597,0,0,test(backend): add inventory guidance tests; fix token on gated thread creation
++0c5a9db8832c1e581336889179257f38a8c56353,522,2025-11-01T07:40:59+05:30,15597,0,0,test(backend): add catalog→chat streaming integration verifying uploaded SKUs via SSE
++c9e0c3515a8c10082be1dc6beae99f3d3ae83146,523,2025-11-01T07:58:00+05:30,15602,5,0,fix(user-tools): honor DATA_DB for app DB path; add debug log for resolved db_path in inventory listing
++0f50ee600217e30834b5172268c28405985bceca,524,2025-11-01T08:06:31+05:30,15616,14,0,feat(config): add resolve_app_db/resolve_market_db helpers; honor DATA_DB and centralize default paths
++19ae0129878dae2be8d0e5756dee53cddb699683,525,2025-11-01T08:08:29+05:30,15621,5,0,"refactor(db-paths): use resolve_app_db/resolve_market_db in price optimizer, supervisor, and backend debug router"
++a5b36cd9c2001207a1d7f2354e30b5d45cb545fd,526,2025-11-01T08:17:51+05:30,15622,1,0,fix(supervisor): import PriceProposal and correct helper indentation to resolve IndentationError
++380a875a883a41f33ad61e6c29a431e394ee58e6,527,2025-11-01T08:19:24+05:30,15640,18,0,"fix(streaming): accept token from query, Authorization bearer header, or fp_session cookie; set owner_id for chat and SSE"
++d1ff84b005beafa6c792fe6b31bdfdf056f2f40c,528,2025-11-01T08:23:04+05:30,15640,0,0,"fix(streaming): reorder request/token params to satisfy FastAPI and fix SyntaxError; keep token extraction flexible across query, header, cookie"
++0e6ffc95443e44047ef457065702f9a041888bea,529,2025-11-01T08:57:08+05:30,15640,0,0,"frontend: add aria-labels and data-testids to Catalog modal and upload controls for reliable e2e/unit testing (file input, dropzone, buttons)"
++96bd85de45dd6a6554f6943562e635e19c8c8ec4,530,2025-11-01T09:05:25+05:30,15640,0,0,frontend: move catalog dropzone test attributes to dropzone container for reliable selection
++ffd14f88dc68a2b46b129732d48502ff094fbc1e,531,2025-11-01T09:34:34+05:30,15638,0,2,Fix owner_id context propagation by using global variable instead of contextvar
++ac04d110d61ef39d7c6a4f2ae1fab0c0c0fb60af,532,2025-11-01T09:49:52+05:30,15652,14,0,Enable autonomous DataCollectorAgent on app startup
++59b3c8beef978c111b28c501c10b9ecc9c750c51,533,2025-11-01T10:02:01+05:30,15666,14,0,Fix DataCollectorAgent indentation and add Amazon product URLs for data collection
++347bd9fb62d20d44ad826063494fa5d902b25dd4,534,2025-11-01T10:12:26+05:30,15668,2,0,backend: wire up reactive DataCollector subscriber on startup so MARKET_FETCH_REQUEST events create jobs and ticks; data_repo: include source_url column in product_catalog to match existing DB; add small tools sanity script
++871d2d2f0e7020f53b697b40335ae96331c03471,535,2025-11-01T10:21:13+05:30,15685,17,0,data_collector: handle mock connector in MARKET_FETCH_REQUEST; scripts: extend tools sanity to publish mock request and verify jobs/ticks
++b97f5ec54d5aa3630b8279b93b675bda2501deae,536,2025-11-01T10:43:55+05:30,15714,29,0,backend: add /api/collector/start to publish MARKET_FETCH_REQUEST via in-process bus
++0206e041eef917a498bcc1a996b571217ca2b0d6,537,2025-11-01T10:45:02+05:30,15714,0,0,test(backend): add tests for /api/collector/start auth and success/error paths
++2858c1bc78c1242b70392f1f09328ff066b79e4d,538,2025-11-01T11:09:21+05:30,15717,3,0,fix(backend): persist DataCollector instance in app.state to maintain event bus subscription and add debug logging
++d90c6696d6808adaf87398977a5b1af02403067b,539,2025-11-01T11:24:37+05:30,15717,0,0,chore(scripts): add kill.bat to force-terminate user-owned processes with admin elevation
++f8e4c1f01990841acdc05ec8fcc5488d2894c01c,540,2025-11-01T11:25:47+05:30,15717,0,0,feat(scripts): kill.bat defaults to killing current user processes; add `all` mode for maximum force (admin)
++9a7232a4326f9220a2a2863bd4b53f1713eb65ee,541,2025-11-01T11:29:12+05:30,15717,0,0,"chore(scripts): add powerful kill.bat with admin elevation, dev-process and port-based termination"
++74fea57c3842a53083bf1c204b4090adfdff2978,542,2025-11-01T11:37:41+05:30,15718,1,0,fix(backend): init DataRepo in lifespan so ingestion tables exist before DataCollector subscribes and runs
++4464f0b9cb678f70fe94a0e511f1640a867ba422,543,2025-11-01T11:41:25+05:30,15757,39,0,"feat(api): add /api/collector verification endpoints (active, recent, freshness, products, stale) for E2E visibility"
++311ec519e6a565126a6f0a5bf2b2899865b09f47,544,2025-11-01T12:48:49+05:30,15800,43,0,Fix markdown rendering: treat short plaintext blocks as inline code
++056e2b2d220a42c9ace2e43c4874a234509dc166,545,2025-11-01T12:53:22+05:30,15800,0,0,Prevent inline code from breaking across lines
++c94769ccf36c0ff35e3ebf550fdc946feccfdc3a,546,2025-11-06T00:36:24+05:30,15800,0,0,"docs: add comprehensive architecture documentation with diagrams, quick references, and onboarding guide"
++3f547c2d4ba619b81d5d2e2303602c73bd144cc2,547,2025-11-06T00:37:15+05:30,15897,97,0,fix: improve UTF-8 streaming in test_chat_streaming.py and add catalog analysis script
++574269e7151f6f9d347d6b065b078b4fc05027c9,548,2025-11-06T00:40:38+05:30,16607,710,0,"feat: implement comprehensive Responsible AI framework with fairness, bias detection, explainability, and privacy auditing"
++86868b06d447fc672b65b98e4a8ed337d798c525,549,2025-11-06T01:21:11+05:30,16607,0,0,docs: add explicit instruction for agents to explain actions before execution
++64815e480dbb6e0211c2fe63b9ac1d0526698def,550,2025-11-07T00:12:20+05:30,17170,563,0,feat(core): add comprehensive self-healing system for automatic issue detection and repair
++1f844ea7031f2178f2f0433d184f166b614f8a73,551,2025-11-07T00:12:39+05:30,17170,0,0,chore: remove unused LangChain dependencies from requirements
++2d7cc0952312183c22a3e70eac3280c86a0ebb2f,552,2025-11-07T00:12:55+05:30,17177,7,0,test: fix pytest discovery and test module imports
++103f62172084cb83eb7c5814d36b53a8da29d215,553,2025-11-07T00:13:23+05:30,17177,0,0,fix: resolve frontend TypeScript build errors by excluding tests and typing API responses
++7f33b6ce383d5c80fa3e18b750ce41d2d9ac08e0,554,2025-11-07T00:14:30+05:30,17796,619,0,fix: resolve owner_id database schema type mismatch and enhance autonomous pricing workflow
++e802a74623de32af49ca5656a989d44de078215d,555,2025-11-07T00:47:24+05:30,17796,0,0,docs: add investigation report on node_modules pollution (commit d75b55c4)
++1765e9ec932c85bafa26e49e27f04a30e6f1803f,556,2025-11-07T00:57:03+05:30,17790,0,6,"Revert ""main copy"""
++e4a6dddbae6da65226d54f24ee4a556395fa6880,557,2025-11-07T00:59:29+05:30,17790,0,0,docs: update investigation report with remote repository repair details
++f801a8d28a7d7f14996c1e212cdbd1ee1c1bdbb2,558,2025-11-07T14:29:06+05:30,18155,365,0,"chore: integrate LangChain client, add pydantic settings, and update migration documentation"
++4a0091379b41004688dc0bd026e8d01fa58c4d1e,559,2025-11-12T22:46:17+05:30,18235,80,0,chore(settings): migrate env/config to pydantic settings and fix LLM/config regressions
++3d345bacc7957bedf10257b7ad4b782ed665f594,560,2025-11-13T13:51:17+05:30,18243,8,0,refactor(config): consolidate DATA_DB resolution to use resolve_app_db helper
++510f4b9b58d71cde9338534e5f2a0fa4320f7921,561,2025-11-18T09:56:24+05:30,18596,353,0,chore(analytics): add LOC evolution script
++34dbfae67a6536ca02b4d5f296559cfa22d94f96,562,2025-11-18T10:02:37+05:30,18597,1,0,chore(analytics): harden LOC evolution script
++aad5a525de0be89921e75bbfd7322a0b6a7f37b7,563,2025-11-18T10:16:50+05:30,18600,3,0,chore(analytics): handle missing cloc invocation
++5e7fdcb9dc9f0b4491b0bb6f00e1a7c291132290,564,2025-11-18T10:49:20+05:30,18600,0,0,chore(analytics): add initial LOC evolution reports
+diff --git a/loc_reports/loc_summary.txt b/loc_reports/loc_summary.txt
+index 50034ce4..fea82238 100644
+--- a/loc_reports/loc_summary.txt
++++ b/loc_reports/loc_summary.txt
+@@ -1,4 +1,4 @@
+ Started at 0 LOC
+-Ended at 0 LOC
+-Peak LOC: 0
++Ended at 18600 LOC
++Peak LOC: 18600
+ Change: 0.0%
+\ No newline at end of file

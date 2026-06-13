@@ -1,0 +1,12 @@
+diff --git a/.env.example b/.env.example
+index 41b1bf0b..fa9e9ee5 100644
+--- a/.env.example
++++ b/.env.example
+@@ -13,4 +13,4 @@ OPENROUTER_MODEL=z-ai/glm-4.5-air:free
+ # OPENAI_MODEL=gpt-4o-mini
+ 
+ # Debug logging for LLM client (0/1)
+-DEBUG_LLM=0
+\ No newline at end of file
++DEBUG_LLM=1
+\ No newline at end of file
