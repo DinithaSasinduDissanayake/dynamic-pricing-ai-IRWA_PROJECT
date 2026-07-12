@@ -23,7 +23,6 @@ except Exception:  # minimal fallback shim
 
 from .repo import DataRepo
 from .collector import DataCollector
-from .connectors.mock import mock_ticks
 from ..agent_sdk.health_tools import ping, version, health
 from ..agent_sdk.auth import verify_capability, AuthError, get_auth_metrics
 
@@ -31,7 +30,7 @@ from ..agent_sdk.auth import verify_capability, AuthError, get_auth_metrics
 class StartCollectionRequest(BaseModel):
     sku: str = Field(..., min_length=1)
     market: str = Field("DEFAULT", min_length=1)
-    connector: str = Field("mock", pattern=r"^(mock|web_scraper|api)$")
+    connector: str = Field("web_scraper", pattern=r"^(web_scraper|api)$")
     depth: int = Field(1, ge=1, le=100)
 
 class FetchMarketFeaturesRequest(BaseModel):
@@ -155,13 +154,7 @@ async def _run_job(job_id: str, sku: str, market: str, connector: str, depth: in
     print(f"[mcp_job] start job id={job_id} sku={sku} connector={connector} depth={depth}")
     try:
         await _repo.mark_job_running(job_id)
-        if connector == "mock":
-            await _collector.ingest_stream(
-                mock_ticks(sku=sku, market=market, n=max(1, int(depth))),
-                delay_s=0.15,
-            )
-        else:
-            raise ValueError(f"unsupported_connector: {connector}")
+        raise ValueError(f"unsupported_connector: {connector}")
         await _repo.mark_job_done(job_id)
         print(f"[mcp_job] done job id={job_id}")
     except Exception as e:
@@ -196,11 +189,11 @@ async def start_collection(
         await _repo.init()
 
         # Validate connector support
-        if request.connector not in ["mock"]:  # Extend as more connectors are added
+        if request.connector not in []:  # No connectors currently wired up in this server
             return {
-                "ok": False, 
-                "error": "unsupported_connector", 
-                "supported_connectors": ["mock"]
+                "ok": False,
+                "error": "unsupported_connector",
+                "supported_connectors": []
             }
 
         job_id = await _repo.create_job(request.sku, request.market, request.connector, request.depth)
@@ -260,14 +253,7 @@ async def list_sources(capability_token: str = "") -> dict:
         # In production, this would check actual connector health
         sources = [
             {
-                "name": "mock",
-                "type": "mock", 
-                "status": "active",
-                "description": "Mock data generator for testing",
-                "last_check": datetime.now(timezone.utc).isoformat()
-            },
-            {
-                "name": "web_scraper", 
+                "name": "web_scraper",
                 "type": "web_scraper",
                 "status": "inactive",
                 "description": "Web scraping data connector",
