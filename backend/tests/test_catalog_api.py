@@ -59,7 +59,7 @@ def test_upload_catalog_csv_success(monkeypatch):
     csv_content = "sku,title,currency,current_price,cost,stock\nLAPTOP001,Test Laptop,USD,1200,800,10"
     files = {"file": ("test.csv", create_csv_file(csv_content), "text/csv")}
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.upsert_products.return_value = 1
         MockRepo.return_value = mock_instance
@@ -92,7 +92,7 @@ def test_upload_catalog_json_success(monkeypatch):
     }])
     files = {"file": ("test.json", io.BytesIO(json_content.encode('utf-8')), "application/json")}
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.upsert_products.return_value = 1
         MockRepo.return_value = mock_instance
@@ -198,7 +198,7 @@ def test_get_products_success(monkeypatch):
         {"sku": "LAPTOP002", "title": "Laptop 2", "current_price": 1500}
     ]
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.get_products_by_owner.return_value = mock_products
         MockRepo.return_value = mock_instance
@@ -223,7 +223,7 @@ def test_get_product_by_sku_success(monkeypatch):
     
     mock_product = {"sku": "LAPTOP001", "title": "Laptop 1", "current_price": 1200}
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.get_product_by_sku_and_owner.return_value = mock_product
         MockRepo.return_value = mock_instance
@@ -245,7 +245,7 @@ def test_get_product_not_found(monkeypatch):
     assert r.status_code == 200
     token = r.json()["token"]
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.get_product_by_sku_and_owner.return_value = None
         MockRepo.return_value = mock_instance
@@ -265,7 +265,7 @@ def test_delete_product_success(monkeypatch):
     assert r.status_code == 200
     token = r.json()["token"]
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.delete_product_by_owner.return_value = 1
         MockRepo.return_value = mock_instance
@@ -287,7 +287,7 @@ def test_delete_product_not_found(monkeypatch):
     assert r.status_code == 200
     token = r.json()["token"]
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.delete_product_by_owner.return_value = 0
         MockRepo.return_value = mock_instance
@@ -330,7 +330,7 @@ LAPTOP002,Laptop 2,USD,1500,900,5
 LAPTOP003,Laptop 3,USD,1800,1000,3"""
     files = {"file": ("test.csv", create_csv_file(csv_content), "text/csv")}
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.upsert_products.return_value = 3
         MockRepo.return_value = mock_instance
@@ -352,7 +352,7 @@ def test_get_products_empty_catalog(monkeypatch):
     assert r.status_code == 200
     token = r.json()["token"]
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.get_products_by_owner.return_value = []
         MockRepo.return_value = mock_instance
@@ -377,7 +377,7 @@ def test_upload_catalog_database_error(monkeypatch):
     csv_content = "sku,title,currency,current_price,cost,stock\nLAPTOP001,Test Laptop,USD,1200,800,10"
     files = {"file": ("test.csv", create_csv_file(csv_content), "text/csv")}
     
-    with patch("backend.routers.catalog.DataRepo") as MockRepo:
+    with patch("backend.deps.DataRepo") as MockRepo:
         mock_instance = AsyncMock()
         mock_instance.upsert_products.side_effect = Exception("Database connection failed")
         MockRepo.return_value = mock_instance
