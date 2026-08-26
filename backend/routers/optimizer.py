@@ -23,7 +23,7 @@ async def run_optimizer(
     owner_id = str(current_user["user_id"])
     set_owner_id(owner_id)
 
-    res = optimize_price(req.sku)
+    res = optimize_price(req.sku, algorithm=req.algorithm)
     if not res.get("ok"):
         return {"ok": False, "sku": req.sku, "error": res.get("error") or res.get("message")}
 

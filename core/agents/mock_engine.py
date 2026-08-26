@@ -21,6 +21,41 @@ def extract_prompt_sku(prompt: str) -> Optional[str]:
     return None
 
 
+def detect_algorithm(messages: List[Dict[str, Any]]) -> str:
+    for m in reversed(messages):
+        if m.get("role") == "user":
+            content = m.get("content") or ""
+            # 1. Explicit "User Request: ... algorithm <algo>"
+            req_match = re.search(r'User Request:\s*.*?\balgorithm\s+([a-zA-Z0-9_-]+)', content, re.IGNORECASE)
+            if req_match:
+                candidate = req_match.group(1).lower().replace("-", "_")
+                if candidate in ("profit_maximization", "profit", "premium"):
+                    return "profit_maximization"
+                if candidate in ("volatility_adjusted", "volatility", "spread"):
+                    return "volatility_adjusted"
+                if candidate in ("rule_based", "rule"):
+                    return "rule_based"
+
+            # 2. "User Request: <text>"
+            user_req_match = re.search(r'User Request:\s*([^\n]+)', content, re.IGNORECASE)
+            if user_req_match:
+                sub_text = user_req_match.group(1).lower()
+                if re.search(r'\b(profit|profit_maximization|maximize|premium)\b', sub_text):
+                    return "profit_maximization"
+                if re.search(r'\b(volatility|volatility_adjusted|spread)\b', sub_text):
+                    return "volatility_adjusted"
+                return "rule_based"
+
+            # 3. Direct chat prompt
+            lower_content = content.lower()
+            if re.search(r'\b(profit|profit_maximization|maximize|premium)\b', lower_content):
+                return "profit_maximization"
+            if re.search(r'\b(volatility|volatility_adjusted|spread)\b', lower_content):
+                return "volatility_adjusted"
+            return "rule_based"
+    return "rule_based"
+
+
 def _call_fn(fn: Callable[..., Any], **kwargs) -> Any:
     try:
         res = fn(**kwargs)
@@ -42,8 +77,8 @@ def _call_fn(fn: Callable[..., Any], **kwargs) -> Any:
                     return ex.submit(_run).result()
             else:
                 return loop.run_until_complete(res)
-        except Exception:
-            return None
+        except Exception as e:
+            raise RuntimeError(f"Async tool call failed: {e}")
     return res
 
 
@@ -60,11 +95,8 @@ class MockLLMEngine:
 
         last_lower = last_user.lower()
         if "select" in last_lower or "algorithm" in last_lower or "tool" in last_lower:
-            if any(w in last_lower for w in ("maximize", "profit", "greedy")):
-                return json.dumps({"tool_name": "profit_maximization", "reason": "Profit maximization requested"})
-            elif any(w in last_lower for w in ("volatility", "spread", "range")):
-                return json.dumps({"tool_name": "volatility_adjusted", "reason": "Volatility adjusted pricing selected"})
-            return json.dumps({"tool_name": "rule_based", "reason": "Deterministic rule-based competitive pricing"})
+            algo = detect_algorithm(messages)
+            return json.dumps({"tool_name": algo, "reason": f"Deterministic selection for {algo}"})
 
         if "title" in last_lower or "summarize" in last_lower:
             sku = extract_prompt_sku(last_user)
@@ -88,49 +120,69 @@ class MockLLMEngine:
                 break
 
         sku = extract_prompt_sku(last_user)
-        target_sku = sku or "PROD-001"
+        target_sku = sku or "LAPTOP-001"
         tools_used: List[str] = []
+        algo = detect_algorithm(messages)
 
         # =========================================================================
         # Case A: PricingOptimizerAgent context (autonomous optimization workflow)
         # =========================================================================
         if "publish_price_proposal" in functions_map or "run_pricing_algorithm" in functions_map:
-            our_price = 100.0
-            cost = 70.0
-            title = target_sku
-            if "get_product_info" in functions_map:
-                pinfo = _call_fn(functions_map["get_product_info"], sku=target_sku)
-                tools_used.append("get_product_info")
-                if isinstance(pinfo, dict) and pinfo.get("product"):
-                    prod = pinfo["product"]
-                    our_price = float(prod.get("current_price") or 100.0)
-                    cost = float(prod.get("cost") or (our_price * 0.7))
-                    title = prod.get("title") or target_sku
+            # 1. Fetch real product info
+            if "get_product_info" not in functions_map:
+                raise RuntimeError("PricingOptimizer workflow missing 'get_product_info' tool")
 
+            pinfo = _call_fn(functions_map["get_product_info"], sku=target_sku)
+            tools_used.append("get_product_info")
+            if not isinstance(pinfo, dict) or not pinfo.get("ok"):
+                err_detail = pinfo.get("error") if isinstance(pinfo, dict) else f"Unknown error ({pinfo})"
+                raise RuntimeError(f"Failed to lookup product info for SKU '{target_sku}': {err_detail}")
+
+            our_price = pinfo.get("current_price")
+            cost = pinfo.get("cost")
+            title = pinfo.get("title") or target_sku
+
+            if our_price is None or cost is None:
+                raise RuntimeError(f"Incomplete catalog data for SKU '{target_sku}': price={our_price}, cost={cost}")
+
+            our_price = float(our_price)
+            cost = float(cost)
+
+            # 2. Gather market intelligence
+            market_records = []
+            competitor_price = None
             if "get_market_intelligence" in functions_map:
-                _call_fn(functions_map["get_market_intelligence"], product_title=title)
+                minfo = _call_fn(functions_map["get_market_intelligence"], product_title=title)
                 tools_used.append("get_market_intelligence")
+                if isinstance(minfo, dict) and minfo.get("ok"):
+                    competitor_price = minfo.get("competitor_price")
+                    market_records = minfo.get("market_records") or []
 
-            proposed_price = round(our_price * 0.96, 2)
-            margin = (proposed_price - cost) / proposed_price if proposed_price > 0 else 0.2
-            if "run_pricing_algorithm" in functions_map:
-                algo_res = _call_fn(
-                    functions_map["run_pricing_algorithm"],
-                    algorithm="rule_based",
-                    sku=target_sku,
-                    our_price=our_price,
-                    competitor_price=round(our_price * 0.98, 2),
-                    cost=cost,
-                    market_records=[],
-                    min_margin=0.12,
-                )
-                tools_used.append("run_pricing_algorithm")
-                if isinstance(algo_res, dict) and "proposed_price" in algo_res:
-                    proposed_price = float(algo_res["proposed_price"])
-                    margin = float(algo_res.get("margin") or margin)
+            # 3. Execute pricing algorithm
+            if "run_pricing_algorithm" not in functions_map:
+                raise RuntimeError("PricingOptimizer workflow missing 'run_pricing_algorithm' tool")
 
+            algo_res = _call_fn(
+                functions_map["run_pricing_algorithm"],
+                algorithm=algo,
+                sku=target_sku,
+                our_price=our_price,
+                competitor_price=competitor_price,
+                cost=cost,
+                market_records=market_records,
+                min_margin=0.12,
+            )
+            tools_used.append("run_pricing_algorithm")
+            if not isinstance(algo_res, dict) or "proposed_price" not in algo_res:
+                raise RuntimeError(f"Pricing algorithm '{algo}' failed for SKU '{target_sku}': {algo_res}")
+
+            proposed_price = float(algo_res["proposed_price"])
+            margin = float(algo_res.get("margin") if algo_res.get("margin") is not None else ((proposed_price - cost) / proposed_price if proposed_price > 0 else 0.0))
+            algorithm_used = algo_res.get("algorithm") or algo
+
+            # 4. Validate price
             if "validate_price" in functions_map:
-                _call_fn(
+                val_res = _call_fn(
                     functions_map["validate_price"],
                     proposed_price=proposed_price,
                     current_price=our_price,
@@ -139,12 +191,15 @@ class MockLLMEngine:
                 )
                 tools_used.append("validate_price")
 
+            # 5. Publish price proposal
             if "publish_price_proposal" in functions_map:
-                _call_fn(
+                pub_res = _call_fn(
                     functions_map["publish_price_proposal"],
                     sku=target_sku,
                     old_price=our_price,
                     new_price=proposed_price,
+                    margin=margin,
+                    algorithm=algorithm_used,
                 )
                 tools_used.append("publish_price_proposal")
 
@@ -152,7 +207,8 @@ class MockLLMEngine:
                 f"### Autonomous Price Optimization for `{target_sku}`\n"
                 f"- **Proposed Price:** ${proposed_price:.2f}\n"
                 f"- **Current Price:** ${our_price:.2f}\n"
-                f"- **Algorithm:** `rule_based`\n"
+                f"- **Cost:** ${cost:.2f}\n"
+                f"- **Algorithm:** `{algorithm_used}`\n"
                 f"- **Margin:** {margin:.1%}\n\n"
                 f"Price proposal published to event bus and logged.",
                 tools_used,
@@ -170,11 +226,12 @@ class MockLLMEngine:
         if is_pricing_intent:
             if "optimize_price" in functions_map:
                 try:
-                    functions_map["optimize_price"](sku=target_sku)
+                    functions_map["optimize_price"](sku=target_sku, algorithm=algo)
                     tools_used.append("optimize_price")
-                except Exception:
-                    pass
+                except Exception as e:
+                    raise RuntimeError(f"optimize_price failed for {target_sku}: {e}")
 
+            # Look up recent proposals
             proposals_list = []
             if "list_price_proposals" in functions_map:
                 try:
@@ -182,21 +239,21 @@ class MockLLMEngine:
                     tools_used.append("list_price_proposals")
                     if isinstance(p_res, dict):
                         proposals_list = p_res.get("items", [])
-                except Exception:
+                except Exception as e:
                     pass
 
             if proposals_list:
                 latest = proposals_list[0]
                 prop_p = float(latest.get("proposed_price") or 0.0)
                 curr_p = float(latest.get("current_price") or 0.0)
-                algo = latest.get("algorithm", "rule_based")
+                algo_name = latest.get("algorithm", algo)
                 p_id = latest.get("id", "prop_1")
                 margin = float(latest.get("margin") or 0.0)
                 return (
                     f"### Price Optimization for SKU `{target_sku}`\n"
                     f"- **Recommended Price:** ${prop_p:.2f}\n"
                     f"- **Current Price:** ${curr_p:.2f}\n"
-                    f"- **Algorithm:** `{algo}`\n"
+                    f"- **Algorithm:** `{algo_name}`\n"
                     f"- **Margin:** {margin:.1%}\n"
                     f"- **Proposal ID:** `{p_id}`\n\n"
                     f"Proposal generated and stored in SQLite database.",

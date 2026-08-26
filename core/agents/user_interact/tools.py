@@ -219,7 +219,7 @@ def list_proposals(sku: str = "", limit: int = 10) -> Dict[str, Any]:
     return list_price_proposals(sku=sku or None, limit=limit)
 
 
-def optimize_price(sku: str) -> Dict[str, Any]:
+def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
     """
     Trigger price optimization workflow for a product.
     
@@ -250,7 +250,8 @@ def optimize_price(sku: str) -> Dict[str, Any]:
         optimization_payload = {
             "sku": sku,
             "product_name": sku,
-            "user_request": f"Optimize price for {sku}",
+            "user_request": f"Optimize price for {sku} using algorithm {algorithm}" if algorithm else f"Optimize price for {sku}",
+            "algorithm": algorithm,
         }
         
         try:

@@ -513,6 +513,8 @@ async def execute_tool_call(tool_name: str, tool_args: dict, tools_instance: Too
             sku=tool_args["sku"],
             old_price=tool_args["old_price"],
             new_price=tool_args["new_price"],
+            margin=tool_args.get("margin", 0.0),
+            algorithm=tool_args.get("algorithm", "rule_based"),
         )
         logger.info(f"publish_price_proposal result: {result}")
         return result

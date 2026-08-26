@@ -241,9 +241,9 @@ Use your tools to complete this workflow autonomously."""
                     "cost": cost, "min_margin": min_margin
                 }, self.tools)
             
-            async def publish_price_proposal_async(sku: str, old_price: float, new_price: float):
+            async def publish_price_proposal_async(sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "rule_based"):
                 return await execute_tool_call("publish_price_proposal", {
-                    "sku": sku, "old_price": old_price, "new_price": new_price
+                    "sku": sku, "old_price": old_price, "new_price": new_price, "margin": margin, "algorithm": algorithm
                 }, self.tools)
             
             async def check_market_data_freshness_async(sku: str):
