@@ -118,7 +118,7 @@ def http_request(
 
     req = urllib.request.Request(url, data=body_bytes, headers=headers, method=method.upper())
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=180) as resp:
             resp_body = resp.read().decode("utf-8")
             if not resp_body.strip():
                 return {"status_code": resp.status, "ok": True}
