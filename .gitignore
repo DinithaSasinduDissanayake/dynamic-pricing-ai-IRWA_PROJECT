@@ -41,13 +41,14 @@ Thumbs.db
 *.sqlite
 *.sqlite3
 *.db
+*.db.old
 app/*.db
 data/*.db
 data/events.jsonl
+events.jsonl
 .env
 .env.*
 *.log
-data/events.jsonl
 auth.db
 app/alert.db
 user_data.json
