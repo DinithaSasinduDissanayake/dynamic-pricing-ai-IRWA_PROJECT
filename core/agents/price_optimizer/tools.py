@@ -343,14 +343,14 @@ def get_llm_tools():
             "type": "function",
             "function": {
                 "name": "run_pricing_algorithm",
-                "description": "Executes a pricing optimization algorithm (rule_based, ml_model, or profit_maximization) with given market context.",
+                "description": "Executes a pricing optimization algorithm (rule_based, volatility_adjusted, or profit_maximization) with given market context.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "algorithm": {
                             "type": "string",
-                            "description": "Algorithm to use: rule_based, ml_model, or profit_maximization",
-                            "enum": ["rule_based", "ml_model", "profit_maximization"]
+                            "description": "Algorithm to use: rule_based, volatility_adjusted, or profit_maximization",
+                            "enum": ["rule_based", "volatility_adjusted", "ml_model", "profit_maximization"]
                         },
                         "sku": {
                             "type": "string",

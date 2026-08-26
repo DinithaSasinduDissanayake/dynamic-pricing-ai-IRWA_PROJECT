@@ -37,12 +37,14 @@ def rule_based(records: List[Tuple[float, str]]) -> Optional[float]:
     return round(competitive_price, 2)
 
 
-def ml_model(records: List[Tuple[float, str]]) -> Optional[float]:
+def volatility_adjusted(records: List[Tuple[float, str]]) -> Optional[float]:
     """
-    Advanced ML-inspired pricing model:
-    - Analyzes price volatility and trends
-    - Considers market positioning based on price range
-    - Applies dynamic adjustment based on competitive density
+    Volatility-adjusted pricing formula:
+    - Calculates average competitor price (avg_price)
+    - Measures price range (max_price - min_price)
+    - Computes volatility = (price_range / avg_price) if avg_price > 0 else 0
+    - Calculates volatility_factor = 1.0 - (volatility * 0.1)
+    - Sets price = round(avg_price * 1.02 * volatility_factor, 2)
     """
     if not records:
         return None
@@ -60,21 +62,25 @@ def ml_model(records: List[Tuple[float, str]]) -> Optional[float]:
     else:
         volatility_factor = 1.0
     
-    ml_price = avg_price * 1.02 * volatility_factor
+    adjusted_price = avg_price * 1.02 * volatility_factor
     
     try:
         from core.agents.agent_sdk.activity_log import should_trace, activity_log
         if should_trace():
             activity_log.log(
                 agent="PriceOptimizer",
-                action="algorithm.ml_model",
+                action="algorithm.volatility_adjusted",
                 status="completed",
-                message=f"Market analysis: avg=${avg_price:.2f}, range=${price_range:.2f}, volatility={volatility:.3f}, ML price: ${ml_price:.2f}",
+                message=f"Market analysis: avg=${avg_price:.2f}, range=${price_range:.2f}, volatility={volatility:.3f}, adjusted price: ${adjusted_price:.2f}",
             )
     except Exception:
         pass
     
-    return round(ml_price, 2)
+    return round(adjusted_price, 2)
+
+
+# Alias for backwards compatibility
+ml_model = volatility_adjusted
 
 
 def profit_maximization(records: List[Tuple[float, str]], fallback_baseline: float = 100.0) -> float:
@@ -127,6 +133,7 @@ def profit_maximization(records: List[Tuple[float, str]], fallback_baseline: flo
 
 ALGORITHMS = {
     "rule_based": rule_based,
-    "ml_model": ml_model,
+    "volatility_adjusted": volatility_adjusted,
+    "ml_model": volatility_adjusted,  # legacy alias
     "profit_maximization": profit_maximization,
 }

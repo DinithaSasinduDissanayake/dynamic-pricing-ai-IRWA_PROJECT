@@ -29,11 +29,11 @@ class LLMBrain:
 					"use_case": "When maintaining market share is priority over profit margins",
 					"arguments": {}
 				})
-			elif name == "ml_model":
+			elif name in ("volatility_adjusted", "ml_model"):
 				tool_descriptions.append({
 					"name": name,
-					"description": "Machine learning model for demand-aware pricing based on historical patterns",
-					"use_case": "When sufficient historical data exists and sophisticated analysis is needed",
+					"description": "Volatility-adjusted pricing model based on competitor price range and spread",
+					"use_case": "When competitor price volatility and range analysis is needed",
 					"arguments": {}
 				})
 			elif name == "profit_maximization":

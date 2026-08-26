@@ -40,8 +40,7 @@ class Config:
         self.auth_log_level = os.getenv("MCP_AUTH_LOG_LEVEL", "INFO").upper()
         
         # Bus Configuration
-        self.bus_backend = os.getenv("BUS_BACKEND", "inproc").lower()  # inproc|redis
-        self.bus_redis_url = os.getenv("BUS_REDIS_URL", "redis://localhost:6379/0")
+        self.bus_backend = os.getenv("BUS_BACKEND", "inproc").lower()  # inproc only
         self.bus_max_queue_size = int(os.getenv("BUS_MAX_QUEUE_SIZE", "1000"))
         self.bus_concurrency_limit = int(os.getenv("BUS_CONCURRENCY_LIMIT", "10"))
         
@@ -70,13 +69,9 @@ class Config:
         elif len(self.auth_secret) < 32:
             errors.append("MCP_AUTH_SECRET must be at least 32 characters for security")
         
-        # Validate bus backend
-        if self.bus_backend not in ("inproc", "redis"):
-            errors.append(f"BUS_BACKEND must be 'inproc' or 'redis', got '{self.bus_backend}'")
-        
-        # Redis URL validation if using Redis backend
-        if self.bus_backend == "redis" and not self.bus_redis_url.startswith("redis://"):
-            errors.append("BUS_REDIS_URL must start with 'redis://' when using Redis backend")
+        # Validate bus backend (inproc only)
+        if self.bus_backend != "inproc":
+            errors.append(f"BUS_BACKEND must be 'inproc' (Redis bus backend is not implemented), got '{self.bus_backend}'")
         
         # Validate numeric ranges
         if not (1 <= self.token_expiry_seconds <= 86400):  # 1 second to 1 day
@@ -163,20 +158,8 @@ def ensure_auth_secret():
             raise ConfigError("MCP_AUTH_SECRET is required in production")
 
 def check_redis_connection() -> bool:
-    """Check if Redis is available (when using Redis backend)."""
-    config = get_config()
-    if config.bus_backend != "redis":
-        return True
-    
-    try:
-        import redis.asyncio as redis
-        # Quick connection test
-        r = redis.from_url(config.bus_redis_url, decode_responses=True)
-        # This would need to be async in real usage
-        return True
-    except Exception as e:
-        logger.warning(f"Redis connection check failed: {e}")
-        return False
+    """Redis bus backend is not implemented."""
+    raise NotImplementedError("Redis bus backend is not implemented; only inproc bus is supported")
 
 if __name__ == "__main__":
     # Configuration validation script

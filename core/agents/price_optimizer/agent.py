@@ -60,7 +60,7 @@ When handling optimization requests, YOU MUST COMPLETE ALL STEPS:
 4. Call get_market_intelligence() to gather competitive context
 5. Analyze the user request and market data to select the appropriate pricing algorithm:
    - rule_based: Conservative pricing based on competitor averages (use when no market data available)
-   - ml_model: Predictive pricing using historical patterns
+   - volatility_adjusted: Volatility-adjusted pricing using price range and spread
    - profit_maximization: Aggressive pricing to maximize margins
 6. Call run_pricing_algorithm() with selected algorithm and gathered data
 7. Call validate_price() to ensure the proposed price meets business constraints
@@ -330,8 +330,8 @@ Use your tools to complete this workflow autonomously."""
             req_l = (user_request or "").lower()
             if any(k in req_l for k in ("maximize", "profit", "greedy")):
                 algorithm = "profit_maximization"
-            elif any(k in req_l for k in ("ml", "predict", "model")):
-                algorithm = "ml_model"
+            elif any(k in req_l for k in ("volatility", "adjusted", "ml", "predict", "model")):
+                algorithm = "volatility_adjusted"
         
         algo_result = await self.tools.run_pricing_algorithm(
             algorithm=algorithm,
@@ -553,14 +553,14 @@ Use your tools to complete this workflow autonomously."""
                 req_l = (user_request or "").lower()
                 if any(k in req_l for k in ("maximize", "profit", "greedy")):
                     algorithm = "profit_maximization"
-                elif any(k in req_l for k in ("ml", "predict", "model")):
-                    algorithm = "ml_model"
+                elif any(k in req_l for k in ("volatility", "adjusted", "ml", "predict", "model")):
+                    algorithm = "volatility_adjusted"
         else:
             req_l = (user_request or "").lower()
             if any(k in req_l for k in ("maximize", "profit", "greedy")):
                 algorithm = "profit_maximization"
-            elif any(k in req_l for k in ("ml", "predict", "model")):
-                algorithm = "ml_model"
+            elif any(k in req_l for k in ("volatility", "adjusted", "ml", "predict", "model")):
+                algorithm = "volatility_adjusted"
 
         market_records: List[Tuple[float, str]] = []
         uri_market = f"file:{self.db.market_db.as_posix()}?mode=ro"
