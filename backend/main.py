@@ -11,7 +11,10 @@ from contextlib import asynccontextmanager
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
-from backend.routers import auth, settings, threads, messages, streaming, prices, catalog, alerts
+from backend.routers import (
+    auth, settings, threads, messages, streaming, prices, catalog, alerts,
+    proposals, optimizer, collector, agents
+)
 
 from core.agents.alert_service import api as alert_api
 from core.agents.price_optimizer.agent import PricingOptimizerAgent
@@ -204,3 +207,7 @@ app.include_router(streaming.router)
 app.include_router(prices.router)
 app.include_router(catalog.router)
 app.include_router(alerts.router)
+app.include_router(proposals.router)
+app.include_router(optimizer.router)
+app.include_router(collector.router)
+app.include_router(agents.router)
