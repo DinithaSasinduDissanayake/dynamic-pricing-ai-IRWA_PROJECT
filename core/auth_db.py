@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 # DB at project root (parent of 'core')
 BASE_DIR = Path(__file__).resolve().parents[1]
 DB_PATH = (BASE_DIR / "data" / "auth.db").resolve()
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 engine = create_engine(f"sqlite:///{DB_PATH}", future=True, echo=False)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, expire_on_commit=False)
