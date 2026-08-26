@@ -149,11 +149,22 @@ class ProviderManager:
             else:
                 working_gemini_key = _load_gemini_working_key()
 
-            try:
-                print("LLM env scan:", {"OPENROUTER": or_key, "OPENAI": oa_key, "GEMINI_KEYS": gemini_keys, "GEMINI_WORKING": working_gemini_key})
-            except Exception:
-                pass
-            self._log.debug("LLM env scan: OPENROUTER=%r OPENAI=%r GEMINI_KEYS=%r GEMINI_WORKING=%r", or_key, oa_key, gemini_keys, working_gemini_key)
+            def _mask(k: Optional[str]) -> str:
+                if not k:
+                    return "unset"
+                return f"set(...{k[-4:]})" if len(k) >= 4 else "set(...)"
+
+            masked_gemini = (
+                [f"{name}:{_mask(key)}" for name, key in gemini_keys]
+                if gemini_keys else "unset"
+            )
+            self._log.debug(
+                "LLM env scan: OPENROUTER=%s OPENAI=%s GEMINI_KEYS=%s GEMINI_WORKING=%s",
+                _mask(or_key),
+                _mask(oa_key),
+                masked_gemini,
+                _mask(working_gemini_key),
+            )
 
             if working_gemini_key and gemini_keys and any(key == working_gemini_key for _, key in gemini_keys):
                 original_order = {item: idx for idx, item in enumerate(gemini_keys)}
