@@ -380,32 +380,6 @@ def request_market_fetch() -> Dict[str, Any]:
     return {"info": "Market fetch request would trigger the market collector"}
 
 
-def execute_sql(database: str, query: str) -> Dict[str, Any]:
-    db_paths = get_db_paths()
-    db_key = database.lower().strip()
-    
-    if db_key not in db_paths:
-        return {"error": f"Unknown database: {database}. Available: {list(db_paths.keys())}"}
-    
-    try:
-        db_path = db_paths[db_key]
-        if not db_path.exists():
-            return {"error": f"Database file not found: {db_path}"}
-        
-        conn = sqlite3.connect(str(db_path))
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute(query)
-        
-        rows = cursor.fetchall()
-        result = [dict(row) for row in rows]
-        conn.close()
-        
-        return {"ok": True, "rows": result, "count": len(result)}
-    except Exception as e:
-        return {"error": str(e)}
-
-
 TOOLS_MAP = {
     "list_inventory_items": list_inventory_items,
     "get_inventory_item": get_inventory_item,
@@ -421,5 +395,4 @@ TOOLS_MAP = {
     "collect_market_data": collect_market_data,
     "scan_for_alerts": scan_for_alerts,
     "request_market_fetch": request_market_fetch,
-    "execute_sql": execute_sql,
 }

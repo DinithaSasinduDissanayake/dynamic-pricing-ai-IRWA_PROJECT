@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Query
 from core.chat_db import (
     create_thread,
     delete_thread,
+    get_thread,
     get_thread_messages,
     list_threads,
     update_thread,
@@ -71,22 +72,44 @@ def api_list_threads(token: Optional[str] = Query(None)):
 
 
 @router.patch("/{thread_id}", response_model=ThreadOut)
-def api_update_thread(thread_id: int, req: UpdateThreadRequest):
-    if req.title is None or (req.title or "").strip() == "":
-        raise HTTPException(status_code=400, detail="Title cannot be empty")
-    t = update_thread(thread_id, title=req.title.strip())
+def api_update_thread(thread_id: int, req: UpdateThreadRequest, token: Optional[str] = Query(None)):
+    t = get_thread(thread_id)
     if not t:
         raise HTTPException(status_code=404, detail="Thread not found")
+    if t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Thread not found")
+    if req.title is None or (req.title or "").strip() == "":
+        raise HTTPException(status_code=400, detail="Title cannot be empty")
+    updated = update_thread(thread_id, title=req.title.strip())
+    if not updated:
+        raise HTTPException(status_code=404, detail="Thread not found")
     return ThreadOut(
-        id=t.id,
-        title=t.title,
-        created_at=t.created_at.isoformat(),
-        updated_at=(t.updated_at or t.created_at).isoformat(),
+        id=updated.id,
+        title=updated.title,
+        created_at=updated.created_at.isoformat(),
+        updated_at=(updated.updated_at or updated.created_at).isoformat(),
     )
 
 
 @router.delete("/{thread_id}")
-def api_delete_thread(thread_id: int):
+def api_delete_thread(thread_id: int, token: Optional[str] = Query(None)):
+    t = get_thread(thread_id)
+    if not t:
+        raise HTTPException(status_code=404, detail="Thread not found")
+    if t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Thread not found")
     ok = delete_thread(thread_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Thread not found")
@@ -94,12 +117,20 @@ def api_delete_thread(thread_id: int):
 
 
 @router.get("/{thread_id}/export", response_model=ThreadExport)
-def api_export_thread(thread_id: int):
+def api_export_thread(thread_id: int, token: Optional[str] = Query(None)):
     try:
         with SessionLocal() as db:
             t = db.get(ChatThread, thread_id)
             if not t:
                 raise HTTPException(status_code=404, detail="Thread not found")
+            if t.owner_id is not None:
+                owner_id = None
+                if token:
+                    sess = validate_session_token(token)
+                    if sess:
+                        owner_id = sess["user_id"]
+                if owner_id != t.owner_id:
+                    raise HTTPException(status_code=404, detail="Thread not found")
     except HTTPException:
         raise
     except Exception as e:
@@ -205,7 +236,16 @@ def api_import_thread(req: ThreadImportRequest):
 
 
 @router.get("/{thread_id}/summaries")
-def api_list_summaries(thread_id: int):
+def api_list_summaries(thread_id: int, token: Optional[str] = Query(None)):
+    t = get_thread(thread_id)
+    if t and t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Thread not found")
     rows: List[Dict[str, Any]] = []
     try:
         with SessionLocal() as db:

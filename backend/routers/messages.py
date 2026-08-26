@@ -1,7 +1,8 @@
-from typing import Any, Dict, List
-from fastapi import APIRouter, HTTPException
+from typing import Any, Dict, List, Optional
+from fastapi import APIRouter, HTTPException, Query
 from core.chat_db import (
     get_message,
+    get_thread,
     delete_message,
     delete_message_cascade,
     update_message,
@@ -12,15 +13,27 @@ from core.payloads import (
     MessageOut,
     DeleteMessageResponse,
 )
+from core.auth_service import validate_session_token
 
 router = APIRouter(prefix="/api", tags=["messages"])
 
 
 @router.patch("/messages/{message_id}", response_model=MessageOut)
-def api_edit_message(message_id: int, req: EditMessageRequest):
+def api_edit_message(message_id: int, req: EditMessageRequest, token: Optional[str] = Query(None)):
     m = get_message(message_id)
     if not m:
         raise HTTPException(status_code=404, detail="Message not found")
+    t = get_thread(m.thread_id)
+    if not t:
+        raise HTTPException(status_code=404, detail="Thread not found")
+    if t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Message not found")
     if m.role != "user":
         raise HTTPException(status_code=400, detail="Only user messages can be edited")
     m = update_message(message_id, content=req.content)
@@ -28,7 +41,21 @@ def api_edit_message(message_id: int, req: EditMessageRequest):
 
 
 @router.delete("/messages/{message_id}", response_model=DeleteMessageResponse)
-def api_delete_message(message_id: int):
+def api_delete_message(message_id: int, token: Optional[str] = Query(None)):
+    m = get_message(message_id)
+    if not m:
+        raise HTTPException(status_code=404, detail="Message not found")
+    t = get_thread(m.thread_id)
+    if not t:
+        raise HTTPException(status_code=404, detail="Thread not found")
+    if t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Message not found")
     ok = delete_message_cascade(message_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Message not found")
@@ -36,7 +63,16 @@ def api_delete_message(message_id: int):
 
 
 @router.get("/threads/{thread_id}/messages", response_model=List[MessageOut])
-def api_get_messages(thread_id: int):
+def api_get_messages(thread_id: int, token: Optional[str] = Query(None)):
+    t = get_thread(thread_id)
+    if t and t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Thread not found")
     import json as _json
     msgs = get_thread_messages(thread_id)
     out: List[MessageOut] = []

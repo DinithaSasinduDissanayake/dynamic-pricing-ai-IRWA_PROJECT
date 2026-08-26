@@ -181,6 +181,14 @@ def list_threads(owner_id: Optional[int] = None) -> list[Thread]:
         return filtered
 
 
+def get_thread(thread_id: int) -> Optional[Thread]:
+    with SessionLocal() as db:
+        t = db.get(Thread, thread_id)
+        if t:
+            db.expunge(t)
+        return t
+
+
 def update_thread(thread_id: int, **fields) -> Optional[Thread]:
     with SessionLocal() as db:
         t = db.get(Thread, thread_id)
