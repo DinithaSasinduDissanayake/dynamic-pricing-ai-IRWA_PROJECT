@@ -75,6 +75,14 @@ class LLMClient:
         self._unavailable_reason: Optional[str] = None
         self.last_usage: Dict[str, Any] = {}
 
+        if os.getenv("MOCK_LLM") == "1":
+            provider_manager = ProviderManager(self._log)
+            provider_manager.load_providers_from_env(None, api_key, base_url, model)
+            self._providers = provider_manager.get_providers()
+            self._unavailable_reason = None
+            self._set_active_provider(0)
+            return
+
         try:
             openai_mod = importlib.import_module("openai")
         except ModuleNotFoundError:
@@ -233,6 +241,22 @@ class LLMClient:
 
         for idx in handler.provider_indices():
             provider = self._providers[idx]
+            if provider.get("name") == "mock":
+                from .mock_engine import MockLLMEngine
+                content, tools_used = MockLLMEngine.handle_chat_with_tools(messages, tools, functions_map, trace_id)
+                self.last_usage = {
+                    "provider": "mock",
+                    "model": provider.get("model", "mock-deterministic-v1"),
+                    "prompt_tokens": len(messages) * 12,
+                    "completion_tokens": len(content.split()),
+                    "total_tokens": len(messages) * 12 + len(content.split()),
+                    "tools_used": tools_used,
+                }
+                words = content.split(" ")
+                for i, w in enumerate(words):
+                    yield {"type": "delta", "text": w + (" " if i < len(words) - 1 else "")}
+                self._set_active_provider(idx)
+                return
             try:
                 local_msgs: List[Dict[str, Any]] = list(messages)
                 for round_i in range(max_rounds):

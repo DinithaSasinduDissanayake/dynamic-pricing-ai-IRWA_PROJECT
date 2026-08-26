@@ -48,6 +48,17 @@ class BaseChatHandler:
         last_error: Optional[Exception] = None
         for idx in self.provider_indices():
             provider = self._providers[idx]
+            if provider.get("name") == "mock":
+                from .mock_engine import MockLLMEngine
+                content = MockLLMEngine.handle_chat(messages)
+                self.last_usage = {
+                    "provider": "mock",
+                    "model": provider.get("model", "mock-deterministic-v1"),
+                    "prompt_tokens": len(messages) * 10,
+                    "completion_tokens": len(content.split()),
+                    "total_tokens": len(messages) * 10 + len(content.split()),
+                }
+                return content, idx
             try:
                 self._log.debug(
                     "Sending %s | provider=%s model=%s msgs=%d max_tokens=%d temp=%.2f",
@@ -115,6 +126,18 @@ class BaseChatHandler:
         last_error: Optional[Exception] = None
         for idx in self.provider_indices():
             provider = self._providers[idx]
+            if provider.get("name") == "mock":
+                from .mock_engine import MockLLMEngine
+                content, tools_used = MockLLMEngine.handle_chat_with_tools(messages, tools, functions_map, trace_id)
+                self.last_usage = {
+                    "provider": "mock",
+                    "model": provider.get("model", "mock-deterministic-v1"),
+                    "prompt_tokens": len(messages) * 12,
+                    "completion_tokens": len(content.split()),
+                    "total_tokens": len(messages) * 12 + len(content.split()),
+                    "tools_used": tools_used,
+                }
+                return content, idx, tools_used
             try:
                 local_msgs: List[Dict[str, Any]] = list(messages)
                 assistant_msg: Dict[str, Any] = {}

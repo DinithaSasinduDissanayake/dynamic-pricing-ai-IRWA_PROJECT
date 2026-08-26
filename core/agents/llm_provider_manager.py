@@ -60,6 +60,19 @@ class ProviderManager:
         provider_model: Optional[str],
         provider_base_url: Optional[str],
     ) -> None:
+        if provider_name == "mock":
+            self._providers.append(
+                {
+                    "name": "mock",
+                    "client": None,
+                    "model": provider_model or "mock-deterministic-v1",
+                    "base_url": "mock://localhost",
+                    "api_key": "mock-key",
+                }
+            )
+            self._log.debug("Registered mock provider for MOCK_LLM mode")
+            return
+
         if not provider_api_key:
             return
         provider_api_key = provider_api_key.strip()
@@ -111,6 +124,10 @@ class ProviderManager:
         explicit_base: Optional[str] = None,
         explicit_model: Optional[str] = None,
     ) -> None:
+        if os.getenv("MOCK_LLM") == "1":
+            self.register_provider(None, "mock", "mock-key", "mock-deterministic-v1", "mock://localhost")
+            return
+
         or_key = (os.getenv("OPENROUTER_API_KEY") or "").strip()
         or_base = explicit_base if (explicit_key and explicit_base) else (os.getenv("OPENROUTER_BASE_URL") or "").strip()
         if not or_base and or_key:
