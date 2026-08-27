@@ -385,7 +385,7 @@ class _LocalPriceOptimizerTools:
             proposed_price=proposed_price, current_price=current_price, cost=cost, min_margin=min_margin
         )
 
-    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown", request_id: Optional[str] = None, rationale: Optional[Any] = None) -> Dict[str, Any]:
+    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: Optional[float] = None, algorithm: Optional[str] = None, request_id: Optional[str] = None, rationale: Optional[Any] = None) -> Dict[str, Any]:
         return await self._impl.publish_price_proposal(sku=sku, old_price=old_price, new_price=new_price, margin=margin, algorithm=algorithm, request_id=request_id, rationale=rationale)
 
     async def check_market_data_freshness(self, sku: str) -> Dict[str, Any]:
@@ -472,7 +472,7 @@ class _MCPPriceOptimizerTools:
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
-    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown", request_id: Optional[str] = None) -> Dict[str, Any]:
+    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: Optional[float] = None, algorithm: Optional[str] = None, request_id: Optional[str] = None, rationale: Optional[Any] = None) -> Dict[str, Any]:
         try:
             # Publishing can be done via event bus locally; attempt to call apply_proposal if MCP exposes it
             res = await self._call("apply_proposal", {"proposal_id": ""})
@@ -482,7 +482,15 @@ class _MCPPriceOptimizerTools:
             from core.agents.agent_sdk.bus_factory import get_bus
             from core.agents.agent_sdk.protocol import Topic
             bus = get_bus()
-            proposal_payload = {"proposal_id": uuid.uuid4().hex, "sku": sku, "previous_price": float(old_price), "proposed_price": float(new_price)}
+            proposal_payload = {
+                "proposal_id": uuid.uuid4().hex,
+                "sku": sku,
+                "previous_price": float(old_price),
+                "proposed_price": float(new_price),
+                "margin": margin,
+                "algorithm": algorithm,
+                "rationale": rationale,
+            }
             if request_id:
                 proposal_payload["request_id"] = request_id
             await bus.publish(Topic.PRICE_PROPOSAL.value, proposal_payload)

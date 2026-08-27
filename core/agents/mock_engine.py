@@ -228,6 +228,37 @@ class MockLLMEngine:
         # Case B: UserInteractionAgent context (chat turn)
         # =========================================================================
         last_lower = last_user.lower()
+
+        # Check for portfolio urgency intent
+        is_urgency_intent = any(w in last_lower for w in ("urgent", "urgently", "portfolio", "priority", "attention", "which product", "which of my products"))
+        if is_urgency_intent and "get_portfolio_urgency" in functions_map:
+            urg_res = _call_fn(functions_map["get_portfolio_urgency"])
+            tools_used.append("get_portfolio_urgency")
+            if not isinstance(urg_res, dict) or not urg_res.get("ok"):
+                err_detail = urg_res.get("error") if isinstance(urg_res, dict) else f"Unknown error ({urg_res})"
+                raise RuntimeError(f"get_portfolio_urgency failed: {err_detail}")
+
+            items = urg_res.get("ranked_urgency", [])
+            total = urg_res.get("total_products", len(items))
+            
+            lines = [
+                f"### 🎯 Portfolio Pricing Urgency Analysis",
+                f"Evaluated **{total} products** across current margin, competitor price gaps, data staleness, and open alerts.\n",
+                f"| Rank | SKU | Price | Cost | Margin | Comp Avg | Gap | Urgency | Reason |",
+                f"|---|---|---|---|---|---|---|---|---|",
+            ]
+            for idx, it in enumerate(items[:5], 1):
+                c_avg = f"${it['avg_competitor_price']:.2f}" if it.get("avg_competitor_price") is not None else "N/A"
+                gap = f"{it['competitor_gap_pct']:+g}%" if it.get("competitor_gap_pct") is not None else "N/A"
+                badge = f"🔴 {it['urgency_level']}" if it["urgency_level"] == "HIGH" else (f"🟡 {it['urgency_level']}" if it["urgency_level"] == "MEDIUM" else f"🟢 {it['urgency_level']}")
+                lines.append(f"| {idx} | `{it['sku']}` | ${it['current_price']:.2f} | ${it['cost']:.2f} | {it['margin_pct']:.1f}% | {c_avg} | {gap} | {badge} | {it['reason']} |")
+
+            if items:
+                top = items[0]
+                lines.append(f"\n> 💡 **Recommendation:** SKU `{top['sku']}` requires the most urgent review ({top['reason']}). Run `optimize_price(sku='{top['sku']}')` to adjust its price.")
+
+            return ("\n".join(lines), tools_used)
+
         is_pricing_intent = (
             sku is not None
             or any(w in last_lower for w in ("price", "pricing", "optimize", "proposal", "cost", "catalog", "margin"))

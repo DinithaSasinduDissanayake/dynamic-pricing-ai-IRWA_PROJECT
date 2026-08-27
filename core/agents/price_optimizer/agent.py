@@ -250,9 +250,37 @@ Use your tools to complete this workflow autonomously."""
                 sku = kwargs.get("sku")
                 old_price = kwargs.get("old_price")
                 new_price = kwargs.get("new_price")
-                margin = kwargs.get("margin", 0.0)
-                algorithm = kwargs.get("algorithm", "rule_based")
+                margin = kwargs.get("margin")
+                algorithm = kwargs.get("algorithm")
                 rationale = kwargs.get("rationale")
+                # If algorithm is missing, empty, or default "rule_based" while rationale specifies a different algorithm, prefer rationale
+                if isinstance(rationale, dict):
+                    if not algorithm or algorithm in ("rule_based", "unknown"):
+                        rat_algo = rationale.get("algorithm")
+                        if rat_algo:
+                            algorithm = rat_algo
+                    if margin is None or margin == 0.0:
+                        rat_margin_pct = rationale.get("achieved_margin_pct")
+                        if rat_margin_pct is not None:
+                            margin = float(rat_margin_pct) / 100.0
+                elif isinstance(rationale, str):
+                    try:
+                        import json
+                        rat_parsed = json.loads(rationale)
+                        if isinstance(rat_parsed, dict):
+                            if not algorithm or algorithm in ("rule_based", "unknown"):
+                                rat_algo = rat_parsed.get("algorithm")
+                                if rat_algo:
+                                    algorithm = rat_algo
+                            if margin is None or margin == 0.0:
+                                rat_margin_pct = rat_parsed.get("achieved_margin_pct")
+                                if rat_margin_pct is not None:
+                                    margin = float(rat_margin_pct) / 100.0
+                    except Exception:
+                        pass
+                
+                algorithm = algorithm or "rule_based"
+                margin = margin if margin is not None else 0.0
                 target_req_id = kwargs.get("request_id") or kwargs.get("req_id") or request_id
                 return await execute_tool_call("publish_price_proposal", {
                     "sku": sku, "old_price": old_price, "new_price": new_price, "margin": margin, "algorithm": algorithm, "request_id": target_req_id, "rationale": rationale

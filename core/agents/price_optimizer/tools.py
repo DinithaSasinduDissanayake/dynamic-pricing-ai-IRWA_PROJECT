@@ -160,14 +160,43 @@ class Tools:
         sku: str,
         old_price: float,
         new_price: float,
-        margin: float = 0.0,
-        algorithm: str = "unknown",
+        margin: Optional[float] = None,
+        algorithm: Optional[str] = None,
         request_id: Optional[str] = None,
         rationale: Optional[Any] = None,
     ) -> Dict[str, Any]:
         try:
             from core.agents.agent_sdk.bus_factory import get_bus
             from core.agents.agent_sdk.protocol import Topic
+
+            # Normalize and extract algorithm & margin from rationale if not explicitly set
+            if isinstance(rationale, dict):
+                if not algorithm or algorithm in ("rule_based", "unknown"):
+                    rat_algo = rationale.get("algorithm")
+                    if rat_algo:
+                        algorithm = rat_algo
+                if margin is None or margin == 0.0:
+                    rat_margin_pct = rationale.get("achieved_margin_pct")
+                    if rat_margin_pct is not None:
+                        margin = float(rat_margin_pct) / 100.0
+            elif isinstance(rationale, str):
+                try:
+                    import json
+                    rat_parsed = json.loads(rationale)
+                    if isinstance(rat_parsed, dict):
+                        if not algorithm or algorithm in ("rule_based", "unknown"):
+                            rat_algo = rat_parsed.get("algorithm")
+                            if rat_algo:
+                                algorithm = rat_algo
+                        if margin is None or margin == 0.0:
+                            rat_margin_pct = rat_parsed.get("achieved_margin_pct")
+                            if rat_margin_pct is not None:
+                                margin = float(rat_margin_pct) / 100.0
+                except Exception:
+                    pass
+
+            algorithm = algorithm or "unknown"
+            margin = margin if margin is not None else 0.0
 
             bus = get_bus()
             proposal_payload = {
@@ -529,8 +558,8 @@ async def execute_tool_call(tool_name: str, tool_args: Dict[str, Any], tools_ins
             sku=tool_args["sku"],
             old_price=tool_args["old_price"],
             new_price=tool_args["new_price"],
-            margin=tool_args.get("margin", 0.0),
-            algorithm=tool_args.get("algorithm", "rule_based"),
+            margin=tool_args.get("margin"),
+            algorithm=tool_args.get("algorithm"),
             request_id=tool_args.get("request_id"),
             rationale=tool_args.get("rationale"),
         )

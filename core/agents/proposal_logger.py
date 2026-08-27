@@ -95,14 +95,39 @@ class ProposalLogger:
             sku = proposal.get("sku") or proposal.get("product_id")
             proposed_price = proposal.get("proposed_price") or proposal.get("new_price")
             current_price = proposal.get("current_price") or proposal.get("previous_price") or proposal.get("old_price")
-            margin = proposal.get("margin", 0.0)
-            algorithm = proposal.get("algorithm", "unknown")
+            margin = proposal.get("margin")
+            algorithm = proposal.get("algorithm")
             rationale = proposal.get("rationale")
             rationale_str = None
             if isinstance(rationale, (dict, list)):
                 rationale_str = json.dumps(rationale)
+                if isinstance(rationale, dict):
+                    if not algorithm or algorithm in ("rule_based", "unknown"):
+                        rat_algo = rationale.get("algorithm")
+                        if rat_algo:
+                            algorithm = rat_algo
+                    if margin is None or margin == 0.0:
+                        rat_margin_pct = rationale.get("achieved_margin_pct")
+                        if rat_margin_pct is not None:
+                            margin = float(rat_margin_pct) / 100.0
             elif rationale is not None:
                 rationale_str = str(rationale)
+                try:
+                    rat_parsed = json.loads(rationale_str)
+                    if isinstance(rat_parsed, dict):
+                        if not algorithm or algorithm in ("rule_based", "unknown"):
+                            rat_algo = rat_parsed.get("algorithm")
+                            if rat_algo:
+                                algorithm = rat_algo
+                        if margin is None or margin == 0.0:
+                            rat_margin_pct = rat_parsed.get("achieved_margin_pct")
+                            if rat_margin_pct is not None:
+                                margin = float(rat_margin_pct) / 100.0
+                except Exception:
+                    pass
+
+            algorithm = algorithm or "unknown"
+            margin = float(margin) if margin is not None else 0.0
             ts = datetime.now(timezone.utc).isoformat()
             
             # Validate required fields
