@@ -5,7 +5,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "list_inventory_items",
-            "description": "List items from the local product catalog (app/data.db). Use for inventory overviews.",
+            "description": "List items from the local product catalog (app/data.db:product_catalog). Use for inventory overviews.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -20,7 +20,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "get_inventory_item",
-            "description": "Get a single inventory item by SKU from app/data.db/product_catalog.",
+            "description": "Get a single inventory item by SKU from app/data.db:product_catalog.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -35,7 +35,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "list_pricing_list",
-            "description": "List current market pricing entries from app/data.db/pricing_list.",
+            "description": "List current market pricing entries from app/data.db:pricing_list.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -50,7 +50,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "list_price_proposals",
-            "description": "List recent price proposals from app/data.db/price_proposals.",
+            "description": "List recent price proposals from app/data.db:price_proposals.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -65,7 +65,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "list_market_data",
-            "description": "List products from app/data.db (market research data). Use this to find products by brand or name in market data.",
+            "description": "List products from data/market.db:market_data (market research data). Use this to find products by brand or name in market data.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -85,6 +85,11 @@ TOOL_SCHEMAS = [
                 "type": "object",
                 "properties": {
                     "sku": {"type": "string", "description": "Product SKU to optimize pricing for"},
+                    "algorithm": {
+                        "type": "string",
+                        "enum": ["rule_based", "profit_maximization", "volatility_adjusted"],
+                        "description": "Pricing optimization algorithm to use. Options: 'rule_based' (default), 'profit_maximization' (elasticity-based), 'volatility_adjusted' (market volatility-aware).",
+                    },
                 },
                 "required": ["sku"],
                 "additionalProperties": False,
@@ -95,7 +100,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "check_stale_market_data",
-            "description": "Check for market data entries that are older than a specified threshold. Returns count and details of stale items.",
+            "description": "Check for market data entries in data/market.db:market_data that are older than a specified threshold. Returns count and details of stale items.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -109,7 +114,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "scan_for_alerts",
-            "description": "Scan for and retrieve all pricing alerts and incidents from the incidents table. Returns open, acknowledged, and resolved alerts with severity levels and details.",
+            "description": "Scan for and retrieve all pricing alerts and incidents from app/alert.db:incidents. Returns open, acknowledged, and resolved alerts with severity levels and details.",
             "parameters": {
                 "type": "object",
                 "properties": {},
