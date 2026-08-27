@@ -161,7 +161,7 @@ class UserInteractionAgent:
                             tools=TOOL_SCHEMAS,
                             functions_map=TOOLS_MAP,
                             tool_choice="auto",
-                            max_rounds=(4 if self.mode == "user" else 5),
+                            max_rounds=8,
                             max_tokens=max_tokens_cfg,
                             temperature=temperature,
                         ):
