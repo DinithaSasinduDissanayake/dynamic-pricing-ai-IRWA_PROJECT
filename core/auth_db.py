@@ -10,7 +10,22 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DB_PATH = (BASE_DIR / "data" / "auth.db").resolve()
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-engine = create_engine(f"sqlite:///{DB_PATH}", future=True, echo=False)
+from sqlalchemy import event
+
+engine = create_engine(
+    f"sqlite:///{DB_PATH}",
+    future=True,
+    echo=False,
+    connect_args={"timeout": 30},
+)
+
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL;")
+    cursor.execute("PRAGMA busy_timeout=30000;")
+    cursor.close()
+
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, expire_on_commit=False)
 Base = declarative_base()
 

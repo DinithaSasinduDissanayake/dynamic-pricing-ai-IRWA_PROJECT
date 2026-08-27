@@ -205,7 +205,8 @@ Use your tools to investigate and take action."""
     
     async def _get_owner_id_for_sku(self, sku: str) -> Optional[str]:
         try:
-            async with aiosqlite.connect("app/data.db") as db:
+            async with aiosqlite.connect("app/data.db", timeout=30.0) as db:
+                await db.execute("PRAGMA busy_timeout=30000;")
                 cur = await db.execute(
                     "SELECT owner_id FROM product_catalog WHERE sku=? LIMIT 1",
                     (sku,),

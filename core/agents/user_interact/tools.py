@@ -17,6 +17,13 @@ def get_db_paths():
     }
 
 
+def _connect(db_path: str) -> sqlite3.Connection:
+    conn = sqlite3.connect(db_path, timeout=30.0)
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA busy_timeout=30000;")
+    return conn
+
+
 def _table_exists(conn: sqlite3.Connection, table: str) -> bool:
     try:
         cur = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table,))
@@ -35,7 +42,7 @@ def list_inventory_items(search: Optional[str] = None, limit: int = 50) -> Dict[
     logger.info(f"[DEBUG] list_inventory_items called with owner_id={owner_id}")
     
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "product_catalog"):
                 return {"items": [], "total": 0, "note": "product_catalog missing"}
@@ -88,7 +95,7 @@ def get_inventory_item(sku: str) -> Dict[str, Any]:
     owner_id = get_owner_id()
     
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "product_catalog"):
                 return {"item": None, "note": "product_catalog missing"}
@@ -111,7 +118,7 @@ def list_pricing_list(search: Optional[str] = None, limit: int = 50) -> Dict[str
     db_paths = get_db_paths()
     db_path = str(db_paths["market"])
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "pricing_list"):
                 return {"items": [], "total": 0, "note": "pricing_list missing"}
@@ -149,7 +156,7 @@ def list_price_proposals(sku: Optional[str] = None, limit: int = 50) -> Dict[str
     owner_id = get_owner_id()
     
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "price_proposals"):
                 return {"items": [], "total": 0, "note": "price_proposals missing"}
@@ -190,7 +197,7 @@ def list_market_data(search: Optional[str] = None, limit: int = 50) -> Dict[str,
     db_paths = get_db_paths()
     db_path = str(db_paths["market"])
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "market_data"):
                 return {"items": [], "total": 0, "note": "market_data missing"}
@@ -362,7 +369,7 @@ def check_stale_market_data(threshold_minutes: int = 60) -> Dict[str, Any]:
     db_paths = get_db_paths()
     db_path = str(db_paths["market"])
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "market_data"):
                 return {"stale_items": [], "count": 0, "note": "market_data missing"}
@@ -398,7 +405,7 @@ def scan_for_alerts() -> Dict[str, Any]:
     owner_id = get_owner_id()
     
     try:
-        with sqlite3.connect(db_path) as conn:
+        with _connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
             if not _table_exists(conn, "incidents"):
                 return {"alerts": [], "total": 0, "note": "incidents table missing"}

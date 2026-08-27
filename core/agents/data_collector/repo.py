@@ -25,14 +25,21 @@ class DataRepo:
         self.path = Path(path or db_env)
         self.market_path = Path(market_path or market_env)
 
+    def _connect_app(self):
+        return aiosqlite.connect(self.path.as_posix(), timeout=30.0)
+
+    def _connect_market(self):
+        return aiosqlite.connect(self.market_path.as_posix(), timeout=30.0)
+
     async def init(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.market_path.parent.mkdir(parents=True, exist_ok=True)
         
-        async with aiosqlite.connect(self.market_path.as_posix()) as mdb:
+        async with self._connect_market() as mdb:
             await mdb.executescript(
                 """
                 PRAGMA journal_mode=WAL;
+                PRAGMA busy_timeout=30000;
 
                 CREATE TABLE IF NOT EXISTS market_data (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,10 +56,11 @@ class DataRepo:
             )
             await mdb.commit()
 
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             await db.executescript(
                 """
                 PRAGMA journal_mode=WAL;
+                PRAGMA busy_timeout=30000;
 
                 -- Additive tables for product catalog, jobs, and proposals
                 CREATE TABLE IF NOT EXISTS product_catalog (
@@ -110,7 +118,7 @@ class DataRepo:
 
         sku = d.get("sku")
         if sku and (not product_name or owner_id is None):
-            async with aiosqlite.connect(self.path.as_posix()) as db:
+            async with self._connect_app() as db:
                 db.row_factory = aiosqlite.Row
                 cur = await db.execute(
                     "SELECT title, owner_id FROM product_catalog WHERE sku=? LIMIT 1",
@@ -135,7 +143,7 @@ class DataRepo:
         if not features_str:
             features_str = f"Market observation for {sku or product_name}"
 
-        async with aiosqlite.connect(self.market_path.as_posix()) as mdb:
+        async with self._connect_market() as mdb:
             await mdb.execute(
                 """
                 INSERT INTO market_data (owner_id, product_name, price, features, update_time)
@@ -155,7 +163,7 @@ class DataRepo:
         product_name = sku
         our_price = None
 
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             db.row_factory = aiosqlite.Row
             cur = await db.execute(
                 "SELECT title, current_price FROM product_catalog WHERE sku=? LIMIT 1",
@@ -175,7 +183,7 @@ class DataRepo:
         ORDER BY update_time DESC
         LIMIT 100
         """
-        async with aiosqlite.connect(self.market_path.as_posix()) as mdb:
+        async with self._connect_market() as mdb:
             cur = await mdb.execute(q, (product_name, since_iso))
             rows = await cur.fetchall()
 
@@ -259,7 +267,7 @@ class DataRepo:
             """
         )
 
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             try:
                 await db.executemany(insert_sql, params)
                 await db.commit()
@@ -308,7 +316,7 @@ class DataRepo:
 
     async def get_products_by_owner(self, owner_id: str) -> List[Dict[str, Any]]:
         """Retrieve all products for a specific owner."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             db.row_factory = aiosqlite.Row
             cur = await db.execute(
                 """
@@ -324,7 +332,7 @@ class DataRepo:
 
     async def get_product_by_sku_and_owner(self, sku: str, owner_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve a specific product by SKU and owner_id."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             db.row_factory = aiosqlite.Row
             cur = await db.execute(
                 """
@@ -339,7 +347,7 @@ class DataRepo:
 
     async def delete_product_by_owner(self, sku: str, owner_id: str) -> int:
         """Delete a product for a specific owner. Returns rows affected."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             cursor = await db.execute(
                 """
                 DELETE FROM product_catalog
@@ -352,7 +360,7 @@ class DataRepo:
 
     async def delete_all_products_by_owner(self, owner_id: str) -> int:
         """Delete all products for a specific owner. Returns rows affected."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             cursor = await db.execute(
                 """
                 DELETE FROM product_catalog
@@ -369,7 +377,7 @@ class DataRepo:
         """Create an ingestion job and return its job id (uuid4)."""
         job_id = str(uuid.uuid4())
         now = _utc_now_iso()
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             await db.execute(
                 """
                 INSERT INTO ingestion_jobs
@@ -395,7 +403,7 @@ class DataRepo:
 
     async def mark_job_running(self, job_id: str) -> None:
         """Mark an ingestion job as RUNNING and set started_at timestamp."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             await db.execute(
                 """
                 UPDATE ingestion_jobs
@@ -408,7 +416,7 @@ class DataRepo:
 
     async def mark_job_done(self, job_id: str) -> None:
         """Mark an ingestion job as DONE and set finished_at timestamp."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             await db.execute(
                 """
                 UPDATE ingestion_jobs
@@ -421,7 +429,7 @@ class DataRepo:
 
     async def mark_job_failed(self, job_id: str, error: str) -> None:
         """Mark an ingestion job as FAILED with an error message."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             await db.execute(
                 """
                 UPDATE ingestion_jobs
@@ -434,7 +442,7 @@ class DataRepo:
 
     async def get_job(self, job_id: str) -> Optional[Dict[str, Any]]:
         """Return a job row as a dict, or None if not found."""
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             cur = await db.execute(
                 """
                 SELECT id, sku, market, connector, depth, status, error,
@@ -468,7 +476,7 @@ class DataRepo:
         """
         pid = pp.get("id") or str(uuid.uuid4())
         ts = pp.get("ts") or _utc_now_iso()
-        async with aiosqlite.connect(self.path.as_posix()) as db:
+        async with self._connect_app() as db:
             await db.execute(
                 """
                 INSERT INTO price_proposals

@@ -9,9 +9,14 @@ class Repo:
     def __init__(self, path: str = "app/alert.db") -> None:
         self.path = path
 
+    def _connect(self):
+        return aiosqlite.connect(self.path, timeout=30.0)
+
     async def init(self) -> None:
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             await db.executescript("""
+            PRAGMA journal_mode=WAL;
+            PRAGMA busy_timeout=30000;
             CREATE TABLE IF NOT EXISTS rules (
               id TEXT PRIMARY KEY,
               version INTEGER,
@@ -48,7 +53,7 @@ class Repo:
 
     # ---------- Rules ----------
     async def list_rules(self) -> List[RuleRecord]:
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             cur = await db.execute("SELECT id, version, spec_json FROM rules WHERE enabled=1")
             rows = await cur.fetchall()
             return [
@@ -57,7 +62,7 @@ class Repo:
             ]
 
     async def upsert_rule(self, spec: RuleSpec) -> None:
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             v = 1
             # If RuleSpec is a pydantic/dataclass, adjust serializer as needed
             spec_json = json.dumps((getattr(spec, "model_dump", None) or getattr(spec, "dict", None) or (lambda: spec.__dict__))())
@@ -71,7 +76,7 @@ class Repo:
     # ---------- Incidents ----------
     async def find_or_create_incident(self, alert: Alert) -> Incident:
         """Correlate by fingerprint, update last_seen or create new incident."""
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             cur = await db.execute(
                 "SELECT id, status, first_seen, last_seen, owner_id FROM incidents WHERE fingerprint=?",
                 (alert.fingerprint,),
@@ -97,7 +102,8 @@ class Repo:
                     owner_id=row[4],
                 )
 
-            inc_id = f"inc_{int(alert.ts.timestamp()*1000)}"
+            import uuid as _uuid
+            inc_id = f"inc_{int(alert.ts.timestamp()*1000)}_{_uuid.uuid4().hex[:6]}"
             await db.execute(
                 """
                 INSERT INTO incidents
@@ -126,7 +132,7 @@ class Repo:
         unit = dur[-1]
         n = int(dur[:-1])
         delta = {"m": timedelta(minutes=n), "h": timedelta(hours=n), "s": timedelta(seconds=n)}[unit]
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             cur = await db.execute("SELECT last_seen FROM incidents WHERE fingerprint=?", (fingerprint,))
             row = await cur.fetchone()
             if not row:
@@ -159,7 +165,7 @@ class Repo:
         
         q += " ORDER BY last_seen DESC"
 
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             cur = await db.execute(q, args)
             rows = await cur.fetchall()
             return [
@@ -177,7 +183,7 @@ class Repo:
             ]
 
     async def set_status(self, inc_id: str, status: str, owner_id: Optional[str] = None) -> None:
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             if owner_id:
                 cur = await db.execute("SELECT owner_id FROM incidents WHERE id=?", (inc_id,))
                 row = await cur.fetchone()
@@ -192,7 +198,7 @@ class Repo:
 
     async def touch_incident(self, fingerprint: str) -> None:
         """Update last_seen for a throttled incident by fingerprint."""
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             await db.execute(
                 "UPDATE incidents SET last_seen=? WHERE fingerprint=?",
                 (datetime.now(timezone.utc).isoformat(), fingerprint),
@@ -203,7 +209,7 @@ class Repo:
     # ---------- Deliveries (optional helpers) ----------
     async def record_delivery(self, delivery_id: str, incident_id: str, channel: str,
                               status: str, response_json: Dict[str, Any] | None = None) -> None:
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             await db.execute(
                 "INSERT OR REPLACE INTO deliveries (id, incident_id, channel, ts, status, response_json) "
                 "VALUES (?,?,?,?,?,?)",
@@ -224,13 +230,13 @@ class Repo:
         Returns a dict of channel overrides persisted by the UI, or None if not set.
         This gets merged over secrets/env by merge_defaults_db().
         """
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             cur = await db.execute("SELECT value FROM settings WHERE key='channels'")
             row = await cur.fetchone()
             return json.loads(row[0]) if row else None
 
     async def save_channel_settings(self, cfg: dict) -> None:
-        async with aiosqlite.connect(self.path) as db:
+        async with self._connect() as db:
             val = json.dumps(cfg)
             # upsert by primary key
             await db.execute(

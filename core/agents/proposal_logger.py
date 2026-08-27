@@ -30,6 +30,12 @@ class ProposalLogger:
         
         self.db_path = db_path
         self._callback = None
+
+    def _connect(self) -> sqlite3.Connection:
+        conn = sqlite3.connect(str(self.db_path), timeout=30.0)
+        conn.execute("PRAGMA journal_mode=WAL;")
+        conn.execute("PRAGMA busy_timeout=30000;")
+        return conn
         
     async def start(self) -> None:
         """Start listening for PRICE_PROPOSAL events."""
@@ -47,13 +53,18 @@ class ProposalLogger:
         
     async def stop(self) -> None:
         """Stop listening (cleanup on shutdown)."""
+        if self._callback is not None:
+            try:
+                get_bus().unsubscribe(Topic.PRICE_PROPOSAL.value, self._callback)
+            except Exception:
+                pass
         self._callback = None
         self.logger.info("ProposalLogger stopped")
     
     def _ensure_table_exists(self) -> None:
         """Ensure price_proposals table exists with correct schema."""
         try:
-            with sqlite3.connect(str(self.db_path)) as conn:
+            with self._connect() as conn:
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS price_proposals (
                         id TEXT PRIMARY KEY,
@@ -88,7 +99,7 @@ class ProposalLogger:
                 return
             
             # Insert into database
-            with sqlite3.connect(str(self.db_path)) as conn:
+            with self._connect() as conn:
                 conn.execute("""
                     INSERT INTO price_proposals (id, sku, proposed_price, current_price, margin, algorithm, ts)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
