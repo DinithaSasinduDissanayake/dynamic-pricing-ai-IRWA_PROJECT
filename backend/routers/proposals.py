@@ -1,7 +1,7 @@
 from typing import Optional, List, Any, Dict
 import sqlite3
 from pathlib import Path
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from backend.deps import get_current_user
 
 router = APIRouter(tags=["proposals"])
@@ -69,3 +69,37 @@ async def list_proposals(
             return {"ok": True, "proposals": rows, "total": len(rows)}
     except Exception as e:
         return {"ok": True, "proposals": [], "total": 0, "error": str(e)}
+
+
+@router.post("/api/proposals/{proposal_id}/apply")
+async def apply_proposal(
+    proposal_id: str,
+    confirm: bool = Query(True, description="true = apply the proposal; false = preview only"),
+    current_user: dict = Depends(get_current_user),
+) -> Dict[str, Any]:
+    """Apply (or preview) a price proposal for the authenticated owner.
+
+    Applies with confirm=True by default; pass confirm=false for a dry-run preview.
+    """
+    owner_id = str(current_user["user_id"])
+    from core.agents.user_interact.context import set_owner_id
+    from core.agents.user_interact.tools import apply_price_proposal
+
+    set_owner_id(owner_id)
+    try:
+        res = apply_price_proposal(proposal_id=proposal_id, confirm=confirm)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Apply failed: {str(e)}")
+
+    if res.get("ok"):
+        return {"success": True, **res}
+
+    err = str(res.get("error", "Apply failed"))
+    lowered = err.lower()
+    if "not found" in lowered:
+        raise HTTPException(status_code=404, detail=err)
+    if "already applied" in lowered:
+        raise HTTPException(status_code=409, detail=err)
+    if "margin" in lowered:
+        raise HTTPException(status_code=422, detail=err)
+    raise HTTPException(status_code=400, detail=err)

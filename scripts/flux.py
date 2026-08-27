@@ -436,6 +436,47 @@ def cmd_proposals_show(args):
     return 1
 
 
+def cmd_proposals_apply(args):
+    token = get_token(args)
+    base_url = get_base_url(args)
+    confirm = bool(getattr(args, "yes", False))
+    res = http_request(
+        "POST",
+        f"/api/proposals/{args.id}/apply",
+        token=token,
+        base_url=base_url,
+        params={"confirm": "true" if confirm else "false"},
+    )
+    if res.get("success") or res.get("ok"):
+        if res.get("applied"):
+            print(f"{GREEN}[APPLIED]{RESET} Proposal {res.get('proposal_id')}")
+            print(f"  SKU:        {res.get('sku')}")
+            print(f"  Old Price:  ${float(res.get('old_price') or 0):.2f}")
+            print(f"  New Price:  {YELLOW}${float(res.get('new_price') or 0):.2f}{RESET}")
+            if res.get("margin") is not None:
+                print(f"  Margin:     {float(res.get('margin')):.1%}")
+            print(f"  Applied At: {res.get('applied_at')}")
+            print(f"  History ID: {res.get('history_id')}")
+            return 0
+        # Preview path (no --yes)
+        print(f"{BOLD}Proposal Apply Preview (no change made):{RESET}")
+        print(f"  ID:             {res.get('proposal_id')}")
+        print(f"  SKU:            {res.get('sku')}")
+        print(f"  Current Price:  ${float(res.get('current_price') or 0):.2f}")
+        print(f"  Proposed Price: {YELLOW}${float(res.get('proposed_price') or 0):.2f}{RESET}")
+        if res.get("margin") is not None:
+            print(f"  Margin:         {float(res.get('margin')):.1%}")
+        print(f"  Algorithm:      {res.get('algorithm')}")
+        if res.get("rationale"):
+            print(f"  Rationale:      {res.get('rationale')}")
+        if res.get("warning"):
+            print(f"{YELLOW}[WARN]{RESET} {res.get('warning')}")
+        print(f"\nRe-run with {BOLD}--yes{RESET} to apply this price change.")
+        return 0
+    print(f"{RED}[ERROR]{RESET} Failed to apply proposal: {res.get('error') or res.get('detail')}")
+    return 1
+
+
 def cmd_alerts_incidents(args):
     token = get_token(args)
     base_url = get_base_url(args)
@@ -635,6 +676,10 @@ def main():
     p_pshow = sp_prop.add_parser("show", help="Show details of a specific price proposal")
     p_pshow.add_argument("id", help="Proposal ID or ID prefix")
     p_pshow.set_defaults(func=cmd_proposals_show)
+    p_papply = sp_prop.add_parser("apply", help="Apply a price proposal to the live catalog (preview without --yes)")
+    p_papply.add_argument("id", help="Proposal ID")
+    p_papply.add_argument("--yes", action="store_true", help="Actually apply the change (otherwise preview only)")
+    p_papply.set_defaults(func=cmd_proposals_apply)
 
     # alerts
     p_alt = subparsers.add_parser("alerts", help="Alert incidents and notifications")

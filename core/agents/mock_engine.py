@@ -259,6 +259,18 @@ class MockLLMEngine:
 
             return ("\n".join(lines), tools_used)
 
+        # Apply-proposal intent: "apply proposal <id>" (add confirm/yes/approve to actually apply)
+        apply_match = re.search(r"apply(?:\s+proposal)?\s+`?([A-Za-z0-9_-]{6,})`?", last_user, re.IGNORECASE)
+        if apply_match and "apply_price_proposal" in functions_map:
+            confirm = bool(re.search(r"\b(confirm|confirmed|yes|approve|approved)\b", last_lower))
+            try:
+                apply_res = functions_map["apply_price_proposal"](proposal_id=apply_match.group(1), confirm=confirm)
+                tools_used.append("apply_price_proposal")
+                if isinstance(apply_res, dict):
+                    return (apply_res.get("message") or apply_res.get("error") or str(apply_res), tools_used)
+            except Exception as e:
+                return (f"Failed to apply proposal: {e}", tools_used)
+
         is_pricing_intent = (
             sku is not None
             or any(w in last_lower for w in ("price", "pricing", "optimize", "proposal", "cost", "catalog", "margin"))

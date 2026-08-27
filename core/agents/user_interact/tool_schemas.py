@@ -99,6 +99,29 @@ TOOL_SCHEMAS = [
     {
         "type": "function",
         "function": {
+            "name": "apply_price_proposal",
+            "description": (
+                "Apply an approved price proposal to the live product catalog (updates product_catalog.current_price). "
+                "TWO-STEP CONFIRMATION FLOW: first call with confirm=false to get a preview (sku, current vs proposed price, "
+                "margin, algorithm, rationale) and show it to the user. Only after the user explicitly agrees, call again "
+                "with confirm=true to apply. Applying validates ownership, rejects already-applied proposals, re-checks the "
+                "12% margin floor against live cost, records an audit row in price_history, and publishes a price.applied event. "
+                "Never call with confirm=true without the user's explicit approval of the previewed change."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "proposal_id": {"type": "string", "description": "ID of the price proposal to apply (from list_price_proposals)."},
+                    "confirm": {"type": "boolean", "default": False, "description": "false = preview only; true = actually apply (requires prior user approval)."},
+                },
+                "required": ["proposal_id"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "check_stale_market_data",
             "description": "Check for market data entries in data/market.db:market_data that are older than a specified threshold. Returns count and details of stale items.",
             "parameters": {
@@ -145,6 +168,7 @@ AGENT_TOOL_MAPPING: Dict[str, str] = {
     "check_stale_market_data": "DataCollectorAgent",
     "run_pricing_workflow": "PriceOptimizationAgent",
     "optimize_price": "PriceOptimizationAgent",
+    "apply_price_proposal": "PriceOptimizationAgent",
     "get_portfolio_urgency": "PriceOptimizationAgent",
     "scan_for_alerts": "AlertNotificationAgent",
     "collect_market_data": "DataCollectorAgent",

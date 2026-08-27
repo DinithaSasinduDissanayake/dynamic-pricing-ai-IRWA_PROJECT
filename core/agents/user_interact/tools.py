@@ -651,6 +651,220 @@ def get_portfolio_urgency() -> Dict[str, Any]:
         return {"ok": False, "error": str(e)}
 
 
+MIN_MARGIN_FLOOR = 0.12
+
+
+def _ensure_apply_schema(conn: sqlite3.Connection) -> None:
+    """Idempotent migrations for the price-apply audit trail.
+
+    - Creates the price_history table if missing.
+    - Adds the nullable applied_at column to price_proposals if missing
+      (mirrors the rationale-column migration pattern in proposal_logger).
+    """
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS price_history (
+            id TEXT PRIMARY KEY,
+            sku TEXT NOT NULL,
+            old_price REAL,
+            new_price REAL NOT NULL,
+            proposal_id TEXT,
+            applied_by TEXT,
+            applied_at TEXT NOT NULL
+        )
+    """)
+    if _table_exists(conn, "price_proposals"):
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(price_proposals)").fetchall()]
+        if "applied_at" not in cols:
+            conn.execute("ALTER TABLE price_proposals ADD COLUMN applied_at TEXT")
+    conn.commit()
+
+
+def _extract_rationale_text(rationale: Any) -> Optional[str]:
+    if rationale is None:
+        return None
+    obj = rationale
+    if isinstance(obj, str):
+        try:
+            import json
+            obj = json.loads(obj)
+        except Exception:
+            return rationale
+    if isinstance(obj, dict):
+        return obj.get("rationale_text") or "; ".join(obj.get("bounding_notes", [])) or None
+    return str(obj)
+
+
+def apply_price_proposal(proposal_id: str, confirm: bool = False) -> Dict[str, Any]:
+    """
+    Apply an approved price proposal to the product catalog.
+
+    Two-step flow:
+    - confirm=False: returns a preview of the change (no mutation).
+    - confirm=True: validates ownership, applied-state and margin floor, then
+      updates product_catalog.current_price, records price_history, stamps
+      price_proposals.applied_at and publishes a price.applied event.
+
+    Failure paths return {"ok": False, "error": ...} and never raise.
+    """
+    from datetime import datetime, timezone
+
+    db_paths = get_db_paths()
+    db_path = str(db_paths["app"])
+    owner_id = get_owner_id()
+
+    try:
+        with _connect(db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            if not _table_exists(conn, "price_proposals"):
+                return {"ok": False, "error": "No price proposals exist (price_proposals table missing)."}
+            if not _table_exists(conn, "product_catalog"):
+                return {"ok": False, "error": "Product catalog is empty (product_catalog table missing)."}
+
+            _ensure_apply_schema(conn)
+
+            prop = conn.execute(
+                "SELECT id, sku, proposed_price, current_price, margin, algorithm, ts, rationale, applied_at "
+                "FROM price_proposals WHERE id = ?",
+                (proposal_id,),
+            ).fetchone()
+            if not prop:
+                return {"ok": False, "error": f"Proposal '{proposal_id}' not found."}
+            prop = dict(prop)
+            sku = prop["sku"]
+
+            # Ownership check: the proposal's SKU must belong to the current owner.
+            q = "SELECT sku, title, currency, current_price, cost, owner_id FROM product_catalog WHERE sku = ?"
+            params: List[Any] = [sku]
+            if owner_id:
+                q += " AND owner_id = ?"
+                params.append(owner_id)
+            product = conn.execute(q + " LIMIT 1", params).fetchone()
+            if not product:
+                return {"ok": False, "error": f"SKU '{sku}' not found in your inventory. You can only apply proposals for your own products."}
+            product = dict(product)
+
+            if prop.get("applied_at"):
+                return {"ok": False, "error": f"Proposal '{proposal_id}' was already applied at {prop['applied_at']}."}
+
+            proposed_price = float(prop["proposed_price"])
+            live_price = float(product["current_price"]) if product["current_price"] is not None else None
+            cost = float(product["cost"]) if product["cost"] is not None else None
+
+            # Recheck margin against live cost — never trust the stored margin.
+            live_margin = (proposed_price - cost) / proposed_price if (cost is not None and proposed_price > 0) else None
+
+            if not confirm:
+                preview = {
+                    "ok": True,
+                    "applied": False,
+                    "requires_confirmation": True,
+                    "proposal_id": prop["id"],
+                    "sku": sku,
+                    "title": product.get("title"),
+                    "currency": product.get("currency"),
+                    "current_price": live_price,
+                    "proposed_price": proposed_price,
+                    "margin": round(live_margin, 4) if live_margin is not None else prop.get("margin"),
+                    "algorithm": prop.get("algorithm"),
+                    "rationale": _extract_rationale_text(prop.get("rationale")),
+                    "message": (
+                        f"PREVIEW ONLY — no change made. This would update {sku} from "
+                        f"{live_price} to {proposed_price}. "
+                        "Ask the user to confirm, then call apply_price_proposal again with confirm=true to apply."
+                    ),
+                }
+                if live_price is not None and prop.get("current_price") is not None and float(prop["current_price"]) != live_price:
+                    preview["warning"] = (
+                        f"Catalog price ({live_price}) differs from the price at proposal time "
+                        f"({float(prop['current_price'])}); the proposal may be outdated."
+                    )
+                return preview
+
+            # confirm=True: enforce margin floor
+            if cost is not None:
+                if live_margin is None or live_margin < MIN_MARGIN_FLOOR:
+                    shown = f"{live_margin:.2%}" if live_margin is not None else "undefined"
+                    return {
+                        "ok": False,
+                        "error": (
+                            f"Refused: proposed price {proposed_price} yields margin {shown}, "
+                            f"below the {MIN_MARGIN_FLOOR:.0%} minimum margin floor (cost={cost})."
+                        ),
+                    }
+
+            applied_at = datetime.now(timezone.utc).isoformat()
+            history_id = uuid.uuid4().hex
+
+            # Atomic already-applied guard + apply in one transaction.
+            cur = conn.execute(
+                "UPDATE price_proposals SET applied_at = ? WHERE id = ? AND applied_at IS NULL",
+                (applied_at, proposal_id),
+            )
+            if cur.rowcount != 1:
+                conn.rollback()
+                return {"ok": False, "error": f"Proposal '{proposal_id}' was already applied."}
+
+            conn.execute(
+                "UPDATE product_catalog SET current_price = ?, updated_at = ? WHERE sku = ?" + (" AND owner_id = ?" if owner_id else ""),
+                [proposed_price, applied_at, sku] + ([owner_id] if owner_id else []),
+            )
+            conn.execute(
+                "INSERT INTO price_history (id, sku, old_price, new_price, proposal_id, applied_by, applied_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (history_id, sku, live_price, proposed_price, proposal_id, owner_id, applied_at),
+            )
+            conn.commit()
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+    # Publish price.applied event after commit (best-effort; failure can't un-apply).
+    event_published = False
+    try:
+        from core.agents.agent_sdk.bus_factory import get_bus
+        from core.agents.agent_sdk.protocol import Topic
+
+        bus = get_bus()
+        payload = {
+            "proposal_id": proposal_id,
+            "sku": sku,
+            "old_price": live_price,
+            "new_price": proposed_price,
+            "applied_by": owner_id,
+            "applied_at": applied_at,
+        }
+
+        async def _pub():
+            await bus.publish(Topic.PRICE_APPLIED.value, payload)
+
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+        if loop and loop.is_running():
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                pool.submit(asyncio.run, _pub()).result()
+        else:
+            asyncio.run(_pub())
+        event_published = True
+    except Exception:
+        event_published = False
+
+    return {
+        "ok": True,
+        "applied": True,
+        "proposal_id": proposal_id,
+        "sku": sku,
+        "old_price": live_price,
+        "new_price": proposed_price,
+        "margin": round(live_margin, 4) if live_margin is not None else None,
+        "applied_at": applied_at,
+        "history_id": history_id,
+        "event_published": event_published,
+        "message": f"Applied proposal {proposal_id}: {sku} price updated from {live_price} to {proposed_price}.",
+    }
+
+
 TOOLS_MAP = {
     "list_inventory_items": list_inventory_items,
     "get_inventory_item": get_inventory_item,
@@ -662,6 +876,7 @@ TOOLS_MAP = {
     "list_market_prices": list_market_prices,
     "list_proposals": list_proposals,
     "optimize_price": optimize_price,
+    "apply_price_proposal": apply_price_proposal,
     "get_portfolio_urgency": get_portfolio_urgency,
     "run_pricing_workflow": run_pricing_workflow,
     "collect_market_data": collect_market_data,

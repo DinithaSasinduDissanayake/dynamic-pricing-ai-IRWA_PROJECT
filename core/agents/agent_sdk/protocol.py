@@ -11,6 +11,7 @@ class Topic(Enum):
     PRICE_PROPOSAL = "price.proposal"
     ALERT = "alert.event"
     PRICE_UPDATE = "price.update"
+    PRICE_APPLIED = "price.applied"
     CHAT_PROMPT = "chat.prompt"
     CHAT_TOOL_CALL = "chat.tool_call"
     OPTIMIZATION_REQUEST = "optimization.request"
