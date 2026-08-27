@@ -124,6 +124,10 @@ class MockLLMEngine:
         tools_used: List[str] = []
         algo = detect_algorithm(messages)
 
+        # Extract request_id if present in prompt (e.g., "Request ID: <uuid>")
+        req_id_match = re.search(r'Request ID:\s*([a-zA-Z0-9_-]+)', last_user, re.IGNORECASE)
+        extracted_request_id = req_id_match.group(1) if req_id_match else None
+
         # =========================================================================
         # Case A: PricingOptimizerAgent context (autonomous optimization workflow)
         # =========================================================================
@@ -173,10 +177,10 @@ class MockLLMEngine:
                 min_margin=0.12,
             )
             tools_used.append("run_pricing_algorithm")
-            if not isinstance(algo_res, dict) or "proposed_price" not in algo_res:
+            if not isinstance(algo_res, dict) or ("proposed_price" not in algo_res and "recommended_price" not in algo_res):
                 raise RuntimeError(f"Pricing algorithm '{algo}' failed for SKU '{target_sku}': {algo_res}")
 
-            proposed_price = float(algo_res["proposed_price"])
+            proposed_price = float(algo_res.get("proposed_price") if algo_res.get("proposed_price") is not None else algo_res["recommended_price"])
             margin = float(algo_res.get("margin") if algo_res.get("margin") is not None else ((proposed_price - cost) / proposed_price if proposed_price > 0 else 0.0))
             algorithm_used = algo_res.get("algorithm") or algo
 
@@ -193,13 +197,18 @@ class MockLLMEngine:
 
             # 5. Publish price proposal
             if "publish_price_proposal" in functions_map:
+                pub_kwargs = {
+                    "sku": target_sku,
+                    "old_price": our_price,
+                    "new_price": proposed_price,
+                    "margin": margin,
+                    "algorithm": algorithm_used,
+                }
+                if extracted_request_id:
+                    pub_kwargs["request_id"] = extracted_request_id
                 pub_res = _call_fn(
                     functions_map["publish_price_proposal"],
-                    sku=target_sku,
-                    old_price=our_price,
-                    new_price=proposed_price,
-                    margin=margin,
-                    algorithm=algorithm_used,
+                    **pub_kwargs,
                 )
                 tools_used.append("publish_price_proposal")
 

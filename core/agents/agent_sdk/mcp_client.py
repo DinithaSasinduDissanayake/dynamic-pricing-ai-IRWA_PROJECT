@@ -385,8 +385,8 @@ class _LocalPriceOptimizerTools:
             proposed_price=proposed_price, current_price=current_price, cost=cost, min_margin=min_margin
         )
 
-    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown") -> Dict[str, Any]:
-        return await self._impl.publish_price_proposal(sku=sku, old_price=old_price, new_price=new_price, margin=margin, algorithm=algorithm)
+    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown", request_id: Optional[str] = None) -> Dict[str, Any]:
+        return await self._impl.publish_price_proposal(sku=sku, old_price=old_price, new_price=new_price, margin=margin, algorithm=algorithm, request_id=request_id)
 
     async def check_market_data_freshness(self, sku: str) -> Dict[str, Any]:
         return await self._impl.check_market_data_freshness(sku)
@@ -446,17 +446,22 @@ class _MCPPriceOptimizerTools:
                 "our_price": float(our_price),
                 "competitor_price": competitor_price,
                 "cost": cost,
-                "min_margin": float(min_margin),
+                "market_records": market_records,
+                "min_margin": min_margin,
             }
             res = await self._call("propose_price", args)
-            return res
+            if res and res.get("ok") is not False:
+                return res
+            return {"ok": False, "error": "run_pricing_algorithm_unavailable_via_mcp"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
     async def validate_price(self, proposed_price: float, current_price: float, cost: Optional[float] = None, min_margin: float = 0.12) -> Dict[str, Any]:
+        # Basic offline validation when MCP server doesn't respond
         try:
-            # Basic validation can be performed locally in the MCP client for now
-            if cost is not None:
+            if proposed_price <= 0:
+                return {"ok": False, "valid": False, "error": "Proposed price must be positive"}
+            if cost is not None and proposed_price > 0:
                 margin = (proposed_price - cost) / proposed_price if proposed_price > 0 else 0
                 if margin < min_margin:
                     return {"ok": False, "valid": False, "error": f"Margin below minimum: {margin}"}
@@ -467,7 +472,7 @@ class _MCPPriceOptimizerTools:
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
-    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown") -> Dict[str, Any]:
+    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown", request_id: Optional[str] = None) -> Dict[str, Any]:
         try:
             # Publishing can be done via event bus locally; attempt to call apply_proposal if MCP exposes it
             res = await self._call("apply_proposal", {"proposal_id": ""})
@@ -478,6 +483,8 @@ class _MCPPriceOptimizerTools:
             from core.agents.agent_sdk.protocol import Topic
             bus = get_bus()
             proposal_payload = {"proposal_id": uuid.uuid4().hex, "sku": sku, "previous_price": float(old_price), "proposed_price": float(new_price)}
+            if request_id:
+                proposal_payload["request_id"] = request_id
             await bus.publish(Topic.PRICE_PROPOSAL.value, proposal_payload)
             return {"ok": True, "message": "Published price proposal via event bus", "proposal_id": proposal_payload["proposal_id"]}
         except Exception as e:

@@ -266,9 +266,16 @@ def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
                     )
                     prop_sku = p_dict.get("sku") or p_dict.get("product_id")
                     prop_req_id = p_dict.get("request_id")
-                    if (prop_req_id and prop_req_id == request_id) or (prop_sku and prop_sku == sku):
-                        if not future.done():
-                            future.set_result(p_dict)
+                    # Correlate strictly by request_id when available;
+                    # keep SKU fallback solely for proposals that legitimately carry no request_id (e.g. autonomous optimizer runs).
+                    matched = False
+                    if prop_req_id:
+                        matched = (prop_req_id == request_id)
+                    elif prop_sku and prop_sku == sku:
+                        matched = True
+
+                    if matched and not future.done():
+                        future.set_result(p_dict)
                 except Exception:
                     pass
 

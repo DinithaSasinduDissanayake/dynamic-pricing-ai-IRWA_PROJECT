@@ -162,6 +162,7 @@ class Tools:
         new_price: float,
         margin: float = 0.0,
         algorithm: str = "unknown",
+        request_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         try:
             from core.agents.agent_sdk.bus_factory import get_bus
@@ -179,6 +180,8 @@ class Tools:
                 "margin": float(margin),
                 "algorithm": algorithm,
             }
+            if request_id:
+                proposal_payload["request_id"] = request_id
             await bus.publish(Topic.PRICE_PROPOSAL.value, proposal_payload)
             
             return {
@@ -430,6 +433,10 @@ def get_llm_tools():
                         "new_price": {
                             "type": "number",
                             "description": "Proposed/new price"
+                        },
+                        "request_id": {
+                            "type": "string",
+                            "description": "Correlation request ID"
                         }
                     },
                     "required": ["sku", "old_price", "new_price"]
@@ -446,7 +453,7 @@ def get_llm_tools():
                     "properties": {
                         "sku": {
                             "type": "string",
-                            "description": "Product SKU to check"
+                            "description": "Product SKU"
                         }
                     },
                     "required": ["sku"]
@@ -457,13 +464,13 @@ def get_llm_tools():
             "type": "function",
             "function": {
                 "name": "start_market_data_collection",
-                "description": "Triggers market data collection for a product when data is missing or stale. This will gather fresh competitor pricing before optimization.",
+                "description": "Triggers background data collection for a product when market data is missing or stale.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "sku": {
                             "type": "string",
-                            "description": "Product SKU to collect data for"
+                            "description": "Product SKU"
                         }
                     },
                     "required": ["sku"]
@@ -473,16 +480,17 @@ def get_llm_tools():
     ]
 
 
-async def execute_tool_call(tool_name: str, tool_args: dict, tools_instance: Tools) -> dict:
+async def execute_tool_call(tool_name: str, tool_args: Dict[str, Any], tools_instance: Tools) -> Dict[str, Any]:
+    """Helper to dispatch tool calls to the Tools instance."""
     logger.info(f"Executing tool: {tool_name} with args: {tool_args}")
     
     if tool_name == "get_product_info":
-        result = await tools_instance.get_product_info(tool_args["sku"])
+        result = await tools_instance.get_product_info(sku=tool_args["sku"])
         logger.info(f"get_product_info result: {result}")
         return result
     
     elif tool_name == "get_market_intelligence":
-        result = await tools_instance.get_market_intelligence(tool_args["product_title"])
+        result = await tools_instance.get_market_intelligence(product_title=tool_args["product_title"])
         logger.info(f"get_market_intelligence result: {result}")
         return result
     
@@ -493,7 +501,7 @@ async def execute_tool_call(tool_name: str, tool_args: dict, tools_instance: Too
             our_price=tool_args["our_price"],
             competitor_price=tool_args.get("competitor_price"),
             cost=tool_args.get("cost"),
-            market_records=tool_args.get("market_records", []),
+            market_records=tool_args.get("market_records"),
             min_margin=tool_args.get("min_margin", 0.12),
         )
         logger.info(f"run_pricing_algorithm result: {result}")
@@ -516,6 +524,7 @@ async def execute_tool_call(tool_name: str, tool_args: dict, tools_instance: Too
             new_price=tool_args["new_price"],
             margin=tool_args.get("margin", 0.0),
             algorithm=tool_args.get("algorithm", "rule_based"),
+            request_id=tool_args.get("request_id"),
         )
         logger.info(f"publish_price_proposal result: {result}")
         return result

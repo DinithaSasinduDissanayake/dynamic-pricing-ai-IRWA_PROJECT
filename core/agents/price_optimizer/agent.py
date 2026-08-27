@@ -184,24 +184,26 @@ class PricingOptimizerAgent:
         
         product_identifier = request_dict.get("product_name") or request_dict.get("sku") or request_dict.get("product_id")
         user_request = request_dict.get("user_request", "Optimize price")
+        request_id = request_dict.get("request_id")
         
         if not product_identifier:
             self.logger.error(f"Optimization request missing product identifier. Keys available: {list(request_dict.keys())}")
             return
         
-        self.logger.info(f"Received optimization request for {product_identifier}: {user_request}")
+        self.logger.info(f"Received optimization request for {product_identifier} (request_id={request_id}): {user_request}")
         
         if self.llm and self.llm.is_available():
-            await self._handle_autonomous_optimization(product_identifier, user_request)
+            await self._handle_autonomous_optimization(product_identifier, user_request, request_id=request_id)
         else:
-            await self._handle_fallback_optimization(product_identifier, user_request)
+            await self._handle_fallback_optimization(product_identifier, user_request, request_id=request_id)
 
-    async def _handle_autonomous_optimization(self, product_identifier: str, user_request: str):
+    async def _handle_autonomous_optimization(self, product_identifier: str, user_request: str, request_id: Optional[str] = None):
         try:
+            req_id_line = f"\nRequest ID: {request_id}" if request_id else ""
             prompt = f"""A new pricing optimization request has been received:
 
 Product: {product_identifier}
-User Request: {user_request}
+User Request: {user_request}{req_id_line}
 
 You must complete the full pricing optimization workflow:
 1. Fetch product information
@@ -241,9 +243,17 @@ Use your tools to complete this workflow autonomously."""
                     "cost": cost, "min_margin": min_margin
                 }, self.tools)
             
-            async def publish_price_proposal_async(sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "rule_based"):
+            async def publish_price_proposal_async(*args, **kwargs):
+                if args and isinstance(args[0], dict):
+                    kwargs = {**args[0], **kwargs}
+                sku = kwargs.get("sku")
+                old_price = kwargs.get("old_price")
+                new_price = kwargs.get("new_price")
+                margin = kwargs.get("margin", 0.0)
+                algorithm = kwargs.get("algorithm", "rule_based")
+                target_req_id = kwargs.get("request_id") or kwargs.get("req_id") or request_id
                 return await execute_tool_call("publish_price_proposal", {
-                    "sku": sku, "old_price": old_price, "new_price": new_price, "margin": margin, "algorithm": algorithm
+                    "sku": sku, "old_price": old_price, "new_price": new_price, "margin": margin, "algorithm": algorithm, "request_id": target_req_id
                 }, self.tools)
             
             async def check_market_data_freshness_async(sku: str):
@@ -275,13 +285,14 @@ Use your tools to complete this workflow autonomously."""
                 
             except Exception as e:
                 self.logger.error(f"LLM optimization failed: {e}")
-                await self._handle_fallback_optimization(product_identifier, user_request)
+                await self._handle_fallback_optimization(product_identifier, user_request, request_id=request_id)
                 
         except Exception as e:
             self.logger.error(f"Autonomous optimization failed: {e}")
+            await self._handle_fallback_optimization(product_identifier, user_request, request_id=request_id)
 
-    async def _handle_fallback_optimization(self, product_identifier: str, user_request: str):
-        self.logger.info(f"Using fallback heuristic optimization for {product_identifier}")
+    async def _handle_fallback_optimization(self, product_identifier: str, user_request: str, request_id: Optional[str] = None):
+        self.logger.info(f"Using fallback heuristic optimization for {product_identifier} (request_id={request_id})")
         
         trace_id = generate_trace_id()
         started = datetime.now()
@@ -293,7 +304,7 @@ Use your tools to complete this workflow autonomously."""
                     action="fallback.start",
                     status="in_progress",
                     message=f"Fallback optimization: {product_identifier}",
-                    details=safe_redact({"trace_id": trace_id, "product": product_identifier}),
+                    details=safe_redact({"trace_id": trace_id, "product": product_identifier, "request_id": request_id}),
                 )
         except Exception:
             pass
@@ -367,6 +378,7 @@ Use your tools to complete this workflow autonomously."""
             new_price=proposed_price,
             margin=margin,
             algorithm=algorithm,
+            request_id=request_id,
         )
         
         completed = datetime.now()
