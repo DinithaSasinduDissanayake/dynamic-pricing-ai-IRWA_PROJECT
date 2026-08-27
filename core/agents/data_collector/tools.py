@@ -19,7 +19,7 @@ class Tools:
             with sqlite3.connect(uri_app, uri=True) as conn:
                 conn.row_factory = sqlite3.Row
                 rows = conn.execute(
-                    "SELECT sku, title, current_price, updated_at, source_url FROM product_catalog LIMIT 100"
+                    "SELECT sku, title, current_price, updated_at FROM product_catalog LIMIT 100"
                 ).fetchall()
                 
                 products = [
@@ -28,7 +28,6 @@ class Tools:
                         "title": r["title"],
                         "current_price": float(r["current_price"]) if r["current_price"] else None,
                         "updated_at": r["updated_at"],
-                        "source_url": r["source_url"],
                     }
                     for r in rows
                 ]
@@ -113,7 +112,7 @@ class Tools:
             with sqlite3.connect(uri_app, uri=True) as conn:
                 conn.row_factory = sqlite3.Row
                 catalog_products = conn.execute(
-                    "SELECT sku, title, source_url FROM product_catalog"
+                    "SELECT sku, title FROM product_catalog"
                 ).fetchall()
 
             market_path = getattr(self.repo, "market_path", Path("data/market.db"))
