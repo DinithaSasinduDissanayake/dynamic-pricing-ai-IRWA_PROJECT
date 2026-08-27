@@ -256,16 +256,6 @@ class AutoHealer:
                             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
                         )
                     """,
-                    "market_ticks": """
-                        CREATE TABLE IF NOT EXISTS market_ticks (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            product_id INTEGER NOT NULL,
-                            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                            price REAL NOT NULL,
-                            competitor TEXT,
-                            FOREIGN KEY (product_id) REFERENCES product_catalog(id)
-                        )
-                    """,
                     "price_proposals": """
                         CREATE TABLE IF NOT EXISTS price_proposals (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -292,6 +282,20 @@ class AutoHealer:
                         ("updated_at", "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"),
                         ("source_url", "source_url TEXT"),
                     ]
+                }
+            },
+            "data/market.db": {
+                "tables": {
+                    "market_data": """
+                        CREATE TABLE IF NOT EXISTS market_data (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            owner_id INTEGER,
+                            product_name TEXT,
+                            price REAL,
+                            features TEXT,
+                            update_time TEXT
+                        )
+                    """
                 }
             },
             "data/auth.db": {

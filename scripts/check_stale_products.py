@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 
 conn = sqlite3.connect('app/data.db')
+conn.execute("ATTACH DATABASE 'data/market.db' AS market")
 cutoff = (datetime.now(timezone.utc) - timedelta(minutes=60)).isoformat()
 
 rows = conn.execute("""
@@ -9,9 +10,9 @@ rows = conn.execute("""
         pc.sku, 
         pc.title, 
         pc.source_url, 
-        MAX(mt.ts) as last_update
+        MAX(md.update_time) as last_update
     FROM product_catalog pc
-    LEFT JOIN market_ticks mt ON pc.sku = mt.sku
+    LEFT JOIN market.market_data md ON (pc.title = md.product_name OR pc.sku = md.product_name)
     GROUP BY pc.sku, pc.title, pc.source_url
     HAVING last_update IS NULL OR last_update < ?
     ORDER BY 

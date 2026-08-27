@@ -64,15 +64,19 @@ async def main():
         conn.close()
         return
     
-    ticks_count = conn.execute("SELECT COUNT(*) as cnt FROM market_ticks").fetchone()["cnt"]
-    logger.info(f"✓ Market ticks collected: {ticks_count}")
+    market_db_path = root / "data" / "market.db"
+    market_conn = sqlite3.connect(market_db_path)
+    market_conn.row_factory = sqlite3.Row
+    ticks_count = market_conn.execute("SELECT COUNT(*) as cnt FROM market_data").fetchone()["cnt"]
+    logger.info(f"✓ Market data records collected: {ticks_count}")
     
     if ticks_count > 0:
-        recent_tick = conn.execute(
-            "SELECT sku, competitor_price, ts FROM market_ticks ORDER BY ts DESC LIMIT 1"
+        recent_tick = market_conn.execute(
+            "SELECT product_name, price, update_time FROM market_data ORDER BY update_time DESC LIMIT 1"
         ).fetchone()
-        logger.info(f"  Latest: {recent_tick['sku']} @ ${recent_tick['competitor_price']}")
+        logger.info(f"  Latest: {recent_tick['product_name']} @ ${recent_tick['price']}")
     
+    market_conn.close()
     conn.close()
     
     logger.info("\n" + "=" * 60)

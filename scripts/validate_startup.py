@@ -205,7 +205,6 @@ def check_database_schemas() -> Tuple[bool, Optional[str]]:
     # Define expected schemas (flexible - only check critical columns)
     schemas = {
         "app/data.db": {
-            "market_ticks": ["id", "sku"],  # Actual schema: id, sku, market, our_price, ts, etc.
             "product_catalog": ["sku", "owner_id", "current_price", "updated_at"],  # Actual schema uses sku as key
             "ingestion_jobs": ["id", "status"],  # May not have owner_id/url yet
             "price_proposals": ["id"],  # May have different schema

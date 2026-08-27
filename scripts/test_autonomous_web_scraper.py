@@ -36,23 +36,26 @@ async def test_autonomous_collector():
     else:
         print("   No ingestion jobs found")
     
-    print("\n3. Checking market_ticks for scraped data...")
-    cursor.execute("""
-        SELECT sku, competitor_price, source, ts 
-        FROM market_ticks 
-        ORDER BY ts DESC 
+    print("\n3. Checking market_data for scraped data...")
+    mconn = sqlite3.connect("data/market.db")
+    mcursor = mconn.cursor()
+    mcursor.execute("""
+        SELECT product_name, price, features, update_time 
+        FROM market_data 
+        ORDER BY update_time DESC 
         LIMIT 10
     """)
-    ticks = cursor.fetchall()
+    ticks = mcursor.fetchall()
     
     if ticks:
-        print(f"   Found {len(ticks)} recent market ticks:")
+        print(f"   Found {len(ticks)} recent market records:")
         for tick in ticks:
             price_str = f"${tick[1]}" if tick[1] else "N/A"
-            print(f"   - {tick[0]}: {price_str} from {tick[2]} at {tick[3]}")
+            print(f"   - {tick[0]}: {price_str} ({tick[2]}) at {tick[3]}")
     else:
-        print("   No market ticks found")
+        print("   No market records found")
     
+    mconn.close()
     conn.close()
     print("\n=== Test Complete ===")
 
