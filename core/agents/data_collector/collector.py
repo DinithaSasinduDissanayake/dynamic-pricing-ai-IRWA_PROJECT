@@ -6,7 +6,7 @@ from typing import Any, Dict, Iterable, Optional
 
 from core.agents.agent_sdk.bus_factory import get_bus as _get_bus
 from core.agents.agent_sdk.protocol import Topic
-from core.agents.agent_sdk.events_models import MarketTick
+from core.agents.alert_service.schemas import MarketTick
 from core.payloads import MarketFetchRequestPayload, MarketFetchAckPayload, MarketFetchDonePayload
 from .repo import DataRepo
 
@@ -44,6 +44,11 @@ class DataCollector:
             or datetime.now(timezone.utc).isoformat(),
             "source": d.get("source", "manual"),
         }
+        # Optional passthrough fields used by the repo layer
+        if d.get("features"):
+            payload["features"] = d["features"]
+        if d.get("product_name"):
+            payload["product_name"] = d["product_name"]
         await self.repo.insert_tick(payload)
         # Publish MARKET_TICK as a typed dataclass on the global bus so downstream
         # consumers (e.g., AlertEngine) receive the expected structure.
@@ -52,12 +57,15 @@ class DataCollector:
             float(competitor_price_value) if competitor_price_value is not None else None
         )
         demand_index_value = float(payload.get("demand_index") or 0.0)
+        # MarketTick schema requires demand_index in [0, 1]
+        demand_index_value = min(max(demand_index_value, 0.0), 1.0)
 
         tick = MarketTick(
             sku=payload["sku"],
             our_price=payload["our_price"],
             competitor_price=comp_price,
             demand_index=demand_index_value,
+            ts=payload["ts"],
         )
         await _get_bus().publish(Topic.MARKET_TICK.value, tick)
 
@@ -96,6 +104,7 @@ class DataCollector:
         sources = payload["sources"]
         urls = payload.get("urls", [])
         depth = payload["depth"]
+        horizon_minutes = payload.get("horizon_minutes", 60)
         
         print(f"[DataCollector-{self._instance_id}] Handling market fetch request: {request_id}")
         
@@ -134,7 +143,55 @@ class DataCollector:
             
             # Process each source
             for source in sources:
-                if source == "web_scraper" and urls:
+                if source in ("mock", "simulator"):
+                    # Deterministic market simulator connector
+                    try:
+                        from .connectors.market_simulator import generate_ticks
+
+                        title = sku
+                        our_price = None
+                        import aiosqlite
+
+                        async with self.repo._connect_app() as db:
+                            db.row_factory = aiosqlite.Row
+                            cur = await db.execute(
+                                "SELECT title, current_price FROM product_catalog WHERE sku=? LIMIT 1",
+                                (sku,),
+                            )
+                            row = await cur.fetchone()
+                        if row is None or row["current_price"] is None:
+                            print(
+                                f"[DataCollector-{self._instance_id}] No catalog price for {sku}; "
+                                "skipping simulator source"
+                            )
+                            continue
+                        if row["title"]:
+                            title = row["title"]
+                        our_price = float(row["current_price"])
+
+                        for sim_tick in generate_ticks(
+                            sku=sku,
+                            title=title,
+                            base_price=our_price,
+                            depth=depth,
+                            horizon_minutes=horizon_minutes,
+                        ):
+                            tick_data = {
+                                "sku": sku,
+                                "market": market,
+                                "our_price": our_price,
+                                "competitor_price": sim_tick["competitor_price"],
+                                "demand_index": sim_tick["demand_index"],
+                                "ts": sim_tick["ts"],
+                                "source": "simulator",
+                                "product_name": title,
+                                "features": f"source=simulator; sku={sku}",
+                            }
+                            await self.ingest_tick(tick_data)
+                            tick_count += 1
+                    except Exception as e:
+                        print(f"[DataCollector-{self._instance_id}] Simulator source failed for {sku}: {e}")
+                elif source == "web_scraper" and urls:
                     # Use web scraper connector
                     try:
                         from .connectors.web_scraper import fetch_competitor_price

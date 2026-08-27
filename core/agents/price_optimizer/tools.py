@@ -298,18 +298,11 @@ class Tools:
             from core.agents.agent_sdk.protocol import Topic
             from core.payloads import MarketFetchRequestPayload
             
-            # Check if product has source_url
-            uri_app = f"file:{self.app_db.as_posix()}?mode=ro"
-            with sqlite3.connect(uri_app, uri=True) as conn:
-                row = conn.execute(
-                    "SELECT source_url FROM product_catalog WHERE sku = ?",
-                    (sku,),
-                ).fetchone()
-                
-                has_url = bool(row and row[0])
-                urls = [row[0]] if has_url else []
-                connector = "web_scraper" if has_url else "mock"
-            
+            # product_catalog has no source_url column; always use the
+            # deterministic simulator connector ("mock") with no URLs.
+            urls: list = []
+            connector = "mock"
+
             request_id = uuid.uuid4().hex
             request_payload: MarketFetchRequestPayload = {
                 "request_id": request_id,
@@ -331,7 +324,7 @@ class Tools:
                 "request_id": request_id,
                 "sku": sku,
                 "connector": connector,
-                "has_source_url": has_url,
+                "has_source_url": False,
                 "message": f"Market data collection started for {sku} using {connector}",
             }
         except Exception as e:

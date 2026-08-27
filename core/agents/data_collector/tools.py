@@ -198,18 +198,10 @@ class Tools:
             
             request_id = uuid.uuid4().hex
             
-            urls = []
-            if connector == "web_scraper":
-                uri_app = f"file:{self.repo.path.as_posix()}?mode=ro"
-                import sqlite3
-                with sqlite3.connect(uri_app, uri=True) as conn:
-                    row = conn.execute(
-                        "SELECT source_url FROM product_catalog WHERE sku = ?",
-                        (sku,),
-                    ).fetchone()
-                    if row and row[0]:
-                        urls = [row[0]]
-            
+            # product_catalog has no source_url column; the simulator connector
+            # ("mock") needs no URLs. Keep the payload shape (urls key required).
+            urls: list = []
+
             request_payload: MarketFetchRequestPayload = {
                 "request_id": request_id,
                 "sku": sku,
