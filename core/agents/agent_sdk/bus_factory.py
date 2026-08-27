@@ -13,6 +13,11 @@ class _AsyncBus:
         # Callback can be sync or async; we'll handle both at publish time.
         self._subs[topic].append(callback)
 
+    def unsubscribe(self, topic: str, callback: Callable):
+        subs = self._subs.get(topic, [])
+        if callback in subs:
+            subs.remove(callback)
+
     async def publish(self, topic: str, message):
         try:
             from core.observability.logging import get_logger
@@ -42,17 +47,29 @@ class _AsyncBus:
         except Exception:
             pass
 
-        # Dispatch to subscribers
-        for cb in list(self._subs.get(topic, [])):
+        # Dispatch to subscribers concurrently
+        subscribers = list(self._subs.get(topic, []))
+        if not subscribers:
+            return
+
+        async def _invoke(cb: Callable):
             try:
                 res = cb(message)
                 if asyncio.iscoroutine(res):
                     await res
             except Exception as e:
-                # Best-effort bus: ignore sink errors but log
                 if log:
                     try:
                         log.warning("bus_sink_error", topic=topic, error=str(e), sink=repr(cb))
+                    except Exception:
+                        pass
+
+        results = await asyncio.gather(*[_invoke(cb) for cb in subscribers], return_exceptions=True)
+        for res, cb in zip(results, subscribers):
+            if isinstance(res, Exception):
+                if log:
+                    try:
+                        log.warning("bus_sink_unhandled_exception", topic=topic, error=str(res), sink=repr(cb))
                     except Exception:
                         pass
 
