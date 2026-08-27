@@ -13,7 +13,8 @@ def get_db_paths():
     root = Path(__file__).resolve().parents[3]
     return {
         "app": root / "app" / "data.db",
-        "market": root / "data" / "market.db"
+        "market": root / "data" / "market.db",
+        "alert": root / "app" / "alert.db",
     }
 
 
@@ -420,7 +421,7 @@ def check_stale_market_data(threshold_minutes: int = 60) -> Dict[str, Any]:
 
 def scan_for_alerts() -> Dict[str, Any]:
     db_paths = get_db_paths()
-    db_path = str(db_paths["app"])
+    db_path = str(db_paths.get("alert") or db_paths["app"])
     owner_id = get_owner_id()
     
     try:
@@ -431,19 +432,18 @@ def scan_for_alerts() -> Dict[str, Any]:
             
             if owner_id:
                 rows = conn.execute(
-                    """SELECT i.id, i.sku, i.title, i.severity, i.status, i.created_at, i.details 
-                       FROM incidents i
-                       INNER JOIN product_catalog pc ON i.sku = pc.sku
-                       WHERE pc.owner_id = ?
-                       ORDER BY i.created_at DESC 
+                    """SELECT id, sku, title, severity, status, first_seen, last_seen, rule_id, owner_id 
+                       FROM incidents
+                       WHERE owner_id = ?
+                       ORDER BY first_seen DESC 
                        LIMIT 50""",
                     (owner_id,)
                 ).fetchall()
             else:
                 rows = conn.execute(
-                    """SELECT id, sku, title, severity, status, created_at, details 
+                    """SELECT id, sku, title, severity, status, first_seen, last_seen, rule_id, owner_id 
                        FROM incidents 
-                       ORDER BY created_at DESC 
+                       ORDER BY first_seen DESC 
                        LIMIT 50"""
                 ).fetchall()
             
@@ -465,6 +465,192 @@ def request_market_fetch() -> Dict[str, Any]:
     return {"info": "Market fetch request would trigger the market collector"}
 
 
+def get_portfolio_urgency() -> Dict[str, Any]:
+    """
+    Compute server-side portfolio urgency summary across catalog products.
+    Evaluates current margin, gap vs latest competitor average price, market data
+    staleness, existing open proposals, and open alert incidents. Returns a compact
+    ranked list (most urgent first) with a one-line reason per SKU.
+    """
+    from datetime import datetime, timezone
+
+    db_paths = get_db_paths()
+    app_db = str(db_paths["app"])
+    market_db = str(db_paths["market"])
+    alert_db = str(db_paths.get("alert") or db_paths["app"])
+    owner_id = get_owner_id()
+
+    try:
+        with _connect(app_db) as app_conn:
+            app_conn.row_factory = sqlite3.Row
+            if not _table_exists(app_conn, "product_catalog"):
+                return {"ok": True, "items": [], "total": 0, "note": "product_catalog missing"}
+
+            cat_query = "SELECT sku, title, currency, current_price, cost, stock, updated_at FROM product_catalog"
+            cat_params: List[Any] = []
+            if owner_id:
+                cat_query += " WHERE owner_id = ?"
+                cat_params.append(owner_id)
+            cat_query += " ORDER BY sku ASC"
+            products = [dict(r) for r in app_conn.execute(cat_query, cat_params).fetchall()]
+
+            if not products:
+                return {"ok": True, "items": [], "total": 0, "message": "No products in catalog."}
+
+            # Fetch existing proposals
+            prop_rows = app_conn.execute(
+                "SELECT sku, proposed_price, current_price, margin, algorithm, ts FROM price_proposals ORDER BY ts DESC"
+            ).fetchall()
+            proposals_by_sku: Dict[str, Dict[str, Any]] = {}
+            for pr in prop_rows:
+                s = pr["sku"]
+                if s not in proposals_by_sku:
+                    proposals_by_sku[s] = dict(pr)
+
+        # Fetch market data from market DB
+        market_by_title: Dict[str, List[Dict[str, Any]]] = {}
+        try:
+            with _connect(market_db) as market_conn:
+                market_conn.row_factory = sqlite3.Row
+                if _table_exists(market_conn, "market_data"):
+                    m_rows = market_conn.execute(
+                        "SELECT product_name, price, update_time FROM market_data ORDER BY update_time DESC"
+                    ).fetchall()
+                    for mr in m_rows:
+                        t = mr["product_name"]
+                        if t not in market_by_title:
+                            market_by_title[t] = []
+                        market_by_title[t].append(dict(mr))
+        except Exception:
+            pass
+
+        # Fetch open alerts from alert DB
+        open_alerts_by_sku: Dict[str, List[Dict[str, Any]]] = {}
+        try:
+            with _connect(alert_db) as alert_conn:
+                alert_conn.row_factory = sqlite3.Row
+                if _table_exists(alert_conn, "incidents"):
+                    al_rows = alert_conn.execute(
+                        "SELECT id, sku, title, severity, status FROM incidents WHERE status = 'OPEN'"
+                    ).fetchall()
+                    for ar in al_rows:
+                        s = ar["sku"]
+                        if s not in open_alerts_by_sku:
+                            open_alerts_by_sku[s] = []
+                        open_alerts_by_sku[s].append(dict(ar))
+        except Exception:
+            pass
+
+        now_utc = datetime.now(timezone.utc)
+        items: List[Dict[str, Any]] = []
+
+        for p in products:
+            sku = p["sku"]
+            title = p["title"]
+            curr_price = float(p["current_price"]) if p["current_price"] is not None else 0.0
+            cost = float(p["cost"]) if p["cost"] is not None else 0.0
+            margin = (curr_price - cost) / curr_price if curr_price > 0 else 0.0
+
+            m_records = market_by_title.get(title, [])
+            comp_prices = [float(r["price"]) for r in m_records if r.get("price") is not None]
+            avg_comp = round(sum(comp_prices) / len(comp_prices), 2) if comp_prices else None
+            
+            # Competitor gap: positive means our price is above competitor avg (we are more expensive)
+            comp_gap_pct = round(((curr_price - avg_comp) / avg_comp) * 100.0, 1) if avg_comp and avg_comp > 0 else None
+
+            # Staleness
+            latest_market_ts = m_records[0]["update_time"] if m_records else None
+            minutes_stale = None
+            if latest_market_ts:
+                try:
+                    ts_clean = str(latest_market_ts).replace("Z", "+00:00")
+                    dt = datetime.fromisoformat(ts_clean)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    minutes_stale = max(0, int((now_utc - dt).total_seconds() / 60))
+                except Exception:
+                    pass
+
+            has_proposal = sku in proposals_by_sku
+            alerts = open_alerts_by_sku.get(sku, [])
+            has_alert = len(alerts) > 0
+
+            # Urgency Score calculation:
+            # - Open alert: +40 points
+            # - Margin below 15%: +35 points, below 20%: +20 points
+            # - Competitor price gap: our price >10% above comp (+30 pts), >5% (+15 pts), < -10% (+15 pts)
+            # - No market data or stale (>120 min): +20 points
+            # - Existing recent proposal already generated: -15 points (already addressed)
+            urgency_score = 0.0
+            reasons: List[str] = []
+
+            if has_alert:
+                urgency_score += 40.0
+                reasons.append(f"{len(alerts)} open alert(s)")
+
+            if margin < 0.12:
+                urgency_score += 40.0
+                reasons.append(f"low margin {margin:.1%} (<12% floor)")
+            elif margin < 0.20:
+                urgency_score += 20.0
+                reasons.append(f"thin margin {margin:.1%}")
+
+            if comp_gap_pct is not None:
+                if comp_gap_pct > 10.0:
+                    urgency_score += 30.0
+                    reasons.append(f"priced +{comp_gap_pct:g}% above competitor avg (${avg_comp:.2f})")
+                elif comp_gap_pct > 5.0:
+                    urgency_score += 15.0
+                    reasons.append(f"priced +{comp_gap_pct:g}% above competitor avg (${avg_comp:.2f})")
+                elif comp_gap_pct < -10.0:
+                    urgency_score += 15.0
+                    reasons.append(f"priced {comp_gap_pct:g}% below competitor avg (${avg_comp:.2f})")
+            elif not m_records:
+                urgency_score += 20.0
+                reasons.append("no competitor market data")
+
+            if minutes_stale is not None and minutes_stale > 120:
+                urgency_score += 10.0
+                reasons.append(f"market data stale ({minutes_stale}m old)")
+
+            if has_proposal:
+                urgency_score = max(0.0, urgency_score - 15.0)
+                prop_algo = proposals_by_sku[sku].get("algorithm", "auto")
+                reasons.append(f"proposal pending ({prop_algo})")
+            else:
+                reasons.append("no open proposal")
+
+            urgency_level = "HIGH" if urgency_score >= 50 else ("MEDIUM" if urgency_score >= 25 else "LOW")
+            reason_line = "; ".join(reasons)
+
+            items.append({
+                "sku": sku,
+                "title": title,
+                "current_price": curr_price,
+                "cost": cost,
+                "margin_pct": round(margin * 100.0, 1),
+                "avg_competitor_price": avg_comp,
+                "competitor_gap_pct": comp_gap_pct,
+                "market_data_stale_minutes": minutes_stale,
+                "has_open_proposal": has_proposal,
+                "has_open_alert": has_alert,
+                "urgency_score": round(urgency_score, 1),
+                "urgency_level": urgency_level,
+                "reason": reason_line,
+            })
+
+        # Rank most urgent first
+        items.sort(key=lambda x: (x["urgency_score"], -x["margin_pct"]), reverse=True)
+
+        return {
+            "ok": True,
+            "total_products": len(items),
+            "ranked_urgency": items,
+        }
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
 TOOLS_MAP = {
     "list_inventory_items": list_inventory_items,
     "get_inventory_item": get_inventory_item,
@@ -476,6 +662,7 @@ TOOLS_MAP = {
     "list_market_prices": list_market_prices,
     "list_proposals": list_proposals,
     "optimize_price": optimize_price,
+    "get_portfolio_urgency": get_portfolio_urgency,
     "run_pricing_workflow": run_pricing_workflow,
     "collect_market_data": collect_market_data,
     "scan_for_alerts": scan_for_alerts,

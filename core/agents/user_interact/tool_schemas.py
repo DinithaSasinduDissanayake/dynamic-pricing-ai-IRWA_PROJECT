@@ -122,6 +122,18 @@ TOOL_SCHEMAS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_portfolio_urgency",
+            "description": "Compute portfolio-wide pricing urgency summary across all catalog products. Evaluates margin, competitor gap, market data staleness, pending proposals, and open alerts to return a compact ranked list (most urgent first). Use when asked which products most urgently need attention or price changes.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": False,
+            },
+        },
+    },
 ]
 
 AGENT_TOOL_MAPPING: Dict[str, str] = {
@@ -133,6 +145,7 @@ AGENT_TOOL_MAPPING: Dict[str, str] = {
     "check_stale_market_data": "DataCollectorAgent",
     "run_pricing_workflow": "PriceOptimizationAgent",
     "optimize_price": "PriceOptimizationAgent",
+    "get_portfolio_urgency": "PriceOptimizationAgent",
     "scan_for_alerts": "AlertNotificationAgent",
     "collect_market_data": "DataCollectorAgent",
     "request_market_fetch": "DataCollectorAgent",

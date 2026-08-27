@@ -225,6 +225,35 @@ def cmd_catalog_list(args):
     return 1
 
 
+def cmd_catalog_urgency(args):
+    token = get_token(args)
+    base_url = get_base_url(args)
+    res = http_request("GET", "/api/catalog/urgency", token=token, base_url=base_url)
+    if res.get("success") or res.get("ok"):
+        items = res.get("ranked_urgency", [])
+        print(f"{BOLD}=== Portfolio Pricing Urgency Analysis ({len(items)} products) ==={RESET}\n")
+        print(f"{BOLD}{'RANK':<5} {'SKU':<14} {'PRICE':<10} {'COST':<10} {'MARGIN':<9} {'COMP AVG':<10} {'GAP':<8} {'URGENCY':<9} {'REASON'}{RESET}")
+        print("-" * 95)
+        for idx, it in enumerate(items, 1):
+            sku = it.get("sku", "-")
+            price = f"${it.get('current_price', 0.0):.2f}"
+            cost = f"${it.get('cost', 0.0):.2f}"
+            margin = f"{it.get('margin_pct', 0.0):.1f}%"
+            c_avg = f"${it.get('avg_competitor_price', 0.0):.2f}" if it.get("avg_competitor_price") is not None else "N/A"
+            gap = f"{it.get('competitor_gap_pct'):+g}%" if it.get("competitor_gap_pct") is not None else "N/A"
+            lvl = it.get("urgency_level", "LOW")
+            badge = f"{RED}{lvl:<9}{RESET}" if lvl == "HIGH" else (f"{YELLOW}{lvl:<9}{RESET}" if lvl == "MEDIUM" else f"{GREEN}{lvl:<9}{RESET}")
+            reason = it.get("reason", "-")
+            print(f"{idx:<5} {CYAN}{sku:<14}{RESET} {price:<10} {cost:<10} {margin:<9} {c_avg:<10} {gap:<8} {badge} {reason}")
+        
+        if items:
+            top = items[0]
+            print(f"\n{BOLD}Top Priority:{RESET} {YELLOW}{top.get('sku')}{RESET} ({top.get('reason')})")
+        return 0
+    print(f"{RED}[ERROR]{RESET} Failed to evaluate portfolio urgency: {res.get('detail') or res.get('error')}")
+    return 1
+
+
 def cmd_catalog_show(args):
     token = get_token(args)
     base_url = get_base_url(args)
@@ -565,6 +594,9 @@ def main():
 
     p_clist = sp_cat.add_parser("list", help="List catalog products")
     p_clist.set_defaults(func=cmd_catalog_list)
+
+    p_curg = sp_cat.add_parser("urgency", help="Show portfolio pricing urgency summary and ranked priority")
+    p_curg.set_defaults(func=cmd_catalog_urgency)
 
     p_cshow = sp_cat.add_parser("show", help="Show specific product details")
     p_cshow.add_argument("sku", help="Product SKU")

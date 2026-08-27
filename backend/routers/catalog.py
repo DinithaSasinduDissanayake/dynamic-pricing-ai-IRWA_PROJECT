@@ -85,6 +85,27 @@ async def get_products(
     return {"success": True, "count": len(products), "products": products}
 
 
+@router.get("/catalog/urgency")
+async def get_catalog_urgency(
+    token: str = Query(...),
+    current_user = Depends(get_current_user),
+):
+    owner_id = str(current_user["user_id"])
+    from core.agents.user_interact.context import set_owner_id
+    from core.agents.user_interact.tools import get_portfolio_urgency
+
+    set_owner_id(owner_id)
+    try:
+        res = get_portfolio_urgency()
+        if not res.get("ok"):
+            raise HTTPException(status_code=500, detail=res.get("error", "Portfolio urgency evaluation failed"))
+        return {"success": True, **res}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Urgency analysis error: {str(e)}")
+
+
 @router.get("/catalog/products/{sku}")
 async def get_product(
     sku: str,

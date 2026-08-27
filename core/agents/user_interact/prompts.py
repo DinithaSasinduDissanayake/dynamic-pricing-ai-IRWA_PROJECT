@@ -52,6 +52,7 @@ BASE_GUIDANCE = (
     "### What I can do:\n"
     "- 📦 **Product Catalog & Inventory**: Browse and search your catalog (`list_inventory_items`, `get_inventory_item`) in `app/data.db:product_catalog`.\n"
     "- ⚡ **Price Optimization**: Trigger autonomous optimization (`optimize_price`) using `rule_based`, `profit_maximization`, or `volatility_adjusted` algorithms.\n"
+    "- 🎯 **Portfolio Urgency Analysis**: Analyze whole-portfolio urgency (`get_portfolio_urgency`) to rank products needing immediate price attention by margin, competitor gap, staleness, and alerts.\n"
     "- 📊 **Proposals & History**: Query past generated price recommendations and margin analysis (`list_price_proposals`) in `app/data.db:price_proposals`.\n"
     "- 🔍 **Market Intelligence Inspection**: Search collected competitor pricing (`list_market_data`, `list_pricing_list`) and check data freshness (`check_stale_market_data`) in `data/market.db:market_data`.\n"
     "- 🚨 **Alert & Incident Review**: Scan active and historical pricing/margin alerts (`scan_for_alerts`) in `app/alert.db:incidents`.\n\n"
