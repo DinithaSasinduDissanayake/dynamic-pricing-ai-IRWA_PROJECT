@@ -385,8 +385,8 @@ class _LocalPriceOptimizerTools:
             proposed_price=proposed_price, current_price=current_price, cost=cost, min_margin=min_margin
         )
 
-    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown", request_id: Optional[str] = None) -> Dict[str, Any]:
-        return await self._impl.publish_price_proposal(sku=sku, old_price=old_price, new_price=new_price, margin=margin, algorithm=algorithm, request_id=request_id)
+    async def publish_price_proposal(self, sku: str, old_price: float, new_price: float, margin: float = 0.0, algorithm: str = "unknown", request_id: Optional[str] = None, rationale: Optional[Any] = None) -> Dict[str, Any]:
+        return await self._impl.publish_price_proposal(sku=sku, old_price=old_price, new_price=new_price, margin=margin, algorithm=algorithm, request_id=request_id, rationale=rationale)
 
     async def check_market_data_freshness(self, sku: str) -> Dict[str, Any]:
         return await self._impl.check_market_data_freshness(sku)

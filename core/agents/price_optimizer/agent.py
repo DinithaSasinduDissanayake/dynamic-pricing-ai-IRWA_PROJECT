@@ -185,17 +185,18 @@ class PricingOptimizerAgent:
         product_identifier = request_dict.get("product_name") or request_dict.get("sku") or request_dict.get("product_id")
         user_request = request_dict.get("user_request", "Optimize price")
         request_id = request_dict.get("request_id")
+        algorithm = request_dict.get("algorithm")
         
         if not product_identifier:
             self.logger.error(f"Optimization request missing product identifier. Keys available: {list(request_dict.keys())}")
             return
         
-        self.logger.info(f"Received optimization request for {product_identifier} (request_id={request_id}): {user_request}")
+        self.logger.info(f"Received optimization request for {product_identifier} (request_id={request_id}, algo={algorithm}): {user_request}")
         
         if self.llm and self.llm.is_available():
             await self._handle_autonomous_optimization(product_identifier, user_request, request_id=request_id)
         else:
-            await self._handle_fallback_optimization(product_identifier, user_request, request_id=request_id)
+            await self._handle_fallback_optimization(product_identifier, user_request, request_id=request_id, algorithm=algorithm)
 
     async def _handle_autonomous_optimization(self, product_identifier: str, user_request: str, request_id: Optional[str] = None):
         try:
@@ -292,8 +293,8 @@ Use your tools to complete this workflow autonomously."""
             self.logger.error(f"Autonomous optimization failed: {e}")
             await self._handle_fallback_optimization(product_identifier, user_request, request_id=request_id)
 
-    async def _handle_fallback_optimization(self, product_identifier: str, user_request: str, request_id: Optional[str] = None):
-        self.logger.info(f"Using fallback heuristic optimization for {product_identifier} (request_id={request_id})")
+    async def _handle_fallback_optimization(self, product_identifier: str, user_request: str, request_id: Optional[str] = None, algorithm: Optional[str] = None):
+        self.logger.info(f"Using fallback heuristic optimization for {product_identifier} (request_id={request_id}, algo={algorithm})")
         
         trace_id = generate_trace_id()
         started = datetime.now()
@@ -305,7 +306,7 @@ Use your tools to complete this workflow autonomously."""
                     action="fallback.start",
                     status="in_progress",
                     message=f"Fallback optimization: {product_identifier}",
-                    details=safe_redact({"trace_id": trace_id, "product": product_identifier, "request_id": request_id}),
+                    details=safe_redact({"trace_id": trace_id, "product": product_identifier, "request_id": request_id, "algorithm": algorithm}),
                 )
         except Exception:
             pass
@@ -328,22 +329,23 @@ Use your tools to complete this workflow autonomously."""
         competitor_price = market_intel.get("competitor_price") if market_intel.get("ok") else None
         market_records = market_intel.get("market_records", []) if market_intel.get("ok") else []
         
-        algorithm = "rule_based"
-        if self.llm_brain:
-            market_context = {
-                "competitor_price": competitor_price,
-                "our_price": our_price,
-                "record_count": market_intel.get("record_count", 0) if market_intel.get("ok") else 0,
-            }
-            decision = self.llm_brain.decide_tool(user_request, ALGORITHMS, market_context)
-            if "error" not in decision:
-                algorithm = decision.get("tool_name", "rule_based")
-        else:
-            req_l = (user_request or "").lower()
-            if any(k in req_l for k in ("maximize", "profit", "greedy")):
-                algorithm = "profit_maximization"
-            elif any(k in req_l for k in ("volatility", "adjusted", "ml", "predict", "model")):
-                algorithm = "volatility_adjusted"
+        if not algorithm:
+            algorithm = "rule_based"
+            if self.llm_brain:
+                market_context = {
+                    "competitor_price": competitor_price,
+                    "our_price": our_price,
+                    "record_count": market_intel.get("record_count", 0) if market_intel.get("ok") else 0,
+                }
+                decision = self.llm_brain.decide_tool(user_request, ALGORITHMS, market_context)
+                if "error" not in decision:
+                    algorithm = decision.get("tool_name", "rule_based")
+            else:
+                req_l = (user_request or "").lower()
+                if any(k in req_l for k in ("maximize", "profit", "greedy")):
+                    algorithm = "profit_maximization"
+                elif any(k in req_l for k in ("volatility", "adjusted", "ml", "predict", "model")):
+                    algorithm = "volatility_adjusted"
         
         algo_result = await self.tools.run_pricing_algorithm(
             algorithm=algorithm,
@@ -380,6 +382,7 @@ Use your tools to complete this workflow autonomously."""
             margin=margin,
             algorithm=algorithm,
             request_id=request_id,
+            rationale=algo_result.get("rationale"),
         )
         
         completed = datetime.now()

@@ -292,6 +292,10 @@ def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
                 proposal_data = await asyncio.wait_for(future, timeout=10.0)
 
                 proposed_price = proposal_data.get("proposed_price") if proposal_data.get("proposed_price") is not None else proposal_data.get("new_price")
+                old_price = proposal_data.get("current_price") if proposal_data.get("current_price") is not None else proposal_data.get("previous_price", proposal_data.get("old_price"))
+                margin = proposal_data.get("margin", 0.0)
+                algo = proposal_data.get("algorithm", algorithm or "unknown")
+                proposal_id = proposal_data.get("proposal_id", proposal_data.get("id"))
                 rationale_obj = proposal_data.get("rationale")
                 rationale_text = None
                 if isinstance(rationale_obj, dict):

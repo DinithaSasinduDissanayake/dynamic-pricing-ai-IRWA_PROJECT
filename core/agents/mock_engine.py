@@ -203,6 +203,7 @@ class MockLLMEngine:
                     "new_price": proposed_price,
                     "margin": margin,
                     "algorithm": algorithm_used,
+                    "rationale": algo_res.get("rationale"),
                 }
                 if extracted_request_id:
                     pub_kwargs["request_id"] = extracted_request_id
@@ -233,12 +234,16 @@ class MockLLMEngine:
         )
 
         if is_pricing_intent:
+            opt_res = None
             if "optimize_price" in functions_map:
                 try:
-                    functions_map["optimize_price"](sku=target_sku, algorithm=algo)
+                    opt_res = functions_map["optimize_price"](sku=target_sku, algorithm=algo)
                     tools_used.append("optimize_price")
                 except Exception as e:
                     raise RuntimeError(f"optimize_price failed for {target_sku}: {e}")
+
+            if opt_res and isinstance(opt_res, dict) and opt_res.get("message"):
+                return (opt_res.get("message"), tools_used)
 
             # Look up recent proposals
             proposals_list = []
@@ -258,13 +263,20 @@ class MockLLMEngine:
                 algo_name = latest.get("algorithm", algo)
                 p_id = latest.get("id", "prop_1")
                 margin = float(latest.get("margin") or 0.0)
+                rat = latest.get("rationale")
+                r_text = ""
+                if isinstance(rat, dict):
+                    r_text = rat.get("rationale_text") or "; ".join(rat.get("bounding_notes", []))
+                elif isinstance(rat, str):
+                    r_text = rat
+                rat_line = f"\n\n> 💡 **Rationale:** {r_text}" if r_text else ""
                 return (
                     f"### Price Optimization for SKU `{target_sku}`\n"
                     f"- **Recommended Price:** ${prop_p:.2f}\n"
                     f"- **Current Price:** ${curr_p:.2f}\n"
                     f"- **Algorithm:** `{algo_name}`\n"
                     f"- **Margin:** {margin:.1%}\n"
-                    f"- **Proposal ID:** `{p_id}`\n\n"
+                    f"- **Proposal ID:** `{p_id}`{rat_line}\n\n"
                     f"Proposal generated and stored in SQLite database.",
                     tools_used,
                 )
