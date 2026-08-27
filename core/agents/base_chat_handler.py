@@ -109,6 +109,11 @@ class BaseChatHandler:
         self._log.error(error_msg)
         raise RuntimeError(error_msg)
 
+    @staticmethod
+    def _looks_like_strict_rejection(exc: Exception) -> bool:
+        msg = str(exc).lower()
+        return "strict" in msg or "schema" in msg
+
     def execute_chat_with_tools(
         self,
         messages: List[Dict[str, Any]],
@@ -124,6 +129,7 @@ class BaseChatHandler:
             raise RuntimeError("LLM client unavailable (missing key or package)")
 
         last_error: Optional[Exception] = None
+        active_tools = tools
         for idx in self.provider_indices():
             provider = self._providers[idx]
             if provider.get("name") == "mock":
@@ -151,14 +157,35 @@ class BaseChatHandler:
                         len(local_msgs),
                         len(tools),
                     )
-                    resp = provider["client"].chat.completions.create(
-                        model=provider["model"],
-                        messages=local_msgs,
-                        tools=tools,
-                        **({"tool_choice": tool_choice} if tool_choice else {}),
-                        max_tokens=max_tokens,
-                        temperature=temperature,
-                    )
+                    try:
+                        resp = provider["client"].chat.completions.create(
+                            model=provider["model"],
+                            messages=local_msgs,
+                            tools=active_tools,
+                            **({"tool_choice": tool_choice} if tool_choice else {}),
+                            max_tokens=max_tokens,
+                            temperature=temperature,
+                        )
+                    except Exception as create_exc:
+                        # Capability degradation: some providers reject the
+                        # "strict" function flag — retry once without it.
+                        if active_tools is tools and self._looks_like_strict_rejection(create_exc):
+                            from .user_interact.tool_schemas import strip_strict
+                            active_tools = strip_strict(tools)
+                            self._log.warning(
+                                "Provider %s rejected strict tool schemas (%s); retrying without strict flags",
+                                provider["name"], create_exc,
+                            )
+                            resp = provider["client"].chat.completions.create(
+                                model=provider["model"],
+                                messages=local_msgs,
+                                tools=active_tools,
+                                **({"tool_choice": tool_choice} if tool_choice else {}),
+                                max_tokens=max_tokens,
+                                temperature=temperature,
+                            )
+                        else:
+                            raise
                     self.capture_usage(resp, provider["name"], provider["model"])
 
                     choice = resp.choices[0]

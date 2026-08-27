@@ -1,163 +1,90 @@
-from typing import Dict, List, Optional
+"""OpenAI-compatible tool specs GENERATED from the Pydantic models in tool_models.py.
 
-TOOL_SCHEMAS = [
-    {
-        "type": "function",
-        "function": {
-            "name": "list_inventory_items",
-            "description": "List items from the local product catalog (app/data.db:product_catalog). Use for inventory overviews.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "search": {"type": "string", "description": "Filter by substring in SKU or title."},
-                    "limit": {"type": "integer", "minimum": 1, "maximum": 200, "default": 50},
-                },
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "get_inventory_item",
-            "description": "Get a single inventory item by SKU from app/data.db:product_catalog.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "sku": {"type": "string", "description": "Item SKU (exact match)"},
-                },
-                "required": ["sku"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "list_pricing_list",
-            "description": "List current market pricing entries from app/data.db:pricing_list.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "search": {"type": "string", "description": "Filter by substring in product_name."},
-                    "limit": {"type": "integer", "minimum": 1, "maximum": 200, "default": 50},
-                },
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "list_price_proposals",
-            "description": "List recent price proposals from app/data.db:price_proposals.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "sku": {"type": "string", "description": "Optional filter by SKU"},
-                    "limit": {"type": "integer", "minimum": 1, "maximum": 200, "default": 50},
-                },
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "list_market_data",
-            "description": "List products from data/market.db:market_data (market research data). Use this to find products by brand or name in market data.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "search": {"type": "string", "description": "Filter by substring in product_name or brand."},
-                    "limit": {"type": "integer", "minimum": 1, "maximum": 200, "default": 50},
-                },
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "optimize_price",
-            "description": "Request autonomous price optimization for a product SKU. The Price Optimizer Agent will analyze market data, run pricing algorithms, validate constraints, and publish a price proposal.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "sku": {"type": "string", "description": "Product SKU to optimize pricing for"},
-                    "algorithm": {
-                        "type": "string",
-                        "enum": ["rule_based", "profit_maximization", "volatility_adjusted"],
-                        "description": "Pricing optimization algorithm to use. Options: 'rule_based' (default), 'profit_maximization' (elasticity-based), 'volatility_adjusted' (market volatility-aware).",
-                    },
-                },
-                "required": ["sku"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "apply_price_proposal",
-            "description": (
-                "Apply an approved price proposal to the live product catalog (updates product_catalog.current_price). "
-                "TWO-STEP CONFIRMATION FLOW: first call with confirm=false to get a preview (sku, current vs proposed price, "
-                "margin, algorithm, rationale) and show it to the user. Only after the user explicitly agrees, call again "
-                "with confirm=true to apply. Applying validates ownership, rejects already-applied proposals, re-checks the "
-                "12% margin floor against live cost, records an audit row in price_history, and publishes a price.applied event. "
-                "Never call with confirm=true without the user's explicit approval of the previewed change."
-            ),
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "proposal_id": {"type": "string", "description": "ID of the price proposal to apply (from list_price_proposals)."},
-                    "confirm": {"type": "boolean", "default": False, "description": "false = preview only; true = actually apply (requires prior user approval)."},
-                },
-                "required": ["proposal_id"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "check_stale_market_data",
-            "description": "Check for market data entries in data/market.db:market_data that are older than a specified threshold. Returns count and details of stale items.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "threshold_minutes": {"type": "integer", "description": "Age threshold in minutes. Default is 60.", "default": 60, "minimum": 1},
-                },
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "scan_for_alerts",
-            "description": "Scan for and retrieve all pricing alerts and incidents from app/alert.db:incidents. Returns open, acknowledged, and resolved alerts with severity levels and details.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "get_portfolio_urgency",
-            "description": "Compute portfolio-wide pricing urgency summary across all catalog products. Evaluates margin, competitor gap, market data staleness, pending proposals, and open alerts to return a compact ranked list (most urgent first). Use when asked which products most urgently need attention or price changes.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "additionalProperties": False,
-            },
-        },
-    },
+The models are the single source of truth: descriptions live on the model
+docstrings and Field(description=...), and the JSON schema handed to
+/v1/chat/completions is derived via model_json_schema() with strict-mode
+post-processing (additionalProperties: false, every property required and
+nullable when optional, no defaults/titles). ``TOOL_SCHEMAS`` keeps its
+historical name and shape so all consumers keep working.
+"""
+from __future__ import annotations
+
+import copy
+from typing import Any, Dict, List, Optional, Type
+
+from pydantic import BaseModel
+
+from .tool_models import TOOL_MODELS
+
+# Tools advertised to the LLM. Legacy aliases in TOOLS_MAP/TOOL_MODELS
+# (list_inventory, run_pricing_workflow, ...) stay dispatchable but hidden.
+EXPOSED_TOOLS: List[str] = [
+    "list_inventory_items",
+    "get_inventory_item",
+    "list_pricing_list",
+    "list_price_proposals",
+    "list_market_data",
+    "optimize_price",
+    "apply_price_proposal",
+    "check_stale_market_data",
+    "scan_for_alerts",
+    "get_portfolio_urgency",
 ]
+
+_STRIP_KEYS = ("title", "default")
+
+
+def _strip_keys(node: Any) -> Any:
+    if isinstance(node, dict):
+        return {k: _strip_keys(v) for k, v in node.items() if k not in _STRIP_KEYS}
+    if isinstance(node, list):
+        return [_strip_keys(v) for v in node]
+    return node
+
+
+def build_strict_parameters(model: Type[BaseModel]) -> Dict[str, Any]:
+    """Convert a Pydantic model's JSON schema into an OpenAI strict-mode
+    parameters object: additionalProperties false, all properties listed in
+    ``required`` (optional ones are already nullable via anyOf from the
+    ``... | None`` annotations), no default/title noise, no $refs."""
+    schema = copy.deepcopy(model.model_json_schema())
+    props = _strip_keys(schema.get("properties") or {})
+    return {
+        "type": "object",
+        "properties": props,
+        "required": list(props.keys()),
+        "additionalProperties": False,
+    }
+
+
+def build_tool_spec(name: str, model: Type[BaseModel]) -> Dict[str, Any]:
+    description = " ".join((model.__doc__ or name).split())
+    return {
+        "type": "function",
+        "function": {
+            "name": name,
+            "description": description,
+            "parameters": build_strict_parameters(model),
+            "strict": True,
+        },
+    }
+
+
+TOOL_SCHEMAS: List[Dict[str, Any]] = [
+    build_tool_spec(name, TOOL_MODELS[name]) for name in EXPOSED_TOOLS
+]
+
+
+def strip_strict(tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return a copy of the tool specs without strict-mode flags, for
+    providers that reject ``strict`` (capability degradation, not failure)."""
+    degraded = copy.deepcopy(tools)
+    for t in degraded:
+        fn = t.get("function")
+        if isinstance(fn, dict):
+            fn.pop("strict", None)
+    return degraded
+
 
 AGENT_TOOL_MAPPING: Dict[str, str] = {
     "list_inventory_items": "UserInteractionAgent",

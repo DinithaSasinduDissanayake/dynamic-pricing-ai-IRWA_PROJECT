@@ -25,8 +25,26 @@ class ChatExecutor:
 
         try:
             args = json.loads(raw_args) if isinstance(raw_args, str) else (raw_args or {})
+            if not isinstance(args, dict):
+                raise ValueError(f"expected a JSON object of arguments, got {type(args).__name__}")
+        except Exception as parse_exc:
+            return {
+                "ok": False,
+                "error": f"invalid arguments for {fn_name}: could not parse tool arguments as JSON object ({parse_exc})",
+            }
+
+        # Typed boundary: validate arguments against the tool's Pydantic model
+        # before touching the implementation (error-as-message on failure).
+        try:
+            from .user_interact.tool_models import validate_tool_args
         except Exception:
-            args = {}
+            validate_tool_args = None
+        if validate_tool_args is not None:
+            ok, validated = validate_tool_args(fn_name or "", args)
+            if not ok:
+                self._log.warning("Tool argument validation failed for %s: %s", fn_name, validated.get("error"))
+                return validated
+            args = validated
 
         tool_start_time = datetime.now()
         result: Any

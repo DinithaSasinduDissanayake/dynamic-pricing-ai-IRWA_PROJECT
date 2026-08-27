@@ -56,7 +56,19 @@ def detect_algorithm(messages: List[Dict[str, Any]]) -> str:
     return "rule_based"
 
 
-def _call_fn(fn: Callable[..., Any], **kwargs) -> Any:
+def _call_fn(fn: Callable[..., Any], _tool_name: Optional[str] = None, **kwargs) -> Any:
+    # Same typed boundary as the real dispatch path: validate against the
+    # tool's Pydantic model (if registered) and return the structured
+    # validation error as the tool result instead of raising.
+    if _tool_name:
+        try:
+            from .user_interact.tool_models import validate_tool_args
+            ok, validated = validate_tool_args(_tool_name, kwargs)
+            if not ok:
+                return validated
+            kwargs = validated
+        except ImportError:
+            pass
     try:
         res = fn(**kwargs)
     except TypeError:
@@ -232,7 +244,7 @@ class MockLLMEngine:
         # Check for portfolio urgency intent
         is_urgency_intent = any(w in last_lower for w in ("urgent", "urgently", "portfolio", "priority", "attention", "which product", "which of my products"))
         if is_urgency_intent and "get_portfolio_urgency" in functions_map:
-            urg_res = _call_fn(functions_map["get_portfolio_urgency"])
+            urg_res = _call_fn(functions_map["get_portfolio_urgency"], _tool_name="get_portfolio_urgency")
             tools_used.append("get_portfolio_urgency")
             if not isinstance(urg_res, dict) or not urg_res.get("ok"):
                 err_detail = urg_res.get("error") if isinstance(urg_res, dict) else f"Unknown error ({urg_res})"
@@ -264,7 +276,7 @@ class MockLLMEngine:
         if apply_match and "apply_price_proposal" in functions_map:
             confirm = bool(re.search(r"\b(confirm|confirmed|yes|approve|approved)\b", last_lower))
             try:
-                apply_res = functions_map["apply_price_proposal"](proposal_id=apply_match.group(1), confirm=confirm)
+                apply_res = _call_fn(functions_map["apply_price_proposal"], _tool_name="apply_price_proposal", proposal_id=apply_match.group(1), confirm=confirm)
                 tools_used.append("apply_price_proposal")
                 if isinstance(apply_res, dict):
                     return (apply_res.get("message") or apply_res.get("error") or str(apply_res), tools_used)
@@ -280,7 +292,7 @@ class MockLLMEngine:
             opt_res = None
             if "optimize_price" in functions_map:
                 try:
-                    opt_res = functions_map["optimize_price"](sku=target_sku, algorithm=algo)
+                    opt_res = _call_fn(functions_map["optimize_price"], _tool_name="optimize_price", sku=target_sku, algorithm=algo)
                     tools_used.append("optimize_price")
                 except Exception as e:
                     raise RuntimeError(f"optimize_price failed for {target_sku}: {e}")
@@ -292,7 +304,7 @@ class MockLLMEngine:
             proposals_list = []
             if "list_price_proposals" in functions_map:
                 try:
-                    p_res = functions_map["list_price_proposals"](sku=target_sku, limit=5)
+                    p_res = _call_fn(functions_map["list_price_proposals"], _tool_name="list_price_proposals", sku=target_sku, limit=5)
                     tools_used.append("list_price_proposals")
                     if isinstance(p_res, dict):
                         proposals_list = p_res.get("items", [])
