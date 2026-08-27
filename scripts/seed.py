@@ -159,9 +159,9 @@ def seed_market_data(owner_id: int):
     print(f"   [OK] Seeded {inserted_count} market competitor observations in data/market.db")
 
 
-async def seed_catalog_and_ticks(owner_id: int):
-    """Seed product catalog and initial market ticks via DataRepo."""
-    print("-> Initializing Product Catalog & Market Ticks...")
+async def seed_catalog(owner_id: int):
+    """Seed product catalog via DataRepo."""
+    print("-> Initializing Product Catalog...")
     repo = DataRepo()
     await repo.init()
     
@@ -180,20 +180,6 @@ async def seed_catalog_and_ticks(owner_id: int):
     owner_str = str(owner_id)
     inserted = await repo.upsert_products(catalog_items, owner_str)
     print(f"   [OK] Upserted {len(catalog_items)} products into product_catalog (owner_id={owner_str})")
-    
-    # Also insert initial ticks into market_ticks
-    now_iso = datetime.now(timezone.utc).isoformat()
-    for item in SAMPLE_PRODUCTS:
-        await repo.insert_tick({
-            "sku": item["sku"],
-            "market": "DEFAULT",
-            "our_price": item["current_price"],
-            "competitor_price": item["market_prices"][0] if item["market_prices"] else item["current_price"],
-            "demand_index": 1.05,
-            "ts": now_iso,
-            "source": "seed_script",
-        })
-    print(f"   [OK] Ingested initial market ticks for {len(SAMPLE_PRODUCTS)} SKUs")
 
 
 def main():
@@ -208,7 +194,7 @@ def main():
     seed_market_data(user_id)
     
     # 3. Product Catalog
-    asyncio.run(seed_catalog_and_ticks(user_id))
+    asyncio.run(seed_catalog(user_id))
     
     print("\n[SUCCESS] Database seeding completed successfully!")
     print("Admin Credentials:")

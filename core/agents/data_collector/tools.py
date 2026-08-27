@@ -48,13 +48,28 @@ class Tools:
             import sqlite3
             with sqlite3.connect(uri_app, uri=True) as conn:
                 conn.row_factory = sqlite3.Row
+                product_row = conn.execute(
+                    "SELECT title FROM product_catalog WHERE sku=? LIMIT 1",
+                    (sku,),
+                ).fetchone()
+                if not product_row:
+                    product_row = conn.execute(
+                        "SELECT title FROM product_catalog WHERE title LIKE ? LIMIT 1",
+                        (sku,),
+                    ).fetchone()
+                product_name = product_row["title"] if product_row and product_row["title"] else sku
+
+            market_path = getattr(self.repo, "market_path", Path("data/market.db"))
+            uri_market = f"file:{market_path.as_posix()}?mode=ro"
+            with sqlite3.connect(uri_market, uri=True) as conn:
+                conn.row_factory = sqlite3.Row
                 row = conn.execute(
                     """
-                    SELECT MAX(ts) as last_ts, COUNT(*) as tick_count
-                    FROM market_ticks
-                    WHERE sku=? AND market=?
+                    SELECT MAX(update_time) as last_ts, COUNT(*) as tick_count
+                    FROM market_data
+                    WHERE product_name=?
                     """,
-                    (sku, market),
+                    (product_name,),
                 ).fetchone()
                 
                 if not row or not row["last_ts"]:
@@ -95,51 +110,70 @@ class Tools:
             uri_app = f"file:{self.repo.path.as_posix()}?mode=ro"
             import sqlite3
             
-            cutoff = (datetime.now(timezone.utc) - timedelta(minutes=threshold_minutes)).isoformat()
-            
             with sqlite3.connect(uri_app, uri=True) as conn:
                 conn.row_factory = sqlite3.Row
-                
-                rows = conn.execute(
-                    """
-                    SELECT 
-                        pc.sku,
-                        pc.title,
-                        pc.source_url,
-                        MAX(mt.ts) as last_update,
-                        COUNT(mt.id) as tick_count
-                    FROM product_catalog pc
-                    LEFT JOIN market_ticks mt ON pc.sku = mt.sku
-                    GROUP BY pc.sku, pc.title, pc.source_url
-                    HAVING last_update IS NULL OR last_update < ?
-                    ORDER BY 
-                        CASE WHEN pc.source_url IS NOT NULL THEN 0 ELSE 1 END,
-                        last_update ASC NULLS FIRST
-                    LIMIT 20
-                    """,
-                    (cutoff,),
+                catalog_products = conn.execute(
+                    "SELECT sku, title, source_url FROM product_catalog"
                 ).fetchall()
+
+            market_path = getattr(self.repo, "market_path", Path("data/market.db"))
+            uri_market = f"file:{market_path.as_posix()}?mode=ro"
+            
+            cutoff = (datetime.now(timezone.utc) - timedelta(minutes=threshold_minutes)).isoformat()
+            
+            with sqlite3.connect(uri_market, uri=True) as conn:
+                conn.row_factory = sqlite3.Row
                 
                 stale_products = []
-                for r in rows:
+                now = datetime.now(timezone.utc)
+                
+                for p in catalog_products:
+                    sku = p["sku"]
+                    title = p["title"] or sku
+                    source_url = p["source_url"] if "source_url" in p.keys() else None
+                    
+                    row = conn.execute(
+                        """
+                        SELECT MAX(update_time) as last_update, COUNT(id) as tick_count
+                        FROM market_data
+                        WHERE product_name=?
+                        """,
+                        (title,),
+                    ).fetchone()
+                    
+                    last_update = row["last_update"] if row else None
+                    tick_count = row["tick_count"] if row else 0
+                    
                     last_ts = None
                     minutes_stale = None
+                    if last_update:
+                        try:
+                            last_ts = datetime.fromisoformat(last_update)
+                            if last_ts.tzinfo is None:
+                                last_ts = last_ts.replace(tzinfo=timezone.utc)
+                            minutes_stale = (now - last_ts).total_seconds() / 60
+                        except Exception:
+                            minutes_stale = None
                     
-                    if r["last_update"]:
-                        last_ts = datetime.fromisoformat(r["last_update"])
-                        now = datetime.now(timezone.utc)
-                        if last_ts.tzinfo is None:
-                            last_ts = last_ts.replace(tzinfo=timezone.utc)
-                        minutes_stale = (now - last_ts).total_seconds() / 60
-                    
-                    stale_products.append({
-                        "sku": r["sku"],
-                        "title": r["title"],
-                        "source_url": r["source_url"],
-                        "last_update": r["last_update"],
-                        "minutes_stale": minutes_stale,
-                        "tick_count": r["tick_count"] or 0,
-                    })
+                    if last_update is None or (minutes_stale is not None and minutes_stale > threshold_minutes):
+                        stale_products.append({
+                            "sku": sku,
+                            "title": title,
+                            "source_url": source_url,
+                            "last_update": last_update,
+                            "minutes_stale": minutes_stale,
+                            "tick_count": tick_count or 0,
+                        })
+                
+                # Sort: products with source_url first, then stalest first (None/highest minutes_stale first)
+                stale_products.sort(
+                    key=lambda x: (
+                        0 if x["source_url"] else 1,
+                        -1 if x["minutes_stale"] is None else -x["minutes_stale"],
+                    )
+                )
+                
+                stale_products = stale_products[:20]
                 
                 return {
                     "ok": True,

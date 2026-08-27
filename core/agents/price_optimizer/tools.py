@@ -202,50 +202,51 @@ class Tools:
                     "SELECT title FROM product_catalog WHERE sku = ?",
                     (sku,),
                 ).fetchone()
+                if not product_row:
+                    product_row = conn.execute(
+                        "SELECT title FROM product_catalog WHERE title LIKE ?",
+                        (sku,),
+                    ).fetchone()
                 
                 if not product_row:
                     return {"ok": False, "error": f"Product not found: {sku}"}
                 
                 product_title = product_row["title"]
                 
-                # Check market_ticks for freshness
-                tick_row = conn.execute(
+            # Check market_data in market DB for freshness
+            uri_market = f"file:{self.market_db.as_posix()}?mode=ro"
+            with sqlite3.connect(uri_market, uri=True) as m:
+                m.row_factory = sqlite3.Row
+                row = m.execute(
                     """
-                    SELECT MAX(ts) as last_ts, COUNT(*) as tick_count
-                    FROM market_ticks
-                    WHERE sku = ?
+                    SELECT MAX(update_time) as last_ts, COUNT(*) as tick_count
+                    FROM market_data
+                    WHERE product_name = ?
                     """,
-                    (sku,),
+                    (product_title,),
                 ).fetchone()
                 
                 has_data = False
                 minutes_stale = None
                 last_update = None
+                market_count = row["tick_count"] if row else 0
                 
-                if tick_row and tick_row["last_ts"]:
+                if row and row["last_ts"]:
                     has_data = True
-                    last_ts = datetime.fromisoformat(tick_row["last_ts"])
+                    last_update = row["last_ts"]
+                    last_ts = datetime.fromisoformat(row["last_ts"])
                     now = datetime.now(timezone.utc)
                     if last_ts.tzinfo is None:
                         last_ts = last_ts.replace(tzinfo=timezone.utc)
                     minutes_stale = (now - last_ts).total_seconds() / 60
-                    last_update = tick_row["last_ts"]
                 
-                # Check if we have any market data records in market DB
-                uri_market = f"file:{self.market_db.as_posix()}?mode=ro"
-                with sqlite3.connect(uri_market, uri=True) as m:
-                    market_count = m.execute(
-                        "SELECT COUNT(*) FROM market_data WHERE product_name = ?",
-                        (product_title,),
-                    ).fetchone()[0]
-                
-                is_stale = (not has_data) or (minutes_stale and minutes_stale > 60)
+                is_stale = (not has_data) or (minutes_stale is not None and minutes_stale > 60)
                 
                 return {
                     "ok": True,
                     "sku": sku,
                     "product_title": product_title,
-                    "has_data": has_data or market_count > 0,
+                    "has_data": has_data,
                     "last_update": last_update,
                     "minutes_stale": minutes_stale,
                     "is_stale": is_stale,

@@ -19,31 +19,40 @@ class DataRepo:
     Minimal repo for market ticks. Uses SQLite at DATA_DB or app/data.db.
     """
 
-    def __init__(self, path: Optional[str] = None) -> None:
+    def __init__(self, path: Optional[str] = None, market_path: Optional[str] = None) -> None:
         db_env = os.getenv("DATA_DB", "app/data.db")
+        market_env = os.getenv("MARKET_DB", "data/market.db")
         self.path = Path(path or db_env)
+        self.market_path = Path(market_path or market_env)
 
     async def init(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.market_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        async with aiosqlite.connect(self.market_path.as_posix()) as mdb:
+            await mdb.executescript(
+                """
+                PRAGMA journal_mode=WAL;
+
+                CREATE TABLE IF NOT EXISTS market_data (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    owner_id INTEGER,
+                    product_name TEXT,
+                    price REAL,
+                    features TEXT,
+                    update_time TEXT
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_market_data_owner ON market_data(owner_id);
+                CREATE INDEX IF NOT EXISTS idx_market_data_product ON market_data(product_name);
+                """
+            )
+            await mdb.commit()
+
         async with aiosqlite.connect(self.path.as_posix()) as db:
             await db.executescript(
                 """
                 PRAGMA journal_mode=WAL;
-
-                CREATE TABLE IF NOT EXISTS market_ticks (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  sku TEXT NOT NULL,
-                  market TEXT NOT NULL,
-                  our_price REAL NOT NULL,
-                  competitor_price REAL,
-                  demand_index REAL,
-                  ts TEXT NOT NULL,
-                  source TEXT,
-                  ingested_at TEXT NOT NULL
-                );
-
-                CREATE INDEX IF NOT EXISTS ix_ticks_sku_market_ts
-                  ON market_ticks (sku, market, ts);
 
                 -- Additive tables for product catalog, jobs, and proposals
                 CREATE TABLE IF NOT EXISTS product_catalog (
@@ -90,59 +99,106 @@ class DataRepo:
     async def insert_tick(self, d: Dict[str, Any]) -> None:
         # Expect ISO ts; if missing, use now
         ts = d.get("ts") or _utc_now_iso()
-        async with aiosqlite.connect(self.path.as_posix()) as db:
-            await db.execute(
+        price = d.get("competitor_price")
+        if price is None:
+            price = float(d.get("our_price", 0.0))
+        else:
+            price = float(price)
+
+        owner_id = d.get("owner_id")
+        product_name = d.get("product_name")
+
+        sku = d.get("sku")
+        if sku and (not product_name or owner_id is None):
+            async with aiosqlite.connect(self.path.as_posix()) as db:
+                db.row_factory = aiosqlite.Row
+                cur = await db.execute(
+                    "SELECT title, owner_id FROM product_catalog WHERE sku=? LIMIT 1",
+                    (sku,),
+                )
+                row = await cur.fetchone()
+                if row:
+                    if not product_name and row["title"]:
+                        product_name = row["title"]
+                    if owner_id is None and row["owner_id"] is not None:
+                        try:
+                            owner_id = int(row["owner_id"])
+                        except (ValueError, TypeError):
+                            owner_id = row["owner_id"]
+
+        if not product_name:
+            product_name = sku or "Unknown Product"
+        if owner_id is None:
+            owner_id = 1
+
+        features_str = d.get("features")
+        if not features_str:
+            features_str = f"Market observation for {sku or product_name}"
+
+        async with aiosqlite.connect(self.market_path.as_posix()) as mdb:
+            await mdb.execute(
                 """
-                INSERT INTO market_ticks
-                  (sku, market, our_price, competitor_price, demand_index, ts,
-                   source, ingested_at)
-                VALUES (?,?,?,?,?,?,?,?)
+                INSERT INTO market_data (owner_id, product_name, price, features, update_time)
+                VALUES (?, ?, ?, ?, ?)
                 """,
-                (
-                    d["sku"],
-                    d.get("market", "DEFAULT"),
-                    float(d["our_price"]),
-                    d.get("competitor_price"),
-                    d.get("demand_index"),
-                    ts,
-                    d.get("source", "unknown"),
-                    _utc_now_iso(),
-                ),
+                (owner_id, product_name, price, features_str, ts),
             )
-            await db.commit()
+            await mdb.commit()
 
     async def features_for(
         self, sku: str, market: str, since_iso: str
     ) -> Dict[str, Any]:
         """
         Return simple recent features for a window: latest values + basic gap.
+        Queries canonical market_data table in market_db.
         """
+        product_name = sku
+        our_price = None
+
+        async with aiosqlite.connect(self.path.as_posix()) as db:
+            db.row_factory = aiosqlite.Row
+            cur = await db.execute(
+                "SELECT title, current_price FROM product_catalog WHERE sku=? LIMIT 1",
+                (sku,),
+            )
+            row = await cur.fetchone()
+            if row:
+                if row["title"]:
+                    product_name = row["title"]
+                if row["current_price"] is not None:
+                    our_price = float(row["current_price"])
+
         q = """
-        SELECT our_price, competitor_price, demand_index, ts
-        FROM market_ticks
-        WHERE sku=? AND market=? AND ts>=?
-        ORDER BY ts DESC
+        SELECT price, update_time
+        FROM market_data
+        WHERE product_name=? AND update_time>=?
+        ORDER BY update_time DESC
         LIMIT 100
         """
-        async with aiosqlite.connect(self.path.as_posix()) as db:
-            cur = await db.execute(q, (sku, market, since_iso))
+        async with aiosqlite.connect(self.market_path.as_posix()) as mdb:
+            cur = await mdb.execute(q, (product_name, since_iso))
             rows = await cur.fetchall()
 
         if not rows:
             return {
                 "snapshot_id": None,
                 "as_of": None,
-                "features": {},
-                "provenance": [],
+                "features": {
+                    "our_price": our_price,
+                    "competitor_price": None,
+                    "demand_index": None,
+                    "price_gap_pct": None,
+                },
+                "provenance": ["market_data"],
                 "count": 0,
             }
 
-        # Latest row
-        our_latest, comp_latest, dem_latest, as_of = rows[0]
+        comp_latest, as_of = rows[0]
+        comp_latest = float(comp_latest) if comp_latest is not None else None
         gap_pct = None
-        if our_latest and comp_latest is not None:
+        if our_price and comp_latest is not None:
             try:
-                gap_pct = (our_latest - comp_latest) / our_latest if our_latest else None
+                gap_pct = (our_price - comp_latest) / our_price if our_price else None
             except ZeroDivisionError:
                 gap_pct = None
 
@@ -150,12 +206,12 @@ class DataRepo:
             "snapshot_id": f"snap:{sku}:{market}:{as_of}",
             "as_of": as_of,
             "features": {
-                "our_price": our_latest,
+                "our_price": our_price,
                 "competitor_price": comp_latest,
-                "demand_index": dem_latest,
+                "demand_index": 1.0,
                 "price_gap_pct": gap_pct,
             },
-            "provenance": ["market_ticks"],
+            "provenance": ["market_data"],
             "count": len(rows),
         }
 

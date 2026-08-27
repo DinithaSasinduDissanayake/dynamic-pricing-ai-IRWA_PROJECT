@@ -516,19 +516,26 @@ Use your tools to complete this workflow autonomously."""
                 except Exception:
                     market_data_cnt = 0
                 if title:
-                    r = m.execute(
-                        "SELECT optimized_price FROM pricing_list WHERE product_name=? LIMIT 1",
-                        (title,),
-                    ).fetchone()
+                    r = None
+                    try:
+                        r = m.execute(
+                            "SELECT optimized_price FROM pricing_list WHERE product_name=? LIMIT 1",
+                            (title,),
+                        ).fetchone()
+                    except Exception:
+                        r = None
                     if r and r[0] is not None:
                         competitor_price = float(r[0])
                     else:
-                        r2 = m.execute(
-                            "SELECT AVG(price) FROM market_data WHERE product_name=?",
-                            (title,),
-                        ).fetchone()
-                        if r2 and r2[0] is not None:
-                            competitor_price = float(r2[0])
+                        try:
+                            r2 = m.execute(
+                                "SELECT AVG(price) FROM market_data WHERE product_name=?",
+                                (title,),
+                            ).fetchone()
+                            if r2 and r2[0] is not None:
+                                competitor_price = float(r2[0])
+                        except Exception:
+                            pass
         except Exception:
             pass
 
@@ -569,10 +576,10 @@ Use your tools to complete this workflow autonomously."""
                 m.row_factory = sqlite3.Row
                 if title:
                     rows = m.execute(
-                        "SELECT price, scraped_at FROM market_data WHERE product_name=? ORDER BY scraped_at DESC LIMIT 50",
+                        "SELECT price, update_time FROM market_data WHERE product_name=? ORDER BY update_time DESC LIMIT 50",
                         (title,),
                     ).fetchall()
-                    market_records = [(float(r["price"]), r["scraped_at"]) for r in rows if r["price"] is not None]
+                    market_records = [(float(r["price"]), r["update_time"]) for r in rows if r["price"] is not None]
         except Exception:
             pass
 
