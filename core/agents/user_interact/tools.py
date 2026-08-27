@@ -219,16 +219,16 @@ def list_proposals(sku: str = "", limit: int = 10) -> Dict[str, Any]:
     return list_price_proposals(sku=sku or None, limit=limit)
 
 
+import asyncio
+import uuid
+
+
 def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
     """
-    Trigger price optimization workflow for a product.
+    Trigger price optimization workflow for a product and await proposal.
     
     This publishes an OPTIMIZATION_REQUEST event that triggers the autonomous
-    Price Optimizer Agent, which will:
-    1. Check market data freshness
-    2. Trigger data collection if needed
-    3. Run pricing algorithm
-    4. Validate and publish price proposal
+    Price Optimizer Agent, then waits for the PRICE_PROPOSAL event with a bounded timeout.
     """
     owner_id = get_owner_id()
     
@@ -242,52 +242,103 @@ def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
     try:
         from core.agents.agent_sdk.bus_factory import get_bus
         from core.agents.agent_sdk.protocol import Topic
-        import asyncio
         
         bus = get_bus()
+        request_id = uuid.uuid4().hex
         
-        # Publish OPTIMIZATION_REQUEST event to trigger autonomous workflow
+        # Publish OPTIMIZATION_REQUEST event with correlation ID
         optimization_payload = {
+            "request_id": request_id,
             "sku": sku,
             "product_name": sku,
             "user_request": f"Optimize price for {sku} using algorithm {algorithm}" if algorithm else f"Optimize price for {sku}",
             "algorithm": algorithm,
         }
         
+        async def _run_bounded_optimization() -> Dict[str, Any]:
+            loop = asyncio.get_running_loop()
+            future: asyncio.Future = loop.create_future()
+
+            def on_proposal(proposal: Any):
+                try:
+                    p_dict = proposal if isinstance(proposal, dict) else (
+                        getattr(proposal, "model_dump", None)() if hasattr(proposal, "model_dump") else getattr(proposal, "__dict__", {})
+                    )
+                    prop_sku = p_dict.get("sku") or p_dict.get("product_id")
+                    prop_req_id = p_dict.get("request_id")
+                    if (prop_req_id and prop_req_id == request_id) or (prop_sku and prop_sku == sku):
+                        if not future.done():
+                            future.set_result(p_dict)
+                except Exception:
+                    pass
+
+            bus.subscribe(Topic.PRICE_PROPOSAL.value, on_proposal)
+            try:
+                loop.create_task(bus.publish(Topic.OPTIMIZATION_REQUEST.value, optimization_payload))
+                proposal_data = await asyncio.wait_for(future, timeout=10.0)
+
+                proposed_price = proposal_data.get("proposed_price") if proposal_data.get("proposed_price") is not None else proposal_data.get("new_price")
+                old_price = proposal_data.get("current_price") if proposal_data.get("current_price") is not None else proposal_data.get("previous_price", proposal_data.get("old_price"))
+                margin = proposal_data.get("margin", 0.0)
+                algo = proposal_data.get("algorithm", algorithm or "unknown")
+                proposal_id = proposal_data.get("proposal_id", proposal_data.get("id"))
+
+                msg_lines = [
+                    f"### ✅ Price Optimization Proposal for `{sku}`",
+                    f"- **Proposed Price:** ${float(proposed_price):.2f}" if proposed_price is not None else "",
+                    f"- **Current/Old Price:** ${float(old_price):.2f}" if old_price is not None else "",
+                    f"- **Margin:** {float(margin):.1%}" if margin is not None else "",
+                    f"- **Algorithm:** `{algo}`",
+                    f"- **Proposal ID:** `{proposal_id}`" if proposal_id else "",
+                ]
+                msg = "\n".join([line for line in msg_lines if line])
+
+                return {
+                    "ok": True,
+                    "sku": sku,
+                    "proposed_price": float(proposed_price) if proposed_price is not None else None,
+                    "old_price": float(old_price) if old_price is not None else None,
+                    "current_price": float(old_price) if old_price is not None else None,
+                    "margin": float(margin) if margin is not None else 0.0,
+                    "algorithm": algo,
+                    "proposal_id": proposal_id,
+                    "proposal": proposal_data,
+                    "message": msg,
+                }
+            except asyncio.TimeoutError:
+                return {
+                    "ok": True,
+                    "timed_out": True,
+                    "message": f"Optimization for {sku} is still processing in background. Check proposals shortly.",
+                    "sku": sku,
+                }
+            finally:
+                if hasattr(bus, "unsubscribe"):
+                    try:
+                        bus.unsubscribe(Topic.PRICE_PROPOSAL.value, on_proposal)
+                    except Exception:
+                        pass
+                elif hasattr(bus, "_subs"):
+                    try:
+                        subs_list = bus._subs.get(Topic.PRICE_PROPOSAL.value, [])
+                        if on_proposal in subs_list:
+                            subs_list.remove(on_proposal)
+                    except Exception:
+                        pass
+
         try:
             loop = asyncio.get_running_loop()
-            # If we're already in an async context, schedule the publish
-            task = loop.create_task(bus.publish(Topic.OPTIMIZATION_REQUEST.value, optimization_payload))
-            return {
-                "ok": True,
-                "message": f"✅ Price optimization request sent for **{sku}**.\n\n"
-                          f"The system will:\n"
-                          f"1. Check market data freshness\n"
-                          f"2. Collect fresh data if needed\n"
-                          f"3. Run pricing algorithm\n"
-                          f"4. Generate price proposal\n\n"
-                          f"You can check the proposals in a moment using the Proposals panel or by asking for proposals for this SKU.",
-                "sku": sku
-            }
         except RuntimeError:
-            # Not in async context, use asyncio.run
-            async def trigger_optimization():
-                await bus.publish(Topic.OPTIMIZATION_REQUEST.value, optimization_payload)
-            
-            asyncio.run(trigger_optimization())
-            
-            return {
-                "ok": True,
-                "message": f"✅ Price optimization request sent for **{sku}**.\n\n"
-                          f"The autonomous pricing agent will:\n"
-                          f"- Check if market data is fresh (last 60 minutes)\n"
-                          f"- Collect new data if stale or missing\n"
-                          f"- Analyze competitive pricing\n"
-                          f"- Run optimization algorithm\n"
-                          f"- Generate validated price proposal\n\n"
-                          f"💡 Check proposals in a few seconds using the Proposals panel.",
-                "sku": sku
-            }
+            loop = None
+
+        if loop and loop.is_running():
+            import concurrent.futures
+            # When inside a running event loop (e.g. FastAPI / synchronous tool caller in thread or async),
+            # run in a separate thread with dedicated loop to block synchronously without deadlocking
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                return pool.submit(asyncio.run, _run_bounded_optimization()).result()
+        else:
+            return asyncio.run(_run_bounded_optimization())
     except Exception as e:
         return {"ok": False, "error": f"Failed to trigger optimization: {str(e)}"}
 
