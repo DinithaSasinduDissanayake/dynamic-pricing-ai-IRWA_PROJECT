@@ -79,11 +79,55 @@ def optimize(
     if recommended > max_price:
         recommended = float(max_price)
 
+    # Calculate metrics for structured rationale
+    sample_count = len(market_records) if market_records is not None else (1 if f.competitor_price is not None else 0)
+    avg_competitor_price = None
+    if market_records:
+        avg_competitor_price = round(sum(r[0] for r in market_records) / len(market_records), 2)
+    elif f.competitor_price is not None:
+        avg_competitor_price = round(float(f.competitor_price), 2)
+
+    our_price_val = round(float(f.our_price), 2)
+    cost_val = round(float(f.cost), 2) if f.cost is not None else None
+    margin_floor_pct = round(float(min_margin) * 100.0, 1)
+    
+    achieved_margin_pct = None
+    if cost_val is not None and recommended > 0:
+        achieved_margin_pct = round(((recommended - cost_val) / recommended) * 100.0, 1)
+
+    algo_name = algorithm or "heuristic"
+    confidence_val = 0.8 if algorithm else 0.6
+
+    # Build rationale_text
+    avg_comp_str = f"${avg_competitor_price:.2f}" if avg_competitor_price is not None else "$0.00"
+    if achieved_margin_pct is not None:
+        margin_str = f"margin floor {margin_floor_pct:g}% satisfied at {achieved_margin_pct:g}%"
+    else:
+        margin_str = f"margin floor {margin_floor_pct:g}%"
+    
+    rationale_text = (
+        f"Sampled {sample_count} competitor prices (avg {avg_comp_str}); "
+        f"algorithm {algo_name} chose ${recommended:.2f}; {margin_str}"
+    )
+
+    rationale_dict: Dict[str, Any] = {
+        "sample_count": sample_count,
+        "avg_competitor_price": avg_competitor_price,
+        "our_price": our_price_val,
+        "cost": cost_val,
+        "margin_floor_pct": margin_floor_pct,
+        "achieved_margin_pct": achieved_margin_pct,
+        "algorithm": algo_name,
+        "confidence": confidence_val,
+        "bounding_notes": rationale,
+        "rationale_text": rationale_text,
+    }
+
     result = {
         "recommended_price": recommended,
-        "confidence": 0.8 if algorithm else 0.6,
-        "rationale": "; ".join(rationale) or "No change",
-        "algorithm": algorithm or "heuristic",
+        "confidence": confidence_val,
+        "rationale": rationale_dict,
+        "algorithm": algo_name,
         "constraints_evaluation": {
             "min_price": min_price,
             "max_price": max_price,

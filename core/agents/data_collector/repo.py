@@ -98,7 +98,8 @@ class DataRepo:
                   current_price REAL,
                   margin REAL,
                   algorithm TEXT,
-                  ts TEXT
+                  ts TEXT,
+                  rationale TEXT
                 );
                 """
             )
@@ -474,14 +475,22 @@ class DataRepo:
 
         If 'id' or 'ts' are missing, they will be generated.
         """
+        import json
         pid = pp.get("id") or str(uuid.uuid4())
         ts = pp.get("ts") or _utc_now_iso()
+        rationale = pp.get("rationale")
+        rationale_str = None
+        if isinstance(rationale, (dict, list)):
+            rationale_str = json.dumps(rationale)
+        elif rationale is not None:
+            rationale_str = str(rationale)
+            
         async with self._connect_app() as db:
             await db.execute(
                 """
                 INSERT INTO price_proposals
-                  (id, sku, proposed_price, current_price, margin, algorithm, ts)
-                VALUES (?,?,?,?,?,?,?)
+                  (id, sku, proposed_price, current_price, margin, algorithm, ts, rationale)
+                VALUES (?,?,?,?,?,?,?,?)
                 """,
                 (
                     pid,
@@ -491,6 +500,7 @@ class DataRepo:
                     pp["margin"],
                     pp["algorithm"],
                     ts,
+                    rationale_str,
                 ),
             )
             await db.commit()

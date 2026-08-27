@@ -163,6 +163,7 @@ class Tools:
         margin: float = 0.0,
         algorithm: str = "unknown",
         request_id: Optional[str] = None,
+        rationale: Optional[Any] = None,
     ) -> Dict[str, Any]:
         try:
             from core.agents.agent_sdk.bus_factory import get_bus
@@ -182,6 +183,8 @@ class Tools:
             }
             if request_id:
                 proposal_payload["request_id"] = request_id
+            if rationale is not None:
+                proposal_payload["rationale"] = rationale
             await bus.publish(Topic.PRICE_PROPOSAL.value, proposal_payload)
             
             return {
@@ -437,6 +440,10 @@ def get_llm_tools():
                         "request_id": {
                             "type": "string",
                             "description": "Correlation request ID"
+                        },
+                        "rationale": {
+                            "type": "object",
+                            "description": "Structured proposal rationale object"
                         }
                     },
                     "required": ["sku", "old_price", "new_price"]
@@ -525,6 +532,7 @@ async def execute_tool_call(tool_name: str, tool_args: Dict[str, Any], tools_ins
             margin=tool_args.get("margin", 0.0),
             algorithm=tool_args.get("algorithm", "rule_based"),
             request_id=tool_args.get("request_id"),
+            rationale=tool_args.get("rationale"),
         )
         logger.info(f"publish_price_proposal result: {result}")
         return result

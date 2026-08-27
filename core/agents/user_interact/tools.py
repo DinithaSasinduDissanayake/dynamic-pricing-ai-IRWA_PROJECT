@@ -292,10 +292,22 @@ def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
                 proposal_data = await asyncio.wait_for(future, timeout=10.0)
 
                 proposed_price = proposal_data.get("proposed_price") if proposal_data.get("proposed_price") is not None else proposal_data.get("new_price")
-                old_price = proposal_data.get("current_price") if proposal_data.get("current_price") is not None else proposal_data.get("previous_price", proposal_data.get("old_price"))
-                margin = proposal_data.get("margin", 0.0)
-                algo = proposal_data.get("algorithm", algorithm or "unknown")
-                proposal_id = proposal_data.get("proposal_id", proposal_data.get("id"))
+                rationale_obj = proposal_data.get("rationale")
+                rationale_text = None
+                if isinstance(rationale_obj, dict):
+                    rationale_text = rationale_obj.get("rationale_text")
+                    if not rationale_text and "bounding_notes" in rationale_obj:
+                        rationale_text = "; ".join(rationale_obj["bounding_notes"])
+                elif isinstance(rationale_obj, str):
+                    try:
+                        import json
+                        parsed = json.loads(rationale_obj)
+                        if isinstance(parsed, dict):
+                            rationale_text = parsed.get("rationale_text") or "; ".join(parsed.get("bounding_notes", []))
+                        else:
+                            rationale_text = str(parsed)
+                    except Exception:
+                        rationale_text = rationale_obj
 
                 msg_lines = [
                     f"### ✅ Price Optimization Proposal for `{sku}`",
@@ -305,6 +317,8 @@ def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
                     f"- **Algorithm:** `{algo}`",
                     f"- **Proposal ID:** `{proposal_id}`" if proposal_id else "",
                 ]
+                if rationale_text:
+                    msg_lines.append(f"\n> 💡 **Rationale:** {rationale_text}")
                 msg = "\n".join([line for line in msg_lines if line])
 
                 return {
@@ -317,6 +331,7 @@ def optimize_price(sku: str, algorithm: Optional[str] = None) -> Dict[str, Any]:
                     "algorithm": algo,
                     "proposal_id": proposal_id,
                     "proposal": proposal_data,
+                    "rationale": rationale_obj,
                     "message": msg,
                 }
             except asyncio.TimeoutError:

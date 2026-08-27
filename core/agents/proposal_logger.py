@@ -73,9 +73,14 @@ class ProposalLogger:
                         current_price REAL,
                         margin REAL,
                         algorithm TEXT,
-                        ts TEXT NOT NULL
+                        ts TEXT NOT NULL,
+                        rationale TEXT
                     )
                 """)
+                # Migration: add rationale column if missing in existing table
+                cols = [r[1] for r in conn.execute("PRAGMA table_info(price_proposals)").fetchall()]
+                if "rationale" not in cols:
+                    conn.execute("ALTER TABLE price_proposals ADD COLUMN rationale TEXT")
                 conn.commit()
                 self.logger.info("Verified price_proposals table exists")
         except Exception as e:
@@ -84,6 +89,7 @@ class ProposalLogger:
     def _persist_proposal(self, proposal: Dict[str, Any]) -> None:
         """Write a single proposal to the database."""
         try:
+            import json
             # Extract fields from proposal event
             proposal_id = proposal.get("proposal_id", str(uuid.uuid4()))
             sku = proposal.get("sku") or proposal.get("product_id")
@@ -91,6 +97,12 @@ class ProposalLogger:
             current_price = proposal.get("current_price") or proposal.get("previous_price") or proposal.get("old_price")
             margin = proposal.get("margin", 0.0)
             algorithm = proposal.get("algorithm", "unknown")
+            rationale = proposal.get("rationale")
+            rationale_str = None
+            if isinstance(rationale, (dict, list)):
+                rationale_str = json.dumps(rationale)
+            elif rationale is not None:
+                rationale_str = str(rationale)
             ts = datetime.now(timezone.utc).isoformat()
             
             # Validate required fields
@@ -101,8 +113,8 @@ class ProposalLogger:
             # Insert into database
             with self._connect() as conn:
                 conn.execute("""
-                    INSERT INTO price_proposals (id, sku, proposed_price, current_price, margin, algorithm, ts)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO price_proposals (id, sku, proposed_price, current_price, margin, algorithm, ts, rationale)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     proposal_id,
                     sku,
@@ -110,7 +122,8 @@ class ProposalLogger:
                     float(current_price) if current_price is not None else None,
                     float(margin) if margin is not None else 0.0,
                     algorithm,
-                    ts
+                    ts,
+                    rationale_str
                 ))
                 conn.commit()
             

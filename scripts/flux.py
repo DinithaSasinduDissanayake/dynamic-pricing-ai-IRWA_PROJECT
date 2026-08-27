@@ -312,6 +312,13 @@ def cmd_optimizer_run(args):
             print(f"  Algorithm:      {p.get('algorithm')}")
             print(f"  Margin:         {float(p.get('margin', 0)):.1%}")
             print(f"  Timestamp:      {p.get('ts')}")
+            rat = p.get("rationale")
+            if rat:
+                if isinstance(rat, dict):
+                    r_text = rat.get("rationale_text") or "; ".join(rat.get("bounding_notes", []))
+                else:
+                    r_text = str(rat)
+                print(f"  Rationale:      {r_text}")
         else:
             print(f"  Result: {res.get('message')}")
         return 0
@@ -342,20 +349,61 @@ def cmd_proposals_list(args):
         if not proposals:
             print(f"No proposals found{' for ' + args.sku if args.sku else ''}.")
             return 0
-        print(f"{BOLD}{'ID':<15} {'SKU':<12} {'PROPOSED':<10} {'CURRENT':<10} {'MARGIN':<8} {'ALGORITHM':<15} {'TIMESTAMP'}{RESET}")
-        print("-" * 80)
+        print(f"{BOLD}{'ID':<12} {'SKU':<12} {'PROPOSED':<10} {'CURRENT':<10} {'MARGIN':<8} {'ALGORITHM':<18} {'RATIONALE / TIMESTAMP'}{RESET}")
+        print("-" * 110)
         for p in proposals:
-            pid = str(p.get("id", "-"))[:14]
+            pid = str(p.get("id", "-"))[:10]
             sku = p.get("sku", "-")
             prop_p = f"${float(p.get('proposed_price', 0)):.2f}"
             curr_p = f"${float(p.get('current_price', 0)):.2f}"
             margin = f"{float(p.get('margin', 0)):.1%}"
             algo = str(p.get("algorithm", "-"))
             ts = str(p.get("ts", "-"))[:19]
-            print(f"{pid:<15} {CYAN}{sku:<12}{RESET} {YELLOW}{prop_p:<10}{RESET} {curr_p:<10} {margin:<8} {algo:<15} {ts}")
+            rat = p.get("rationale")
+            r_text = ""
+            if isinstance(rat, dict):
+                r_text = rat.get("rationale_text") or "; ".join(rat.get("bounding_notes", []))
+            elif isinstance(rat, str) and rat:
+                r_text = rat
+            
+            rat_display = r_text if r_text else ts
+            print(f"{pid:<12} {CYAN}{sku:<12}{RESET} {YELLOW}{prop_p:<10}{RESET} {curr_p:<10} {margin:<8} {algo:<18} {rat_display}")
         print(f"\nTotal proposals: {len(proposals)}")
         return 0
     print(f"{RED}[ERROR]{RESET} Failed to list proposals: {res.get('error') or res.get('detail')}")
+    return 1
+
+
+def cmd_proposals_show(args):
+    token = get_token(args)
+    base_url = get_base_url(args)
+    res = http_request("GET", "/api/proposals", token=token, base_url=base_url)
+    if res.get("ok"):
+        proposals = res.get("proposals", [])
+        matched = [p for p in proposals if str(p.get("id", "")).startswith(args.id)]
+        if not matched:
+            print(f"{RED}[ERROR]{RESET} Proposal not found matching ID '{args.id}'")
+            return 1
+        p = matched[0]
+        print(f"{BOLD}Proposal Details:{RESET}")
+        print(f"  ID:             {p.get('id')}")
+        print(f"  SKU:            {p.get('sku')}")
+        print(f"  Proposed Price: {YELLOW}${float(p.get('proposed_price', 0)):.2f}{RESET}")
+        print(f"  Current Price:  ${float(p.get('current_price', 0)):.2f}")
+        print(f"  Margin:         {float(p.get('margin', 0)):.1%}")
+        print(f"  Algorithm:      {p.get('algorithm')}")
+        print(f"  Timestamp:      {p.get('ts')}")
+        rat = p.get("rationale")
+        if isinstance(rat, dict):
+            print(f"  Rationale Text: {rat.get('rationale_text') or '-'}")
+            print(f"  Sample Count:   {rat.get('sample_count')}")
+            print(f"  Avg Comp Price: ${rat.get('avg_competitor_price', 0):.2f}" if rat.get('avg_competitor_price') is not None else "  Avg Comp Price: N/A")
+            print(f"  Cost Baseline:  ${rat.get('cost', 0):.2f}" if rat.get('cost') is not None else "  Cost Baseline:  N/A")
+            print(f"  Confidence:     {float(rat.get('confidence', 0)):.0%}")
+        elif rat:
+            print(f"  Rationale:      {rat}")
+        return 0
+    print(f"{RED}[ERROR]{RESET} Failed to fetch proposals: {res.get('error') or res.get('detail')}")
     return 1
 
 
@@ -552,6 +600,9 @@ def main():
     p_plist = sp_prop.add_parser("list", help="List recent price proposals")
     p_plist.add_argument("sku", nargs="?", help="Optional SKU filter")
     p_plist.set_defaults(func=cmd_proposals_list)
+    p_pshow = sp_prop.add_parser("show", help="Show details of a specific price proposal")
+    p_pshow.add_argument("id", help="Proposal ID or ID prefix")
+    p_pshow.set_defaults(func=cmd_proposals_show)
 
     # alerts
     p_alt = subparsers.add_parser("alerts", help="Alert incidents and notifications")

@@ -37,8 +37,16 @@ async def list_proposals(
             if not table_check:
                 return {"ok": True, "proposals": [], "total": 0}
 
-            query = """
-                SELECT pp.id, pp.sku, pp.proposed_price, pp.current_price, pp.margin, pp.algorithm, pp.ts
+            import json
+            cols = [col[1] for col in cur.execute("PRAGMA table_info(price_proposals)").fetchall()]
+            has_rationale = "rationale" in cols
+            
+            select_cols = "pp.id, pp.sku, pp.proposed_price, pp.current_price, pp.margin, pp.algorithm, pp.ts"
+            if has_rationale:
+                select_cols += ", pp.rationale"
+
+            query = f"""
+                SELECT {select_cols}
                 FROM price_proposals pp
             """
             params: List[Any] = []
@@ -48,7 +56,16 @@ async def list_proposals(
             query += " ORDER BY pp.ts DESC LIMIT ?"
             params.append(limit)
 
-            rows = [dict(r) for r in cur.execute(query, params).fetchall()]
+            raw_rows = [dict(r) for r in cur.execute(query, params).fetchall()]
+            rows = []
+            for r in raw_rows:
+                rat = r.get("rationale")
+                if isinstance(rat, str):
+                    try:
+                        r["rationale"] = json.loads(rat)
+                    except Exception:
+                        pass
+                rows.append(r)
             return {"ok": True, "proposals": rows, "total": len(rows)}
     except Exception as e:
         return {"ok": True, "proposals": [], "total": 0, "error": str(e)}

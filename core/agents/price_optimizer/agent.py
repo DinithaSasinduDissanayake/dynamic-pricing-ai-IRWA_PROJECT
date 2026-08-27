@@ -251,9 +251,10 @@ Use your tools to complete this workflow autonomously."""
                 new_price = kwargs.get("new_price")
                 margin = kwargs.get("margin", 0.0)
                 algorithm = kwargs.get("algorithm", "rule_based")
+                rationale = kwargs.get("rationale")
                 target_req_id = kwargs.get("request_id") or kwargs.get("req_id") or request_id
                 return await execute_tool_call("publish_price_proposal", {
-                    "sku": sku, "old_price": old_price, "new_price": new_price, "margin": margin, "algorithm": algorithm, "request_id": target_req_id
+                    "sku": sku, "old_price": old_price, "new_price": new_price, "margin": margin, "algorithm": algorithm, "request_id": target_req_id, "rationale": rationale
                 }, self.tools)
             
             async def check_market_data_freshness_async(sku: str):
@@ -612,6 +613,7 @@ Use your tools to complete this workflow autonomously."""
             "recommended_price": res.get("recommended_price", our_price),
             "confidence": res.get("confidence", 0.6),
             "reason": res.get("rationale", ""),
+            "rationale": res.get("rationale"),
             "algorithm": algorithm,
             "llm_reason": llm_reason,
             "market_context": market_context,
@@ -654,12 +656,21 @@ Use your tools to complete this workflow autonomously."""
         try:
             if _get_bus is not None and _Topic is not None and out.get("status") == "ok":
                 bus = _get_bus()
+                calculated_margin = float((out.get("price") - cost) / out.get("price")) if cost and out.get("price") else 0.0
                 proposal_payload = {
                     "proposal_id": uuid.uuid4().hex,
+                    "sku": sku,
                     "product_id": sku,
+                    "old_price": float(our_price) if our_price is not None else 0.0,
                     "previous_price": float(our_price) if our_price is not None else 0.0,
+                    "new_price": float(out.get("price")),
                     "proposed_price": float(out.get("price")),
+                    "margin": calculated_margin,
+                    "algorithm": algorithm,
+                    "rationale": out.get("rationale"),
                 }
+                if request_id:
+                    proposal_payload["request_id"] = request_id
                 await bus.publish(_Topic.PRICE_PROPOSAL.value, proposal_payload)
         except Exception:
             pass
