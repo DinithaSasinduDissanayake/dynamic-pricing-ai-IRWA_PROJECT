@@ -68,6 +68,7 @@ dist/
 build/
 .cache/
 .ipynb_checkpoints/
+openapi.json
 
 # ---------- Streamlit ----------
 # Streamlit stores local secrets and runtime state; don't commit.
