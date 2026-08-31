@@ -5,14 +5,10 @@
 - **Python 3.11** (recommended). The pinned `pydantic==2.8.2` in `requirements.txt` ships a `pydantic-core` wheel that does not build on Python 3.14 — use 3.11 (or another 3.11/3.12 environment) to avoid a source build failure.
 - Node.js (for the frontend build)
 
-## Option 1: Easy start (Windows)
-
-Double-click `run_app.bat` in the project root. It checks the Python installation, installs dependencies if needed, finds an available port (8000/8001/8002), and starts the server.
-
-## Option 2: Manual setup
+## Quickstart
 
 1. **Environment variables**
-   - Copy `.env.example` to `.env` and fill in whichever LLM provider keys you have (OpenRouter, OpenAI, and/or Gemini). None are required — without any key configured, the chat still responds with a non-LLM fallback message.
+   - Copy `.env.example` to `.env` and configure any LLM provider keys (OpenRouter, OpenAI, and/or Gemini). Without keys configured, fallback responses are used.
 
 2. **Install backend dependencies**
    ```
@@ -22,11 +18,13 @@ Double-click `run_app.bat` in the project root. It checks the Python installatio
 3. **Build the frontend and run the server**
    ```
    cd frontend && npm install && npm run build && cd ..
-   uvicorn backend.main:app --reload --port 8000
+   uvicorn backend.main:app --port 8000
    ```
    Open http://localhost:8000.
 
-   For hot-reload development (separate backend + frontend dev server), use `run_full_app.bat` on Windows or run the equivalent two commands (`uvicorn backend.main:app --reload` and `npm run dev` inside `frontend/`) manually on other platforms.
+   For development with hot reloading (separate backend and frontend dev servers):
+   - Terminal 1: `uvicorn backend.main:app --reload --port 8000`
+   - Terminal 2: `cd frontend && npm run dev`
 
 4. **Optional: run tests**
    ```
