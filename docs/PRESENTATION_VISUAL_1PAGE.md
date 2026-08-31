@@ -155,7 +155,7 @@ curl -X POST http://localhost:8000/api/chat \
 | Event Bus Factory | `core/agents/agent_sdk/bus_factory.py` | 8-68 |
 | MCP Protocol Defs | `core/agents/agent_sdk/protocol.py` | All |
 | Journal (Logging) | `core/events/journal.py` | 16-28 |
-| Supervisor (Orchestrator) | `core/agents/supervisor.py` | 39-156 |
+| User Interaction Agent (Orchestrator) | `core/agents/user_interact/user_interaction_agent.py` | All |
 | Alert Service (Engine) | `core/agents/alert_service/engine.py` | 17-119 |
 | Data Collector | `core/agents/data_collection_agent.py` | All |
 | Price Optimizer | `core/agents/price_optimizer_bus/price_optimizer.py` | All |

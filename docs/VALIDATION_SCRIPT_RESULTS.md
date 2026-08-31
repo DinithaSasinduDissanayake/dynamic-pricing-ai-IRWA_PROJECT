@@ -52,7 +52,7 @@ Comprehensive validation script successfully tests the multi-agent autonomous pr
 User agent responded with "pricing list is empty" message instead of performing comparative analysis. This indicates the agent needs market pricing data populated to perform analytical queries.
 
 **Recommendation:**
-Populate market pricing data using `scripts/populate_sri_lanka_laptop_store.py` or equivalent data loader before running analytical scenarios.
+Populate market pricing data using `scripts/seed.py` or equivalent data loader before running analytical scenarios.
 
 ---
 
@@ -161,7 +161,7 @@ python scripts/validate_end_to_end_workflow.py
 ### For 100% Pass Rate
 1. **Populate Market Data:** Run data collection scripts before Scenario 2
    ```bash
-   python scripts/populate_sri_lanka_laptop_store.py
+   python scripts/seed.py
    ```
 
 2. **Enable Alert Agent:** Start full backend for Scenario 4 alert verification

@@ -134,8 +134,8 @@ This IR layer enables fast, relevant data retrieval supporting pricing decisions
    - "Event bus enables loose coupling and easy scaling"
 
 2. **Multi-Agent Orchestration**
-   - Point to `core/agents/supervisor.py` (orchestration logic)
-   - Explain how supervisor coordinates pricing optimizer workflow
+   - Point to `core/agents/user_interact/user_interaction_agent.py` (orchestration logic)
+   - Explain how user interaction agent coordinates pricing optimizer workflow
    - Show how agents publish events for other agents to consume
 
 3. **Protocol Choice Justification**
@@ -163,7 +163,7 @@ This IR layer enables fast, relevant data retrieval supporting pricing decisions
 **Files to Reference:**
 - `core/agents/agent_sdk/protocol.py` - MCP implementation
 - `core/agents/bus_factory.py` - Event bus creation
-- `core/agents/supervisor.py` - Coordination logic
+- `core/agents/user_interact/user_interaction_agent.py` - Coordination logic
 - `docs/system_architecture.mmd` - Visual diagram
 
 ---

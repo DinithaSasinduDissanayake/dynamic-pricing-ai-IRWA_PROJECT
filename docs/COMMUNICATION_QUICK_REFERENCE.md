@@ -139,7 +139,7 @@ Code Locations:
 ├─ Topics:            core/agents/agent_sdk/protocol.py
 ├─ Journal:           core/events/journal.py
 ├─ Agents:            core/agents/{pricing_optimizer, alert_service, ...}
-└─ Supervisor:        core/agents/supervisor.py
+└─ User Interaction:  core/agents/user_interact/user_interaction_agent.py
 
 Demo:
 ├─ View events:       tail -f data/events.jsonl

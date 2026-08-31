@@ -1,14 +1,16 @@
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from core.chat_db import (
     add_message,
     update_message,
     get_thread_messages,
     get_message,
+    get_thread,
 )
 from core.agents.user_interact.user_interaction_agent import UserInteractionAgent
 from core.payloads import PostMessageRequest, MessageOut
+from core.auth_service import validate_session_token
 import logging
 
 logger = logging.getLogger(__name__)
@@ -103,32 +105,38 @@ def _apply_output_gate(text: str, tools_used: Optional[List[str]]) -> (str, Opti
 
 
 @router.post("/{thread_id}/messages", response_model=MessageOut)
-def api_post_message(thread_id: int, req: PostMessageRequest, token: Optional[str] = None):
+def api_post_message(thread_id: int, req: PostMessageRequest, token: Optional[str] = Query(None)):
     import json as _json
     from core.auth_service import validate_session_token
     from core.agents.user_interact.context import set_owner_id
-    
+
+    t = get_thread(thread_id)
+    if not t:
+        raise HTTPException(status_code=404, detail="Thread not found")
+    if t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Thread not found")
+
     settings = _get_user_settings(token)
     mode = str(settings.get("mode", "user") or "user")
-    
-    owner_id = None
+
+    owner_id_str = None
     if token:
         sess = validate_session_token(token)
-        logger.info(f"[DEBUG POST] Session validation result: {sess}")
         if sess and "user_id" in sess:
-            owner_id = str(sess["user_id"])
-            logger.info(f"[DEBUG POST] Extracted owner_id: {owner_id}")
-    else:
-        logger.warning("[DEBUG POST] No token provided!")
-    
+            owner_id_str = str(sess["user_id"])
+
     um = add_message(thread_id=thread_id, role="user", content=req.content, parent_id=req.parent_id)
-    uia = UserInteractionAgent(user_name=req.user_name, mode=mode, owner_id=owner_id)
-    logger.info(f"[DEBUG POST] Created UserInteractionAgent with owner_id={owner_id}")
-    
-    if owner_id:
-        set_owner_id(owner_id)
-        logger.info(f"[DEBUG POST] Called set_owner_id({owner_id})")
-    
+    uia = UserInteractionAgent(user_name=req.user_name, mode=mode, owner_id=owner_id_str)
+
+    if owner_id_str:
+        set_owner_id(owner_id_str)
+
     for item in _assemble_memory(thread_id):
         uia.add_to_memory(item["role"], item["content"])
     
@@ -238,8 +246,20 @@ def api_post_message(thread_id: int, req: PostMessageRequest, token: Optional[st
 
 
 @router.post("/{thread_id}/messages/stream")
-def api_post_message_stream(thread_id: int, req: PostMessageRequest, token: Optional[str] = None):
+def api_post_message_stream(thread_id: int, req: PostMessageRequest, token: Optional[str] = Query(None)):
     import json as _json
+
+    t = get_thread(thread_id)
+    if not t:
+        raise HTTPException(status_code=404, detail="Thread not found")
+    if t.owner_id is not None:
+        owner_id = None
+        if token:
+            sess = validate_session_token(token)
+            if sess:
+                owner_id = sess["user_id"]
+        if owner_id != t.owner_id:
+            raise HTTPException(status_code=404, detail="Thread not found")
 
     def _get_show_thinking() -> bool:
         try:
@@ -271,22 +291,16 @@ def api_post_message_stream(thread_id: int, req: PostMessageRequest, token: Opti
             owner_id = None
             if token:
                 sess = validate_session_token(token)
-                logger.info(f"[DEBUG STREAM] Session validation result: {sess}")
                 if sess and "user_id" in sess:
                     owner_id = str(sess["user_id"])
-                    logger.info(f"[DEBUG STREAM] Extracted owner_id: {owner_id}")
-            else:
-                logger.warning("[DEBUG STREAM] No token provided!")
-            
+
             um = add_message(thread_id=thread_id, role="user", content=req.content, parent_id=req.parent_id)
 
             uia = UserInteractionAgent(user_name=req.user_name, mode=_get_mode(), owner_id=owner_id)
-            logger.info(f"[DEBUG STREAM] Created UserInteractionAgent with owner_id={owner_id}")
-            
+
             if owner_id:
                 set_owner_id(owner_id)
-                logger.info(f"[DEBUG STREAM] Called set_owner_id({owner_id})")
-            
+
             for item in _assemble_memory(thread_id):
                 uia.add_to_memory(item["role"], item["content"])
             

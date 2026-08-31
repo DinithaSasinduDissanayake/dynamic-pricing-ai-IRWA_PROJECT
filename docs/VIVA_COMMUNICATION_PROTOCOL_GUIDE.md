@@ -431,10 +431,10 @@ Show: Actual JSON message formats
 Explain: "This is how agents talk—standardized, not ad-hoc"
 ```
 
-**4. Supervisor Workflow**
+**4. Agent Orchestration Workflow**
 ```
-Pull up: core/agents/supervisor.py (lines 39-156)
-Show: How supervisor orchestrates workflow
+Pull up: core/agents/user_interact/user_interaction_agent.py
+Show: How User Interaction Agent orchestrates multi-agent workflow
 Run script: python scripts/smoke_price_optimizer.py
 Show: Console output showing each agent executing
 ```

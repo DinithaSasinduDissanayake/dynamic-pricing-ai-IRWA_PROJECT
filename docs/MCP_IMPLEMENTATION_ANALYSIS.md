@@ -45,10 +45,7 @@
 **Startup**: `scripts/run_data_collector_mcp.py`
 
 **Consumer**:
-- ✅ **`core/agents/supervisor.py`** - Orchestrates catalog import → collection → optimization workflow
-  - Lines 62-64: `await self.dc_client.start_collection(sku, market, connector, depth)`
-  - Lines 76-82: `await self.dc_client.get_job_status(job_id)` (polling loop)
-  - Uses `get_data_collector_client()` from `core/agents/agent_sdk/mcp_client.py`
+- `UserInteractionAgent` / tool handlers — Orchestrates catalog import → collection → optimization workflow via tools and event bus
 
 **Fallback Mechanism**:
 - `mcp_client.py:350` has `_LocalDataCollectorTools` class
@@ -84,10 +81,6 @@
 - ❌ **NONE FOUND** - No MCP client instantiation in codebase
 
 **Actual Usage Pattern**:
-- `core/agents/supervisor.py:91-93` calls Price Optimizer directly:
-  ```python
-  opt_res = await self.optimizer.process_full_workflow("maximize profit", sku)
-  ```
 - Direct Python import: `from core.agents.price_optimizer.agent import PricingOptimizerAgent`
 - **Bypasses MCP entirely** - uses in-process async method calls
 
@@ -191,15 +184,14 @@ def get_data_collector_client() -> DataCollectorClient:
 
 ## 3. Agent Communication Patterns
 
-### 3.1 Data Collector → Supervisor
-**Protocol**: ✅ **MCP (via stdio JSON-RPC)**
-- `supervisor.py` → `mcp_client.py` → Data Collector MCP server
+### 3.1 Data Collector → Orchestrator
+**Protocol**: ✅ **MCP (via stdio JSON-RPC)** / Direct Tools
 - Tools: `start_collection`, `get_job_status`
 
-### 3.2 Price Optimizer → Supervisor
+### 3.2 Price Optimizer → Orchestrator
 **Protocol**: ❌ **Direct Python Async Calls (NOT MCP)**
-- `supervisor.py` → Direct import of `PricingOptimizerAgent`
-- Method: `await self.optimizer.process_full_workflow(...)`
+- Direct import of `PricingOptimizerAgent`
+- Method: `await optimizer.process_full_workflow(...)`
 
 ### 3.3 Alert Service → Event Bus
 **Protocol**: ❌ **Pub/Sub Event Bus (NOT MCP)**
@@ -208,8 +200,8 @@ def get_data_collector_client() -> DataCollectorClient:
 
 ### 3.4 User Interaction Agent → Backend
 **Protocol**: ❌ **OpenAI Function Calling (NOT MCP)**
-- `backend/routers/streaming.py` uses OpenAI SDK with tool definitions
-- Frontend calls `/api/messages/chat/streaming`
+- `backend/routers/streaming.py` uses LLM function/tool calling with tool definitions
+- Frontend calls `/api/threads/{thread_id}/messages/stream`
 - No MCP involvement
 
 ### 3.5 Governance Agents → Event Bus
@@ -236,7 +228,7 @@ def get_data_collector_client() -> DataCollectorClient:
 9. `CHAT_TOOL_CALL` - Tool invocation
 
 **Publishers**:
-- `supervisor.py:141` → `PRICE_PROPOSAL`
+- Price Optimizer / `proposal_logger.py` → `PRICE_PROPOSAL`
 - `auto_applier.py:403` → `PRICE_UPDATE`
 - `governance_execution_agent.py:310` → `PRICE_UPDATE`
 - `alert_service/engine.py:37` → `ALERT`
@@ -446,8 +438,8 @@ async def test_fallback_when_mcp_down():
 ### MCP Infrastructure (1)
 - ⚠️ `core/agents/agent_sdk/mcp_supervisor.py` (317 lines) - **ARCHIVED**: Never instantiated
 
-### Consumers (1)
-- ✅ `core/agents/supervisor.py` (uses Data Collector MCP client) - **ACTIVE**
+### Consumers
+- `core/agents/user_interact/user_interaction_agent.py` - Orchestrates tools and pricing flow
 
 ### Event-Driven Agents (2)
 - `core/agents/auto_applier.py` (418 lines)

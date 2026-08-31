@@ -43,8 +43,8 @@ The archived files represent fully-implemented MCP servers for Price Optimizer a
 
 The following MCP components remain in the active codebase and are used in production:
 
-- ✅ `core/agents/data_collector/mcp_server.py` - Active, consumed by supervisor
-- ✅ `core/agents/agent_sdk/mcp_client.py` - Active, used by supervisor to call Data Collector
+- ✅ `core/agents/data_collector/mcp_server.py` - Active Data Collector MCP server
+- ✅ `core/agents/agent_sdk/mcp_client.py` - Active MCP client utilities
 - ✅ `scripts/run_data_collector_mcp.py` - Active startup script
 
 ## How to Restore (If Needed)
@@ -84,7 +84,7 @@ Before archiving, the following checks confirmed these files had no active consu
 
 - **Analysis Report**: `docs/MCP_IMPLEMENTATION_ANALYSIS.md`
 - **Architecture Documentation**: `docs/system_architecture.mmd`
-- **Active Supervisor**: `core/agents/supervisor.py`
+- **Orchestration**: `core/agents/user_interact/user_interaction_agent.py`
 
 ## Archival Date
 

@@ -929,7 +929,7 @@ core/
 │   │   ├── activity_log.py    # Tracing
 │   │   ├── auth.py            # MCP authentication
 │   │   └── health_tools.py    # System health
-│   ├── supervisor.py          # Workflow orchestrator
+│   ├── user_interact/         # Workflow orchestrator & chat agent
 │   ├── chat_executor.py       # Chat execution
 │   ├── llm_client.py          # LLM provider abstraction
 │   ├── llm_provider_manager.py # Provider management

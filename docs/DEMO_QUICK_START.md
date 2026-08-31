@@ -52,7 +52,7 @@ Turn 3: What would happen if I reduced the price of the highest-margin one by 10
 
 ## Emergency Recovery
 
-- **No products?** Run `python scripts/populate_sri_lanka_laptop_store.py`
+- **No products?** Run `python scripts/seed.py`
 - **No alerts?** Run `python scripts/smoke_price_proposal_alerts.py`  
 - **LLM errors?** Check `.env` has API keys configured
 - **Chat broken?** Refresh page and start new thread

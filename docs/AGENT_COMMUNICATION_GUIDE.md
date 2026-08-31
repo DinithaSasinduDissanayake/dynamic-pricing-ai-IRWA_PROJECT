@@ -362,10 +362,9 @@ each stage completes before moving to next."
    - `mcp_client.py`: MCP tool calling
 
 2. **Agents** (`core/agents/`)
-   - `supervisor.py`: Orchestration (lines 19-156)
+   - `user_interact/user_interaction_agent.py`: Chat NLP and agent orchestration
    - `pricing_optimizer.py`: Price algorithms (rule_based, ml_model)
    - `alert_service/engine.py`: Alert engine with rule evaluation (lines 17-119)
-   - `user_interact/user_interaction_agent.py`: Chat NLP
 
 3. **Events** (`core/events/`)
    - `journal.py`: Event persistence (lines 16-28)

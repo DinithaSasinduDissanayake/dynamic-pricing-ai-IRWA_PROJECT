@@ -178,7 +178,7 @@ Each prompt validated against:
 ## Troubleshooting
 
 ### "Product catalog is empty"
-**Solution:** Run `python scripts/populate_sri_lanka_laptop_store.py` to repopulate data
+**Solution:** Run `python scripts/seed.py` to repopulate data
 
 ### "No alerts found"
 **Solution:** Run `python scripts/smoke_price_proposal_alerts.py` to generate test alerts

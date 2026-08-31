@@ -43,6 +43,9 @@ python scripts/flux.py catalog list
 
 # Show detailed SKU info
 python scripts/flux.py catalog show LAPTOP-001
+
+# Show portfolio pricing urgency summary and ranked priority
+python scripts/flux.py catalog urgency
 ```
 
 ### 💬 Chat Interaction (`flux chat`)
@@ -82,6 +85,15 @@ python scripts/flux.py proposals list
 
 # Filter proposals by SKU
 python scripts/flux.py proposals list LAPTOP-001
+
+# Show details of a specific price proposal (ID or ID prefix)
+python scripts/flux.py proposals show <id>
+
+# Preview applying a price proposal to the live catalog (dry-run)
+python scripts/flux.py proposals apply <id>
+
+# Actually apply a price proposal to the live catalog
+python scripts/flux.py proposals apply <id> --yes
 ```
 
 ### 🚨 Alerts & Incidents (`flux alerts`)

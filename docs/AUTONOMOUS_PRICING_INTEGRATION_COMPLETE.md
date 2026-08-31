@@ -141,10 +141,8 @@ asyncio.run(trigger_optimization())
 
 ## Next Steps (Future Work)
 
-### 1. Supervisor Refactoring (Optional)
-**Decision:** Keep `process_full_workflow()` for supervisor OR refactor to events
-- **Low Risk:** Keep direct calls in `core/agents/supervisor.py:91`
-- **High Reward:** Refactor supervisor to publish events (cleaner architecture)
+### 1. Orchestration Architecture
+- Supervisor stack removed in favor of `UserInteractionAgent` and event bus orchestration
 
 ### 2. Enhanced Monitoring
 - Add Prometheus metrics for optimization latency
